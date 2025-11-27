@@ -124,13 +124,18 @@ const Index = () => {
                 <CardDescription className="text-base">{form.description}</CardDescription>
               </CardHeader>
                 <CardContent>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="outline" className={getTypeColor(form.type)}>
                       {form.type}
                     </Badge>
                     {form.pages.length > 1 && (
                       <Badge variant="outline" className="bg-muted text-muted-foreground">
                         {form.pages.length} pages
+                      </Badge>
+                    )}
+                    {form.layout && (
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                        {form.layout.replace('-', ' ')}
                       </Badge>
                     )}
                   </div>

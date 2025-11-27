@@ -8,6 +8,7 @@ import { useFormState } from "@/hooks/useFormState";
 import { compareWithGroundTruth, ComparisonResult } from "@/utils/form-comparison";
 import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { layoutComponents } from "./form-layouts";
 import {
   TextField,
   TextareaField,
@@ -48,9 +49,10 @@ interface DynamicFormProps {
   totalPages?: number;
   inputToLLM?: string;
   groundTruth?: Record<string, any>;
+  layout?: 'single-column' | 'two-column' | 'split-screen' | 'wizard-style';
 }
 
-const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPages = 1, inputToLLM, groundTruth }: DynamicFormProps) => {
+const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPages = 1, inputToLLM, groundTruth, layout = 'single-column' }: DynamicFormProps) => {
   const { pageData, updateFieldValue, getAllData, handleSubmit: submitForm } = useFormState({
     formId,
     pageNumber,
@@ -408,13 +410,17 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
               </div>
             ) : (
               // Show form
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {page.fields.map((field) => (
-                  <div key={field.id}>
-                    {renderField(field)}
-                  </div>
-                ))}
-                <div className="flex gap-3">
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4 flex items-center justify-between">
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 font-medium">
+                    Layout: {layout.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                  </Badge>
+                </div>
+                {(() => {
+                  const LayoutComponent = layoutComponents[layout] || layoutComponents['single-column'];
+                  return <LayoutComponent fields={page.fields} renderField={renderField} />;
+                })()}
+                <div className="flex gap-3 mt-6">
                   <Button
                     type="button"
                     variant="outline"

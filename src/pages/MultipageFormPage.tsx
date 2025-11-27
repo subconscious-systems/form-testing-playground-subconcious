@@ -64,6 +64,7 @@ const MultipageFormPage = () => {
       totalPages={configForm.pages.length}
       inputToLLM={configForm.inputToLLM}
       groundTruth={configForm.groundTruth}
+      layout={configForm.layout || 'single-column'}
     />
   );
 

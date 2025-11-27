@@ -87,6 +87,11 @@ FORM_PAGE_SCHEMA = {
             "enum": ["single-page", "multipage"],
             "description": "Whether this is a single-page or multipage form"
         },
+        "layout": {
+            "type": "string",
+            "enum": ["single-column", "two-column", "split-screen", "wizard-style"],
+            "description": "Layout style for the form: 'single-column' (vertical stack), 'two-column' (grid), 'split-screen' (two columns with sidebar), 'wizard-style' (sectioned with dividers)"
+        },
         "inputToLLM": {
             "type": "string",
             "description": "Detailed instructions for an LLM to fill out this form. Include all field values in a natural language format."
@@ -150,7 +155,7 @@ FORM_PAGE_SCHEMA = {
             "description": "Expected values for all fields. This MUST be generated LAST after all pages and fields are defined. For each field ID in the form, provide the expected value. Format: dates as 'YYYY-MM-DD' strings, arrays for multi-selects, booleans for checkboxes/switches, numbers as strings or numbers, date-ranges as objects with 'from' and 'to' ISO date strings."
         }
     },
-    "required": ["id", "title", "description", "type", "inputToLLM", "pages", "groundTruth"]
+    "required": ["id", "title", "description", "type", "inputToLLM", "pages", "groundTruth", "layout"]
 }
 
 # Few-shot examples
@@ -241,7 +246,7 @@ FEW_SHOT_EXAMPLES = [
     }
 ]
 
-def generate_form_page(page_number: int, industry: str, form_id: str) -> Dict[str, Any]:
+def generate_form_page(page_number: int, industry: str, form_id: str, layout: str) -> Dict[str, Any]:
     """
     Generate a single form page using OpenAI GPT-4o.
     
@@ -249,6 +254,7 @@ def generate_form_page(page_number: int, industry: str, form_id: str) -> Dict[st
         page_number: The page number (1-10)
         industry: The industry/use case for the form
         form_id: The sequential form ID (e.g., "29") - just the number as a string
+        layout: The layout style to use (e.g., "two-column", "split-screen")
     
     Returns:
         A dictionary containing the generated form definition
@@ -296,6 +302,7 @@ CRITICAL: Generate the JSON in this exact order:
 Requirements:
 - The form MUST be for: {industry}
 - Use the exact form ID: "{form_id}" (do not generate a different ID, just use the number as a string)
+- Use the exact layout: "{layout}" (do not generate a different layout)
 - It can be single-page or multipage (if multipage, use 2-4 pages)
 - Include 5-12 fields per page
 - Mix different field types appropriately
@@ -307,7 +314,7 @@ Requirements:
 - Make it realistic and useful for testing AI form-filling
 - The form should be specific to the {industry} industry/use case
 
-Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), and set "required" appropriately for each field."""
+Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), use the exact layout "{layout}", and set "required" appropriately for each field."""
 
     try:
         response = client.beta.chat.completions.parse(
@@ -329,9 +336,10 @@ Generate a unique, realistic form for {industry}. Remember: groundTruth must be 
         )
         
         generated_form = json.loads(response.choices[0].message.content)
-        # Ensure the ID matches what we requested
+        # Ensure the ID and layout match what we requested
         generated_form["id"] = form_id
-        print(f"✓ Generated form #{page_number} ({industry}): {generated_form.get('title', 'Unknown')}")
+        generated_form["layout"] = layout
+        print(f"✓ Generated form #{page_number} ({industry}, {layout}): {generated_form.get('title', 'Unknown')}")
         return generated_form
         
     except Exception as e:
@@ -389,11 +397,16 @@ def main():
         # Randomly select an industry
         industry = random.choice(INDUSTRIES)
         
+        # Randomly select a layout
+        layouts = ["single-column", "two-column", "split-screen", "wizard-style"]
+        selected_layout = random.choice(layouts)
+        
         try:
-            form = generate_form_page(i, industry, form_id)
+            form = generate_form_page(i, industry, form_id, selected_layout)
             generated_forms[form_id] = form
             print(f"  Form ID: {form_id}")
             print(f"  Industry: {industry}")
+            print(f"  Layout: {selected_layout}")
             print(f"  Title: {form.get('title', 'N/A')}")
             print(f"  Type: {form.get('type', 'N/A')}")
             print(f"  Pages: {len(form.get('pages', []))}")

@@ -23,6 +23,8 @@ export interface FormPage {
   fields: FormField[];
 }
 
+export type LayoutType = 'single-column' | 'two-column' | 'split-screen' | 'wizard-style';
+
 export interface FormDefinition {
   id: string;
   title: string;
@@ -31,6 +33,7 @@ export interface FormDefinition {
   pages: FormPage[];
   inputToLLM: string; // Information provided to LLM to fill the form
   groundTruth: Record<string, any>; // Expected values for each field ID
+  layout?: LayoutType; // Layout style for the form (defaults to 'single-column' for manual forms)
 }
 
 export interface FormConfig {

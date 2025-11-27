@@ -62,6 +62,7 @@ const FormPage = () => {
       totalPages={form.pages.length}
       inputToLLM={form.inputToLLM}
       groundTruth={form.groundTruth}
+      layout={form.layout || 'single-column'}
     />
   );
 };

@@ -1,117 +1,179 @@
 {
   "29": {
     "id": "29",
-    "title": "Website Contact Us Form",
-    "description": "Form for users to reach out with inquiries or feedback",
-    "type": "single-page",
-    "inputToLLM": "You are filling out a contact form for a website inquiry. Your full name is Alex Turner, your email is alex.turner@example.com, your phone number is 5557654321, your company is Web Solutions Inc., your preferred contact method is email, your message is 'Interested in your web development services.', you have uploaded a file 'requirements.docx', and you agree to the privacy policy.",
+    "title": "Software Bug Report",
+    "description": "Form for reporting software bugs to improve product quality",
+    "type": "multipage",
+    "layout": "two-column",
+    "inputToLLM": "You are reporting a bug found in the software. Page 1: Your name is Alex Johnson, email is alex.johnson@example.com, and the software version is 2.3.1. The bug was found on 2023-10-15, and the operating system is Windows 10. Page 2: The bug severity is Critical, it can be reproduced, and the steps to reproduce are to open the app and click on settings. Include a screenshot of the error, and the error message is 'Application crash upon opening settings'. Page 3: You have additional comments that state 'This bug causes a major disruption in workflow', and you agree to the privacy policy.",
     "pages": [
       {
         "pageNumber": 1,
         "fields": [
           {
-            "id": "fullName",
+            "id": "reporterName",
             "type": "text",
-            "label": "Full Name",
-            "placeholder": "Enter your full name"
+            "label": "Your Name",
+            "placeholder": "Enter your full name",
+            "required": true
           },
           {
-            "id": "email",
+            "id": "reporterEmail",
             "type": "email",
             "label": "Email Address",
-            "placeholder": "you@example.com"
+            "placeholder": "you@example.com",
+            "required": true
           },
           {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567"
-          },
-          {
-            "id": "company",
+            "id": "softwareVersion",
             "type": "text",
-            "label": "Company Name",
-            "placeholder": "Enter your company name"
+            "label": "Software Version",
+            "placeholder": "e.g., 2.3.1",
+            "required": true
           },
           {
-            "id": "preferredContact",
+            "id": "dateFound",
+            "type": "date",
+            "label": "Date Bug Found",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "operatingSystem",
             "type": "select",
-            "label": "Preferred Contact Method",
+            "label": "Operating System",
             "options": [
-              "Email",
-              "Phone"
-            ]
+              "Windows 10",
+              "macOS Monterey",
+              "Linux Ubuntu",
+              "iOS",
+              "Android"
+            ],
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "bugSeverity",
+            "type": "radio",
+            "label": "Bug Severity",
+            "options": [
+              "Low",
+              "Medium",
+              "High",
+              "Critical"
+            ],
+            "required": true
           },
           {
-            "id": "message",
-            "type": "textarea",
-            "label": "Message",
-            "placeholder": "Write your message here"
-          },
-          {
-            "id": "fileUpload",
-            "type": "file",
-            "label": "Attach File (optional)",
-            "accept": ".docx,.pdf,.txt"
-          },
-          {
-            "id": "agreeToPolicy",
+            "id": "reproducible",
             "type": "checkbox",
-            "label": "I agree to the privacy policy"
+            "label": "Can the bug be reproduced?",
+            "required": true
+          },
+          {
+            "id": "reproductionSteps",
+            "type": "textarea",
+            "label": "Steps to Reproduce",
+            "placeholder": "Describe steps to reproduce the bug",
+            "required": true
+          },
+          {
+            "id": "screenshot",
+            "type": "file",
+            "label": "Screenshot of the Error",
+            "accept": "image/*",
+            "required": false
+          },
+          {
+            "id": "errorMessage",
+            "type": "text",
+            "label": "Error Message",
+            "placeholder": "Error message displayed",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "additionalComments",
+            "type": "textarea",
+            "label": "Additional Comments",
+            "placeholder": "Any other information",
+            "required": false
+          },
+          {
+            "id": "agreePrivacyPolicy",
+            "type": "checkbox",
+            "label": "I agree to the privacy policy",
+            "required": true
           }
         ]
       }
     ],
     "groundTruth": {
-      "fullName": "Alex Turner",
-      "email": "alex.turner@example.com",
-      "phone": "5557654321",
-      "company": "Web Solutions Inc.",
-      "preferredContact": "Email",
-      "message": "Interested in your web development services.",
-      "fileUpload": "requirements.docx",
-      "agreeToPolicy": true
+      "reporterName": "Alex Johnson",
+      "reporterEmail": "alex.johnson@example.com",
+      "softwareVersion": "2.3.1",
+      "dateFound": "2023-10-15",
+      "operatingSystem": "Windows 10",
+      "bugSeverity": "Critical",
+      "reproducible": true,
+      "reproductionSteps": "Open the app and click on settings.",
+      "screenshot": null,
+      "errorMessage": "Application crash upon opening settings",
+      "additionalComments": "This bug causes a major disruption in workflow",
+      "agreePrivacyPolicy": true
     }
   },
   "30": {
     "id": "30",
-    "title": "Consulting Project Bid Submission",
-    "description": "Form for submitting project bids for consulting opportunities",
+    "title": "Software Bug Reporting Form",
+    "description": "Form for reporting software bugs and issues to the development team",
     "type": "multipage",
-    "inputToLLM": "You are submitting a bid for a consulting project. Page 1: Your company's name is 'Innovate Solutions', contact person is Michael Green, email is michael.green@innovate.com, phone is 5554237890, and company website is http://www.innovatesolutions.com. Page 2: Project title is 'Digital Transformation Strategy', proposed start date is 2024-05-01, end date is 2024-09-30, total bid amount is $150,000, and you have attached a proposal document. Page 3: Your company has expertise in 'Digital Strategy' and 'Process Improvement', references are available, you agree to the bid terms and conditions.",
+    "layout": "wizard-style",
+    "inputToLLM": "You are reporting a software bug. Page 1: Your name is Alex Turner, your email address is alex.turner@techmail.com, the software version is 2.3.4, and the severity of the bug is Critical. Page 2: The bug description is 'The application crashes on startup', and steps to reproduce are '1. Open the application, 2. Click the login button'. Page 3: The expected result was 'User should be able to log in without error', and actual result observed is 'Application crashes and displays error code 500'. You have attached a screenshot file named 'crash_error.png' and you agree to share this information with the development team.",
     "pages": [
       {
         "pageNumber": 1,
         "fields": [
           {
-            "id": "companyName",
+            "id": "reporterName",
             "type": "text",
-            "label": "Company Name",
-            "placeholder": "Enter your company name"
-          },
-          {
-            "id": "contactPerson",
-            "type": "text",
-            "label": "Contact Person",
-            "placeholder": "Enter contact person's name"
+            "label": "Your Name",
+            "placeholder": "Enter your full name",
+            "required": true
           },
           {
             "id": "email",
             "type": "email",
-            "label": "Contact Email",
-            "placeholder": "you@example.com"
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
           },
           {
-            "id": "phone",
-            "type": "phone",
-            "label": "Contact Phone Number",
-            "placeholder": "(555) 123-4567"
+            "id": "softwareVersion",
+            "type": "text",
+            "label": "Software Version",
+            "placeholder": "e.g., 2.3.4",
+            "required": true
           },
           {
-            "id": "website",
-            "type": "url",
-            "label": "Company Website",
-            "placeholder": "http://www.example.com"
+            "id": "bugSeverity",
+            "type": "select",
+            "label": "Severity Level",
+            "options": [
+              "Low",
+              "Medium",
+              "High",
+              "Critical"
+            ],
+            "required": true
           }
         ]
       },
@@ -119,35 +181,18 @@
         "pageNumber": 2,
         "fields": [
           {
-            "id": "projectTitle",
-            "type": "text",
-            "label": "Project Title",
-            "placeholder": "Enter project title"
+            "id": "bugDescription",
+            "type": "textarea",
+            "label": "Bug Description",
+            "placeholder": "Describe the bug in detail",
+            "required": true
           },
           {
-            "id": "startDate",
-            "type": "date",
-            "label": "Proposed Start Date",
-            "allowed": "after"
-          },
-          {
-            "id": "endDate",
-            "type": "date",
-            "label": "Proposed End Date",
-            "allowed": "after"
-          },
-          {
-            "id": "bidAmount",
-            "type": "currency",
-            "label": "Total Bid Amount (USD)",
-            "currency": "USD",
-            "placeholder": "0.00"
-          },
-          {
-            "id": "proposalDocument",
-            "type": "file",
-            "label": "Attach Proposal Document",
-            "accept": ".pdf,.doc,.docx"
+            "id": "reproductionSteps",
+            "type": "textarea",
+            "label": "Steps to Reproduce",
+            "placeholder": "List the steps to reproduce the bug",
+            "required": true
           }
         ]
       },
@@ -155,54 +200,55 @@
         "pageNumber": 3,
         "fields": [
           {
-            "id": "expertiseAreas",
-            "type": "multiselect",
-            "label": "Areas of Expertise",
-            "options": [
-              "Digital Strategy",
-              "Process Improvement",
-              "IT Consulting",
-              "Change Management"
-            ]
+            "id": "expectedResult",
+            "type": "textarea",
+            "label": "Expected Result",
+            "placeholder": "What should have happened?",
+            "required": true
           },
           {
-            "id": "referencesAvailable",
-            "type": "switch",
-            "label": "References Available"
+            "id": "actualResult",
+            "type": "textarea",
+            "label": "Actual Result Observed",
+            "placeholder": "What actually happened?",
+            "required": true
           },
           {
-            "id": "agreeToTerms",
+            "id": "screenshot",
+            "type": "file",
+            "label": "Attach Screenshot",
+            "accept": "image/*",
+            "required": false
+          },
+          {
+            "id": "consentToShare",
             "type": "checkbox",
-            "label": "I agree to the terms and conditions"
+            "label": "I agree to share this report with the development team",
+            "required": true
           }
         ]
       }
     ],
     "groundTruth": {
-      "companyName": "Innovate Solutions",
-      "contactPerson": "Michael Green",
-      "email": "michael.green@innovate.com",
-      "phone": "5554237890",
-      "website": "http://www.innovatesolutions.com",
-      "projectTitle": "Digital Transformation Strategy",
-      "startDate": "2024-05-01",
-      "endDate": "2024-09-30",
-      "bidAmount": "150000",
-      "proposalDocument": "Attached Document",
-      "expertiseAreas": [
-        "Digital Strategy",
-        "Process Improvement"
-      ],
-      "referencesAvailable": true,
-      "agreeToTerms": true
+      "reporterName": "Alex Turner",
+      "email": "alex.turner@techmail.com",
+      "softwareVersion": "2.3.4",
+      "bugSeverity": "Critical",
+      "bugDescription": "The application crashes on startup",
+      "reproductionSteps": "1. Open the application, 2. Click the login button",
+      "expectedResult": "User should be able to log in without error",
+      "actualResult": "Application crashes and displays error code 500",
+      "screenshot": "crash_error.png",
+      "consentToShare": true
     }
   },
   "31": {
     "id": "31",
-    "title": "Loan Refinancing Application",
-    "description": "Application form for refinancing a home loan",
+    "title": "Workout Class Booking",
+    "description": "Book your spot in a workout class at our fitness center.",
     "type": "multipage",
-    "inputToLLM": "You are applying to refinance your home loan. On page 1, your full name is Alex Johnson, date of birth is 1985-07-15, Social Security Number is 987654321, and marital status is single. On page 2, your current loan amount is $250,000, term of the loan is 30 years, and the interest rate is 4.5%. You are refinancing to a new term of 15 years starting from 2024-01-01. On page 3, your email is alex.j@example.com, phone number is 5559871234, home address is 123 Elm Street, Springfield, IL, 62704, and you agree to the terms and conditions.",
+    "layout": "wizard-style",
+    "inputToLLM": "You are booking a workout class at a fitness center. Page 1: Your name is Emily Turner, email is emily.turner@example.com, and phone is 5552468101. You prefer the morning class. Page 2: You want to book a Yoga class on 2023-11-15, and you need a yoga mat. You have no medical conditions. Page 3: You will pay with card number 4111111111111111, expiration date is 11/24, and CVV is 321. You agree to the terms and conditions.",
     "pages": [
       {
         "pageNumber": 1,
@@ -211,33 +257,33 @@
             "id": "fullName",
             "type": "text",
             "label": "Full Name",
-            "placeholder": "Enter your full name"
+            "placeholder": "Enter your full name",
+            "required": true
           },
           {
-            "id": "dateOfBirth",
-            "type": "date",
-            "label": "Date of Birth",
-            "allowed": "before",
-            "placeholder": null
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
           },
           {
-            "id": "socialSecurityNumber",
-            "type": "number",
-            "label": "Social Security Number",
-            "placeholder": "123-45-6789"
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
           },
           {
-            "id": "maritalStatus",
+            "id": "classPreference",
             "type": "select",
-            "label": "Marital Status",
+            "label": "Class Preference",
             "options": [
-              "Single",
-              "Married",
-              "Separated",
-              "Divorced",
-              "Widowed"
+              "Morning",
+              "Afternoon",
+              "Evening"
             ],
-            "placeholder": null
+            "required": false
           }
         ]
       },
@@ -245,835 +291,36 @@
         "pageNumber": 2,
         "fields": [
           {
-            "id": "currentLoanAmount",
-            "type": "currency",
-            "label": "Current Loan Amount (USD)",
-            "currency": "USD",
-            "placeholder": "0.00"
+            "id": "workoutType",
+            "type": "select",
+            "label": "Workout Class Type",
+            "options": [
+              "Yoga",
+              "Pilates",
+              "Kickboxing",
+              "Zumba"
+            ],
+            "required": true
           },
           {
-            "id": "currentLoanTerm",
-            "type": "number",
-            "label": "Current Loan Term (Years)",
-            "placeholder": "Enter number of years"
-          },
-          {
-            "id": "currentInterestRate",
-            "type": "number",
-            "label": "Current Interest Rate (%)",
-            "placeholder": "Enter interest rate"
-          },
-          {
-            "id": "newLoanTerm",
-            "type": "number",
-            "label": "New Loan Term (Years)",
-            "placeholder": "Enter number of years"
-          },
-          {
-            "id": "refinanceStartDate",
+            "id": "classDate",
             "type": "date",
-            "label": "Refinance Start Date",
+            "label": "Class Date",
             "allowed": "after",
-            "placeholder": null
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com"
+            "required": true
           },
           {
-            "id": "phoneNumber",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567"
-          },
-          {
-            "id": "homeAddress",
-            "type": "address",
-            "label": "Home Address",
-            "placeholder": "Enter your home address"
-          },
-          {
-            "id": "agreeToTerms",
+            "id": "needEquipment",
             "type": "checkbox",
-            "label": "I agree to the terms and conditions",
-            "placeholder": null
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "fullName": "Alex Johnson",
-      "dateOfBirth": "1985-07-15",
-      "socialSecurityNumber": "987654321",
-      "maritalStatus": "Single",
-      "currentLoanAmount": "250000.00",
-      "currentLoanTerm": 30,
-      "currentInterestRate": 4.5,
-      "newLoanTerm": 15,
-      "refinanceStartDate": "2024-01-01",
-      "email": "alex.j@example.com",
-      "phoneNumber": "5559871234",
-      "homeAddress": "123 Elm Street, Springfield, IL, 62704",
-      "agreeToTerms": true
-    }
-  },
-  "32": {
-    "id": "32",
-    "title": "Wholesale Seller Post Form",
-    "description": "Form for wholesale sellers to post product information and business details",
-    "type": "multipage",
-    "inputToLLM": "You are a wholesale seller filling out a post form. Page 1: Your business name is 'Global Wholesale Inc.', business email is contact@globalwholesale.com, business phone is 5552345678, and business website is http://globalwholesale.com. Page 2: You are listing a product named 'Premium Cotton Shirts', available quantity is 500 units, the unit price is $10.00, and the product category is 'Clothing'. Page 3: Your business address is 1234 Market St, San Francisco, CA, 94103, your tax ID is 98-7654321, and you confirm that the products are certified. Lastly, you agree to the platform's terms and conditions.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "businessName",
-            "type": "text",
-            "label": "Business Name",
-            "placeholder": "Enter your business name"
+            "label": "Need Equipment Rental (e.g., yoga mat)",
+            "required": false
           },
           {
-            "id": "businessEmail",
-            "type": "email",
-            "label": "Business Email",
-            "placeholder": "contact@yourbusiness.com"
-          },
-          {
-            "id": "businessPhone",
-            "type": "phone",
-            "label": "Business Phone",
-            "placeholder": "(555) 234-5678"
-          },
-          {
-            "id": "businessWebsite",
-            "type": "url",
-            "label": "Business Website",
-            "placeholder": "http://www.yourbusiness.com"
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "productName",
-            "type": "text",
-            "label": "Product Name",
-            "placeholder": "Enter product name"
-          },
-          {
-            "id": "productQuantity",
-            "type": "number",
-            "label": "Available Quantity",
-            "placeholder": "Enter available units",
-            "min": 1
-          },
-          {
-            "id": "unitPrice",
-            "type": "currency",
-            "label": "Unit Price (USD)",
-            "currency": "USD",
-            "placeholder": "0.00"
-          },
-          {
-            "id": "productCategory",
-            "type": "select",
-            "label": "Product Category",
-            "options": [
-              "Clothing",
-              "Electronics",
-              "Home Goods",
-              "Toys",
-              "Automotive"
-            ]
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "businessAddress",
-            "type": "address",
-            "label": "Business Address",
-            "placeholder": "Enter your business address"
-          },
-          {
-            "id": "taxId",
-            "type": "text",
-            "label": "Tax ID",
-            "placeholder": "XX-XXXXXXX"
-          },
-          {
-            "id": "productCertification",
-            "type": "checkbox",
-            "label": "Products are certified"
-          },
-          {
-            "id": "agreeTerms",
-            "type": "checkbox",
-            "label": "I agree to the terms and conditions"
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "businessName": "Global Wholesale Inc.",
-      "businessEmail": "contact@globalwholesale.com",
-      "businessPhone": "5552345678",
-      "businessWebsite": "http://globalwholesale.com",
-      "productName": "Premium Cotton Shirts",
-      "productQuantity": 500,
-      "unitPrice": "10.00",
-      "productCategory": "Clothing",
-      "businessAddress": "1234 Market St, San Francisco, CA, 94103",
-      "taxId": "98-7654321",
-      "productCertification": true,
-      "agreeTerms": true
-    }
-  },
-  "33": {
-    "id": "33",
-    "title": "Research Grant Application Form",
-    "description": "Application form for submitting a research grant proposal to the National Science Fund.",
-    "type": "multipage",
-    "inputToLLM": "You are applying for a research grant. Page 1: Your full name is Dr. Emily Carter, email is emily.carter@researchuni.edu, phone is 5553219876, and your institution is Research University. Page 2: Your project title is 'AI and Renewable Energy Integration', the abstract is provided, and the start date is 2025-01-15. Page 3: You request $125,000.00 in funding, have already secured $25,000.00, and your planned end date is 2026-12-31. You agree to the grant terms and conditions.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "fullName",
-            "type": "text",
-            "label": "Full Name",
-            "placeholder": "Enter your full name"
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@university.edu"
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Contact Number",
-            "placeholder": "(555) 123-4567"
-          },
-          {
-            "id": "institution",
-            "type": "text",
-            "label": "Institution Name",
-            "placeholder": "Enter your institution's name"
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "projectTitle",
-            "type": "text",
-            "label": "Project Title",
-            "placeholder": "Enter the title of your project"
-          },
-          {
-            "id": "abstract",
+            "id": "medicalConditions",
             "type": "textarea",
-            "label": "Project Abstract",
-            "placeholder": "Provide a brief abstract of your project"
-          },
-          {
-            "id": "startDate",
-            "type": "date",
-            "label": "Proposed Start Date",
-            "allowed": "after"
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "requestedFunding",
-            "type": "currency",
-            "label": "Requested Funding Amount (USD)",
-            "currency": "USD",
-            "placeholder": "0.00"
-          },
-          {
-            "id": "securedFunding",
-            "type": "currency",
-            "label": "Already Secured Funding (USD)",
-            "currency": "USD",
-            "placeholder": "0.00"
-          },
-          {
-            "id": "plannedEndDate",
-            "type": "date",
-            "label": "Planned Project End Date",
-            "allowed": "after"
-          },
-          {
-            "id": "agreeToTerms",
-            "type": "checkbox",
-            "label": "I agree to the grant terms and conditions"
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "fullName": "Dr. Emily Carter",
-      "email": "emily.carter@researchuni.edu",
-      "phone": "5553219876",
-      "institution": "Research University",
-      "projectTitle": "AI and Renewable Energy Integration",
-      "abstract": "Project abstract goes here describing the aim, methodology, and expected outcomes.",
-      "startDate": "2025-01-15",
-      "requestedFunding": "125000.00",
-      "securedFunding": "25000.00",
-      "plannedEndDate": "2026-12-31",
-      "agreeToTerms": true
-    }
-  },
-  "34": {
-    "id": "34",
-    "title": "Construction Project Bid Submission",
-    "description": "Form for contractors to submit bids for construction projects.",
-    "type": "multipage",
-    "inputToLLM": "You are a contractor submitting a bid for a new construction project. Page 1: Your company name is 'BuildRight Corp', contact person is 'Alice Johnson', email is 'alice.j@buildright.com', phone number is '5551236789', and website is 'https://www.buildright.com'. Page 2: Project name is 'Downtown Office Complex', project start date is '2024-03-15', completion date is '2025-09-30', and bid amount is $1,500,000.00. Page 3: You have included attachments for project plans and include insurance documentation. You agree to the terms and conditions.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "companyName",
-            "type": "text",
-            "label": "Company Name",
-            "placeholder": "Enter your company name"
-          },
-          {
-            "id": "contactPerson",
-            "type": "text",
-            "label": "Contact Person",
-            "placeholder": "Enter the contact person's name"
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Contact Email",
-            "placeholder": "you@example.com"
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Contact Phone",
-            "placeholder": "(555) 123-4567"
-          },
-          {
-            "id": "website",
-            "type": "url",
-            "label": "Company Website",
-            "placeholder": "https://www.example.com"
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "projectName",
-            "type": "text",
-            "label": "Project Name",
-            "placeholder": "Enter the project name"
-          },
-          {
-            "id": "startDate",
-            "type": "date",
-            "label": "Project Start Date",
-            "allowed": "after"
-          },
-          {
-            "id": "completionDate",
-            "type": "date",
-            "label": "Expected Completion Date",
-            "allowed": "after"
-          },
-          {
-            "id": "bidAmount",
-            "type": "currency",
-            "label": "Bid Amount (USD)",
-            "currency": "USD",
-            "placeholder": "0.00"
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "projectPlans",
-            "type": "file",
-            "label": "Project Plans",
-            "accept": ".pdf,.docx,.xlsx"
-          },
-          {
-            "id": "insuranceDocumentation",
-            "type": "file",
-            "label": "Insurance Documentation",
-            "accept": ".pdf,.docx,.xlsx"
-          },
-          {
-            "id": "agreeToTerms",
-            "type": "checkbox",
-            "label": "I agree to the terms and conditions"
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "companyName": "BuildRight Corp",
-      "contactPerson": "Alice Johnson",
-      "email": "alice.j@buildright.com",
-      "phone": "5551236789",
-      "website": "https://www.buildright.com",
-      "projectName": "Downtown Office Complex",
-      "startDate": "2024-03-15",
-      "completionDate": "2025-09-30",
-      "bidAmount": "1500000.00",
-      "projectPlans": null,
-      "insuranceDocumentation": null,
-      "agreeToTerms": true
-    }
-  },
-  "35": {
-    "id": "35",
-    "title": "Insurance Claim Form",
-    "description": "Form for submitting an insurance claim including personal information, incident details, and claim specifics.",
-    "type": "multipage",
-    "inputToLLM": "You are submitting an insurance claim. Page 1: Your name is Alex Brown, email is alex.brown@email.com, phone is 5551234567, policy number is P123456, and you are claiming for an auto incident. Page 2: The incident occurred on 2023-08-15, location is 123 Elm St, Springfield, and the incident description is 'Rear-ended at a traffic light'. Page 3: You are claiming $1500 for damages, agree to terms, and attach photos of the damage.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "fullName",
-            "type": "text",
-            "label": "Full Name",
-            "placeholder": "Enter your full name"
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com"
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567"
-          },
-          {
-            "id": "policyNumber",
-            "type": "text",
-            "label": "Policy Number",
-            "placeholder": "Enter policy number"
-          },
-          {
-            "id": "claimType",
-            "type": "select",
-            "label": "Type of Claim",
-            "options": [
-              "Auto",
-              "Home",
-              "Health",
-              "Life"
-            ]
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "incidentDate",
-            "type": "date",
-            "label": "Date of Incident",
-            "allowed": "before"
-          },
-          {
-            "id": "incidentLocation",
-            "type": "address",
-            "label": "Location of Incident",
-            "placeholder": "Enter location"
-          },
-          {
-            "id": "incidentDescription",
-            "type": "textarea",
-            "label": "Describe the Incident",
-            "placeholder": "Provide a detailed description"
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "claimAmount",
-            "type": "currency",
-            "label": "Claim Amount (USD)",
-            "currency": "USD",
-            "placeholder": "0.00"
-          },
-          {
-            "id": "agreeToTerms",
-            "type": "checkbox",
-            "label": "I agree to the terms and conditions"
-          },
-          {
-            "id": "damagePhotos",
-            "type": "file",
-            "label": "Upload Photos of Damage",
-            "accept": "image/*"
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "fullName": "Alex Brown",
-      "email": "alex.brown@email.com",
-      "phone": "5551234567",
-      "policyNumber": "P123456",
-      "claimType": "Auto",
-      "incidentDate": "2023-08-15",
-      "incidentLocation": "123 Elm St, Springfield",
-      "incidentDescription": "Rear-ended at a traffic light",
-      "claimAmount": "1500.00",
-      "agreeToTerms": true,
-      "damagePhotos": null
-    }
-  },
-  "36": {
-    "id": "36",
-    "title": "Pet Adoption Application",
-    "description": "Application form for individuals interested in adopting a pet",
-    "type": "multipage",
-    "inputToLLM": "You are filling out an application to adopt a pet. Page 1: Your name is Alex Turner, email is alex.turner@example.com, phone is 5557654321, address is 123 Pet Lane, Petville, ST 98765, and you currently own one dog and a cat. Page 2: You are interested in adopting a 'Dog', have a preference for male pets, and you are available for a home visit on 2023-12-15. Page 3: You understand and agree to the adoption terms, have the registration fee of $75.00 ready, and your preferred payment method is credit card. Your card number is 4111111111111111, with expiration date 11/24 and CVV 321.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "fullName",
-            "type": "text",
-            "label": "Full Name",
-            "placeholder": "Enter your full name"
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com"
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567"
-          },
-          {
-            "id": "address",
-            "type": "text",
-            "label": "Residential Address",
-            "placeholder": "Street, City, State, ZIP"
-          },
-          {
-            "id": "currentPets",
-            "type": "multiselect",
-            "label": "Current Pets",
-            "options": [
-              "None",
-              "Dog",
-              "Cat",
-              "Bird",
-              "Fish",
-              "Other"
-            ]
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "petType",
-            "type": "select",
-            "label": "Type of Pet Interested In",
-            "options": [
-              "Dog",
-              "Cat",
-              "Bird",
-              "Other"
-            ]
-          },
-          {
-            "id": "genderPreference",
-            "type": "radio",
-            "label": "Gender Preference",
-            "options": [
-              "Male",
-              "Female",
-              "No Preference"
-            ]
-          },
-          {
-            "id": "homeVisitDate",
-            "type": "date",
-            "label": "Home Visit Availability",
-            "allowed": "after"
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "agreeToTerms",
-            "type": "checkbox",
-            "label": "I agree to the adoption terms and conditions"
-          },
-          {
-            "id": "registrationFee",
-            "type": "currency",
-            "label": "Registration Fee (USD)",
-            "currency": "USD",
-            "placeholder": "0.00"
-          },
-          {
-            "id": "paymentMethod",
-            "type": "select",
-            "label": "Preferred Payment Method",
-            "options": [
-              "Credit Card",
-              "PayPal",
-              "Bank Transfer"
-            ]
-          },
-          {
-            "id": "cardNumber",
-            "type": "credit-card",
-            "label": "Credit Card Number",
-            "placeholder": "1234 5678 9012 3456"
-          },
-          {
-            "id": "expirationDate",
-            "type": "expiration-date",
-            "label": "Expiration Date",
-            "placeholder": "MM/YY"
-          },
-          {
-            "id": "cvv",
-            "type": "cvv",
-            "label": "CVV",
-            "placeholder": "123"
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "fullName": "Alex Turner",
-      "email": "alex.turner@example.com",
-      "phone": "5557654321",
-      "address": "123 Pet Lane, Petville, ST 98765",
-      "currentPets": [
-        "Dog",
-        "Cat"
-      ],
-      "petType": "Dog",
-      "genderPreference": "Male",
-      "homeVisitDate": "2023-12-15",
-      "agreeToTerms": true,
-      "registrationFee": "75.00",
-      "paymentMethod": "Credit Card",
-      "cardNumber": "4111111111111111",
-      "expirationDate": "11/24",
-      "cvv": "321"
-    }
-  },
-  "37": {
-    "id": "37",
-    "title": "Non-Disclosure Agreement Form",
-    "description": "Form to formalize confidentiality agreements between parties",
-    "type": "single-page",
-    "inputToLLM": "You are filling out an NDA form. Your full name is Alex Brown, your email is alex.brown@example.com, phone number is 5559876543, company name is SecureTech Inc., your role is Software Developer, the date of agreement is 2023-11-15, you agree to the terms, you have attached a signed document, and your signature is 'Alex Brown'.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "fullName",
-            "type": "text",
-            "label": "Full Name",
-            "placeholder": "Enter your full name"
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com"
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567"
-          },
-          {
-            "id": "companyName",
-            "type": "text",
-            "label": "Company Name",
-            "placeholder": "Enter your company name"
-          },
-          {
-            "id": "role",
-            "type": "text",
-            "label": "Your Role",
-            "placeholder": "Your role in the company"
-          },
-          {
-            "id": "dateOfAgreement",
-            "type": "date",
-            "label": "Date of Agreement",
-            "placeholder": null,
-            "allowed": "before"
-          },
-          {
-            "id": "agreeTerms",
-            "type": "checkbox",
-            "label": "I agree to the terms and conditions",
-            "placeholder": null
-          },
-          {
-            "id": "attachment",
-            "type": "file",
-            "label": "Attach Signed Document",
-            "placeholder": null,
-            "accept": ".pdf,.doc,.docx"
-          },
-          {
-            "id": "signature",
-            "type": "text",
-            "label": "Signature",
-            "placeholder": "Your signature"
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "fullName": "Alex Brown",
-      "email": "alex.brown@example.com",
-      "phone": "5559876543",
-      "companyName": "SecureTech Inc.",
-      "role": "Software Developer",
-      "dateOfAgreement": "2023-11-15",
-      "agreeTerms": true,
-      "attachment": "",
-      "signature": "Alex Brown"
-    }
-  },
-  "38": {
-    "id": "38",
-    "title": "Train Booking Form",
-    "description": "A form for booking train tickets including passenger details, journey information, and payment details.",
-    "type": "multipage",
-    "inputToLLM": "You are booking a train ticket. Page 1: Your name is Alex Johnson, email is alex.johnson@email.com, phone is 5553216547, and you are booking for 2 adults and 1 child. Page 2: The departure station is New York, the arrival station is Washington DC, the travel date is 2024-03-15, and you prefer an aisle seat. Page 3: Your card number is 4111111111111111, expiration is 11/24, CVV is 456, and you agree to the booking terms.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "passengerName",
-            "type": "text",
-            "label": "Passenger Name",
-            "placeholder": "Enter your full name"
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com"
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567"
-          },
-          {
-            "id": "adults",
-            "type": "number",
-            "label": "Number of Adults",
-            "min": 1,
-            "max": 10
-          },
-          {
-            "id": "children",
-            "type": "number",
-            "label": "Number of Children",
-            "min": 0,
-            "max": 5
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "departureStation",
-            "type": "select",
-            "label": "Departure Station",
-            "options": [
-              "New York",
-              "Boston",
-              "Philadelphia",
-              "Chicago"
-            ]
-          },
-          {
-            "id": "arrivalStation",
-            "type": "select",
-            "label": "Arrival Station",
-            "options": [
-              "Washington DC",
-              "Baltimore",
-              "Richmond",
-              "Atlanta"
-            ]
-          },
-          {
-            "id": "travelDate",
-            "type": "date",
-            "label": "Travel Date",
-            "allowed": "after"
-          },
-          {
-            "id": "seatPreference",
-            "type": "select",
-            "label": "Seat Preference",
-            "options": [
-              "Aisle",
-              "Window",
-              "No Preference"
-            ]
+            "label": "Medical Conditions",
+            "placeholder": "List any medical conditions",
+            "required": false
           }
         ]
       },
@@ -1084,43 +331,1068 @@
             "id": "cardNumber",
             "type": "credit-card",
             "label": "Credit Card Number",
-            "placeholder": "1234 5678 9012 3456"
+            "placeholder": "1234 5678 9012 3456",
+            "required": true
           },
           {
             "id": "expirationDate",
             "type": "expiration-date",
             "label": "Expiration Date",
-            "placeholder": "MM/YY"
+            "placeholder": "MM/YY",
+            "required": true
           },
           {
             "id": "cvv",
             "type": "cvv",
             "label": "CVV",
             "placeholder": "123",
-            "maxLength": 4
+            "maxLength": 4,
+            "required": true
           },
           {
             "id": "agreeToTerms",
             "type": "checkbox",
-            "label": "I agree to the booking terms and conditions"
+            "label": "I agree to the terms and conditions",
+            "required": true
           }
         ]
       }
     ],
     "groundTruth": {
-      "passengerName": "Alex Johnson",
-      "email": "alex.johnson@email.com",
-      "phone": "5553216547",
-      "adults": 2,
-      "children": 1,
-      "departureStation": "New York",
-      "arrivalStation": "Washington DC",
-      "travelDate": "2024-03-15",
-      "seatPreference": "Aisle",
+      "fullName": "Emily Turner",
+      "email": "emily.turner@example.com",
+      "phone": "5552468101",
+      "classPreference": "Morning",
+      "workoutType": "Yoga",
+      "classDate": "2023-11-15",
+      "needEquipment": true,
+      "medicalConditions": "",
       "cardNumber": "4111111111111111",
       "expirationDate": "11/24",
-      "cvv": "456",
+      "cvv": "321",
       "agreeToTerms": true
+    }
+  },
+  "32": {
+    "id": "32",
+    "title": "Residential Lease Application",
+    "description": "Application form for prospective tenants to apply for a residential lease",
+    "type": "multipage",
+    "layout": "wizard-style",
+    "inputToLLM": "You are applying for a residential lease. On Page 1, your full name is Alice Johnson, date of birth is 1985-06-15, email is alice.johnson@example.com, phone number is 5551236789, and you currently live at 123 Main St, Springfield, IL 62701. On Page 2, your employment status is Employed, you work at Tech Solutions with a monthly income of $4000.00, your employment start date was 2015-05-10, and your supervisor's name is Robert Smith with phone 5559876543. On Page 3, you are applying for the apartment at 456 Elm St, Springfield, IL 62702 starting from 2024-02-01, and you have no pets. You agree to the lease terms.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "currentAddress",
+            "type": "address",
+            "label": "Current Address",
+            "placeholder": "Street, City, State, ZIP",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "employmentStatus",
+            "type": "select",
+            "label": "Employment Status",
+            "options": [
+              "Employed",
+              "Self-Employed",
+              "Unemployed",
+              "Student"
+            ],
+            "required": true
+          },
+          {
+            "id": "employerName",
+            "type": "text",
+            "label": "Employer Name",
+            "placeholder": "Enter employer name",
+            "required": true
+          },
+          {
+            "id": "monthlyIncome",
+            "type": "currency",
+            "label": "Monthly Income",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "employmentStartDate",
+            "type": "date",
+            "label": "Employment Start Date",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "supervisorName",
+            "type": "text",
+            "label": "Supervisor's Name",
+            "placeholder": "Enter supervisor's name",
+            "required": false
+          },
+          {
+            "id": "supervisorPhone",
+            "type": "phone",
+            "label": "Supervisor's Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": false
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "desiredApartmentAddress",
+            "type": "address",
+            "label": "Desired Apartment Address",
+            "placeholder": "Street, City, State, ZIP",
+            "required": true
+          },
+          {
+            "id": "leaseStartDate",
+            "type": "date",
+            "label": "Lease Start Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "havePets",
+            "type": "switch",
+            "label": "Do you have pets?",
+            "required": false
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the lease terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alice Johnson",
+      "dateOfBirth": "1985-06-15",
+      "email": "alice.johnson@example.com",
+      "phone": "5551236789",
+      "currentAddress": "123 Main St, Springfield, IL 62701",
+      "employmentStatus": "Employed",
+      "employerName": "Tech Solutions",
+      "monthlyIncome": "4000.00",
+      "employmentStartDate": "2015-05-10",
+      "supervisorName": "Robert Smith",
+      "supervisorPhone": "5559876543",
+      "desiredApartmentAddress": "456 Elm St, Springfield, IL 62702",
+      "leaseStartDate": "2024-02-01",
+      "havePets": false,
+      "agreeToTerms": true
+    }
+  },
+  "33": {
+    "id": "33",
+    "title": "Bus Booking Form",
+    "description": "Form for booking bus tickets for travel",
+    "type": "multipage",
+    "layout": "split-screen",
+    "inputToLLM": "You are booking a bus ticket. Page 1: Your name is Alice Johnson, email is alice.johnson@example.com, phone is 5551122334, and you prefer window seat. Page 2: You are travelling from New York to Boston, departure date is 2023-12-20, return date is 2023-12-27. Page 3: You will pay $75.50 with card number 4111111111111111, expiration date is 11/24, and CVV is 321. You agree to the terms and conditions.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "seatPreference",
+            "type": "select",
+            "label": "Seat Preference",
+            "options": [
+              "Window",
+              "Aisle",
+              "No Preference"
+            ],
+            "required": false
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "departureLocation",
+            "type": "text",
+            "label": "Departure Location",
+            "placeholder": "City, State",
+            "required": true
+          },
+          {
+            "id": "destinationLocation",
+            "type": "text",
+            "label": "Destination Location",
+            "placeholder": "City, State",
+            "required": true
+          },
+          {
+            "id": "departureDate",
+            "type": "date",
+            "label": "Departure Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "returnDate",
+            "type": "date",
+            "label": "Return Date",
+            "allowed": "after",
+            "required": false
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "paymentAmount",
+            "type": "currency",
+            "label": "Total Payment (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "cardNumber",
+            "type": "credit-card",
+            "label": "Credit Card Number",
+            "placeholder": "1234 5678 9012 3456",
+            "required": true
+          },
+          {
+            "id": "expirationDate",
+            "type": "expiration-date",
+            "label": "Expiration Date",
+            "placeholder": "MM/YY",
+            "required": true
+          },
+          {
+            "id": "cvv",
+            "type": "cvv",
+            "label": "CVV",
+            "placeholder": "123",
+            "maxLength": 3,
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alice Johnson",
+      "email": "alice.johnson@example.com",
+      "phone": "5551122334",
+      "seatPreference": "Window",
+      "departureLocation": "New York",
+      "destinationLocation": "Boston",
+      "departureDate": "2023-12-20",
+      "returnDate": "2023-12-27",
+      "paymentAmount": "75.50",
+      "cardNumber": "4111111111111111",
+      "expirationDate": "11/24",
+      "cvv": "321",
+      "agreeToTerms": true
+    }
+  },
+  "34": {
+    "id": "34",
+    "title": "Freelance Project Bid Submission",
+    "description": "Submit your bid for a freelance project opportunity",
+    "type": "multipage",
+    "layout": "two-column",
+    "inputToLLM": "You are a freelancer submitting a bid for a web development project. Page 1: Your name is Alex Doe, your email is alex.doe@freelance.com, and your phone number is 5551239876. You specialize in Frontend Development and Backend Development. Page 2: Your proposed budget for the project is $5000, estimated completion date is 2024-06-01, and you can start after 2024-05-01. You uploaded a portfolio PDF. Page 3: Your bid includes detailed timeline and cost breakdown in the document, and you agree to the terms and conditions.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "specialization",
+            "type": "multiselect",
+            "label": "Areas of Specialization",
+            "options": [
+              "Frontend Development",
+              "Backend Development",
+              "UI/UX Design",
+              "Mobile App Development",
+              "DevOps"
+            ],
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "budget",
+            "type": "currency",
+            "label": "Proposed Budget (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "estimatedCompletionDate",
+            "type": "date",
+            "label": "Estimated Completion Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "startDateAvailability",
+            "type": "date",
+            "label": "Available to Start After",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "portfolio",
+            "type": "file",
+            "label": "Upload Portfolio",
+            "accept": ".pdf",
+            "required": false
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "bidDetails",
+            "type": "textarea",
+            "label": "Bid Details",
+            "placeholder": "Provide a detailed timeline and cost breakdown",
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Doe",
+      "email": "alex.doe@freelance.com",
+      "phone": "5551239876",
+      "specialization": [
+        "Frontend Development",
+        "Backend Development"
+      ],
+      "budget": "5000",
+      "estimatedCompletionDate": "2024-06-01",
+      "startDateAvailability": "2024-05-01",
+      "portfolio": "portfolio.pdf",
+      "bidDetails": "Detailed timeline and cost breakdown included.",
+      "agreeToTerms": true
+    }
+  },
+  "35": {
+    "id": "35",
+    "title": "Wholesale Purchase Form",
+    "description": "Form for placing wholesale orders with vendor information and payment details",
+    "type": "multipage",
+    "layout": "single-column",
+    "inputToLLM": "You are placing a wholesale order. On Page 1, your company is Global Supplies Inc., contact person is Michael Adams, email is michael.adams@globalsupplies.com, phone is 5556789012, and the preferred delivery date is 2024-06-15. On Page 2, you are ordering 500 units of 'Industrial Widgets', unit price is $25.00, and you want to apply a discount code 'SAVE10'. On Page 3, your shipping address is 1234 Market St, Suite 200, Springfield, IL, 62701, and you prefer expedited shipping. On Page 4, total order cost is $12500.00, credit card number is 4111111111111111, expiration date is 05/26, CVV is 321, and you agree to the purchase terms.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "companyName",
+            "type": "text",
+            "label": "Company Name",
+            "placeholder": "Enter your company name",
+            "required": true
+          },
+          {
+            "id": "contactPerson",
+            "type": "text",
+            "label": "Contact Person",
+            "placeholder": "Enter contact person's name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "preferredDeliveryDate",
+            "type": "date",
+            "label": "Preferred Delivery Date",
+            "allowed": "after",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "productDescription",
+            "type": "text",
+            "label": "Product Description",
+            "placeholder": "Describe the product",
+            "required": true
+          },
+          {
+            "id": "quantity",
+            "type": "number",
+            "label": "Quantity",
+            "placeholder": "Enter quantity",
+            "min": 1,
+            "required": true
+          },
+          {
+            "id": "unitPrice",
+            "type": "currency",
+            "label": "Unit Price (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "discountCode",
+            "type": "text",
+            "label": "Discount Code",
+            "placeholder": "Enter discount code",
+            "required": false
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "shippingAddress",
+            "type": "address",
+            "label": "Shipping Address",
+            "placeholder": "Enter full shipping address",
+            "required": true
+          },
+          {
+            "id": "city",
+            "type": "text",
+            "label": "City",
+            "placeholder": "Enter city",
+            "required": true
+          },
+          {
+            "id": "state",
+            "type": "state",
+            "label": "State",
+            "placeholder": "Enter state",
+            "required": true
+          },
+          {
+            "id": "zipCode",
+            "type": "zip",
+            "label": "ZIP Code",
+            "placeholder": "Enter ZIP code",
+            "required": true
+          },
+          {
+            "id": "shippingMethod",
+            "type": "select",
+            "label": "Shipping Method",
+            "options": [
+              "Standard",
+              "Expedited",
+              "Overnight"
+            ],
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 4,
+        "fields": [
+          {
+            "id": "totalCost",
+            "type": "currency",
+            "label": "Total Order Cost (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "creditCardNumber",
+            "type": "credit-card",
+            "label": "Credit Card Number",
+            "placeholder": "1234 5678 9012 3456",
+            "required": true
+          },
+          {
+            "id": "expirationDate",
+            "type": "expiration-date",
+            "label": "Expiration Date",
+            "placeholder": "MM/YY",
+            "required": true
+          },
+          {
+            "id": "cvv",
+            "type": "cvv",
+            "label": "CVV",
+            "placeholder": "123",
+            "maxLength": 4,
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the purchase terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "companyName": "Global Supplies Inc.",
+      "contactPerson": "Michael Adams",
+      "email": "michael.adams@globalsupplies.com",
+      "phone": "5556789012",
+      "preferredDeliveryDate": "2024-06-15",
+      "productDescription": "Industrial Widgets",
+      "quantity": 500,
+      "unitPrice": "25.00",
+      "discountCode": "SAVE10",
+      "shippingAddress": "1234 Market St, Suite 200",
+      "city": "Springfield",
+      "state": "IL",
+      "zipCode": "62701",
+      "shippingMethod": "Expedited",
+      "totalCost": "12500.00",
+      "creditCardNumber": "4111111111111111",
+      "expirationDate": "05/26",
+      "cvv": "321",
+      "agreeToTerms": true
+    }
+  },
+  "36": {
+    "id": "36",
+    "title": "Flight Booking Form",
+    "description": "Form for booking a flight, including personal details, flight preferences, and payment information",
+    "type": "multipage",
+    "layout": "wizard-style",
+    "inputToLLM": "You are booking a flight. Page 1: Your full name is Alice Johnson, email is alice.johnson@example.com, phone number is 5551239876, and you have a frequent flyer number of 123456789. Page 2: You are flying from New York (JFK) to Los Angeles (LAX), your flight is on 2024-05-15, and you prefer a window seat. Page 3: Your payment is $350.00, card number is 4111111111111111, expiration is 11/25, and CVV is 321, you agree to the booking terms.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "frequentFlyerNumber",
+            "type": "text",
+            "label": "Frequent Flyer Number",
+            "placeholder": "Enter your frequent flyer number",
+            "required": false
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "departureAirport",
+            "type": "select",
+            "label": "Departure Airport",
+            "options": [
+              "New York (JFK)",
+              "San Francisco (SFO)",
+              "Chicago (ORD)"
+            ],
+            "required": true
+          },
+          {
+            "id": "arrivalAirport",
+            "type": "select",
+            "label": "Arrival Airport",
+            "options": [
+              "Los Angeles (LAX)",
+              "Miami (MIA)",
+              "Dallas (DFW)"
+            ],
+            "required": true
+          },
+          {
+            "id": "flightDate",
+            "type": "date",
+            "label": "Flight Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "seatPreference",
+            "type": "radio",
+            "label": "Seat Preference",
+            "options": [
+              "Window",
+              "Aisle",
+              "No preference"
+            ],
+            "required": false
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "paymentAmount",
+            "type": "currency",
+            "label": "Payment Amount (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "cardNumber",
+            "type": "credit-card",
+            "label": "Credit Card Number",
+            "placeholder": "1234 5678 9012 3456",
+            "required": true
+          },
+          {
+            "id": "expirationDate",
+            "type": "expiration-date",
+            "label": "Expiration Date",
+            "placeholder": "MM/YY",
+            "required": true
+          },
+          {
+            "id": "cvv",
+            "type": "cvv",
+            "label": "CVV",
+            "placeholder": "123",
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the booking terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alice Johnson",
+      "email": "alice.johnson@example.com",
+      "phone": "5551239876",
+      "frequentFlyerNumber": "123456789",
+      "departureAirport": "New York (JFK)",
+      "arrivalAirport": "Los Angeles (LAX)",
+      "flightDate": "2024-05-15",
+      "seatPreference": "Window",
+      "paymentAmount": "350.00",
+      "cardNumber": "4111111111111111",
+      "expirationDate": "11/25",
+      "cvv": "321",
+      "agreeToTerms": true
+    }
+  },
+  "37": {
+    "id": "37",
+    "title": "Residential Lease Application",
+    "description": "Application form for prospective tenants applying for a residential lease.",
+    "type": "multipage",
+    "layout": "wizard-style",
+    "inputToLLM": "You are applying for a residential lease. Page 1: Your full name is Alex Johnson, email is alex.johnson@email.com, phone number is 5551234567, and current address is 123 Elm Street, Springfield. Page 2: Your date of birth is 1990-05-15, you are employed at Tech Innovations, your monthly income is 5000, and you have no pets. Page 3: You want to move in on 2024-01-15, prefer a 12-month lease, have a reference from Jane Doe with phone 5559876543, and agree to the lease terms.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "currentAddress",
+            "type": "address",
+            "label": "Current Address",
+            "placeholder": "Enter your current address",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "employment",
+            "type": "text",
+            "label": "Current Employer",
+            "placeholder": "Enter your employer's name",
+            "required": true
+          },
+          {
+            "id": "monthlyIncome",
+            "type": "currency",
+            "label": "Monthly Income (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "hasPets",
+            "type": "checkbox",
+            "label": "Do you have pets?",
+            "required": false
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "moveInDate",
+            "type": "date",
+            "label": "Desired Move-in Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "leaseTerm",
+            "type": "select",
+            "label": "Preferred Lease Term",
+            "options": [
+              "6 months",
+              "12 months",
+              "24 months"
+            ],
+            "required": true
+          },
+          {
+            "id": "referenceName",
+            "type": "text",
+            "label": "Reference Name",
+            "placeholder": "Enter reference name",
+            "required": false
+          },
+          {
+            "id": "referencePhone",
+            "type": "phone",
+            "label": "Reference Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": false
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the lease terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Johnson",
+      "email": "alex.johnson@email.com",
+      "phone": "5551234567",
+      "currentAddress": "123 Elm Street, Springfield",
+      "dateOfBirth": "1990-05-15",
+      "employment": "Tech Innovations",
+      "monthlyIncome": "5000",
+      "hasPets": false,
+      "moveInDate": "2024-01-15",
+      "leaseTerm": "12 months",
+      "referenceName": "Jane Doe",
+      "referencePhone": "5559876543",
+      "agreeToTerms": true
+    }
+  },
+  "38": {
+    "id": "38",
+    "title": "Vehicle Registration Form",
+    "description": "Form for registering a new vehicle with the DMV",
+    "type": "multipage",
+    "layout": "split-screen",
+    "inputToLLM": "You are registering a vehicle. Page 1: Your name is Robert Taylor, address is 123 Elm St, Springfield, email is robert.taylor@email.com, phone is 5553219876. Page 2: The vehicle is a 2023 Toyota Camry, VIN is JT3AC12R8M1005678, license plate is ABC1234, title is clean. Page 3: You choose comprehensive insurance with a $500 deductible, agree to terms, and will pay $150.00 for the registration fee.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "address",
+            "type": "textarea",
+            "label": "Residential Address",
+            "placeholder": "Enter your address",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "vehicleMake",
+            "type": "text",
+            "label": "Vehicle Make",
+            "placeholder": "e.g., Toyota",
+            "required": true
+          },
+          {
+            "id": "vehicleModel",
+            "type": "text",
+            "label": "Vehicle Model",
+            "placeholder": "e.g., Camry",
+            "required": true
+          },
+          {
+            "id": "vehicleYear",
+            "type": "number",
+            "label": "Vehicle Year",
+            "placeholder": "e.g., 2023",
+            "required": true
+          },
+          {
+            "id": "vin",
+            "type": "text",
+            "label": "Vehicle Identification Number (VIN)",
+            "placeholder": "17-character VIN",
+            "required": true
+          },
+          {
+            "id": "licensePlate",
+            "type": "text",
+            "label": "License Plate Number",
+            "placeholder": "e.g., ABC1234",
+            "required": true
+          },
+          {
+            "id": "titleStatus",
+            "type": "select",
+            "label": "Title Status",
+            "options": [
+              "Clean",
+              "Salvage",
+              "Rebuilt"
+            ],
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "insuranceType",
+            "type": "radio",
+            "label": "Insurance Type",
+            "options": [
+              "Liability",
+              "Comprehensive",
+              "Collision"
+            ],
+            "required": true
+          },
+          {
+            "id": "deductible",
+            "type": "select",
+            "label": "Insurance Deductible",
+            "options": [
+              "$250",
+              "$500",
+              "$1000"
+            ],
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the terms and conditions",
+            "required": true
+          },
+          {
+            "id": "registrationFee",
+            "type": "currency",
+            "label": "Registration Fee (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Robert Taylor",
+      "address": "123 Elm St, Springfield",
+      "email": "robert.taylor@email.com",
+      "phone": "5553219876",
+      "vehicleMake": "Toyota",
+      "vehicleModel": "Camry",
+      "vehicleYear": 2023,
+      "vin": "JT3AC12R8M1005678",
+      "licensePlate": "ABC1234",
+      "titleStatus": "Clean",
+      "insuranceType": "Comprehensive",
+      "deductible": "$500",
+      "agreeToTerms": true,
+      "registrationFee": "150.00"
     }
   }
 }
