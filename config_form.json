@@ -124,9 +124,9 @@
     "title": "File Upload - Document",
     "description": "Single file upload input field",
     "type": "single-page",
-    "inputToLLM": "You need to upload a resume document. The file name is resume_john_doe.pdf.",
+    "inputToLLM": "You need to upload a resume document. The file name is Orijeet_Mukherjee_Resume.pdf.",
     "groundTruth": {
-      "resume": "resume_john_doe.pdf"
+      "resume": "Orijeet_Mukherjee_Resume.pdf"
     },
     "pages": [
       {
