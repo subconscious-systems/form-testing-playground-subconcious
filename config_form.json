@@ -1,0 +1,691 @@
+{
+  "contact-form": {
+    "id": "contact-form",
+    "title": "Contact Form",
+    "description": "Basic contact form for customer inquiries",
+    "type": "single-page",
+    "inputToLLM": "You are filling out a contact form. The customer's name is John Smith, email is john.smith@email.com, phone number is 5551234567, and they want to inquire about product pricing.",
+    "groundTruth": {
+      "name": "John Smith",
+      "email": "john.smith@email.com",
+      "phone": "5551234567",
+      "message": "I would like to inquire about product pricing and availability."
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "name",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "message",
+            "type": "textarea",
+            "label": "Message",
+            "placeholder": "Your message here...",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "job-application": {
+    "id": "job-application",
+    "title": "Job Application",
+    "description": "Software engineer position application",
+    "type": "single-page",
+    "inputToLLM": "You are applying for a Software Engineer position. Your name is Sarah Johnson, email is sarah.j@email.com, phone is 5559876543, you have 5 years of experience, your current role is Senior Developer, you have a Bachelor's degree, your skills include Python, JavaScript, and React, and your expected salary is $120000.",
+    "groundTruth": {
+      "fullName": "Sarah Johnson",
+      "email": "sarah.j@email.com",
+      "phone": "5559876543",
+      "yearsExperience": "5",
+      "currentRole": "Senior Developer",
+      "education": "Bachelor's",
+      "skills": ["Python", "JavaScript", "React"],
+      "salary": "120000"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "yearsExperience",
+            "type": "number",
+            "label": "Years of Experience",
+            "min": 0,
+            "max": 50,
+            "required": true
+          },
+          {
+            "id": "currentRole",
+            "type": "text",
+            "label": "Current Job Title",
+            "placeholder": "e.g., Senior Developer",
+            "required": true
+          },
+          {
+            "id": "education",
+            "type": "select",
+            "label": "Education Level",
+            "options": ["High School", "Bachelor's", "Master's", "PhD"],
+            "required": true
+          },
+          {
+            "id": "skills",
+            "type": "searchable-multiselect",
+            "label": "Technical Skills",
+            "options": ["Python", "JavaScript", "React", "Node.js", "Java", "C++", "SQL", "Docker", "Kubernetes"],
+            "required": true
+          },
+          {
+            "id": "salary",
+            "type": "currency",
+            "label": "Expected Salary (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "patient-registration": {
+    "id": "patient-registration",
+    "title": "Patient Registration",
+    "description": "Medical patient registration form",
+    "type": "single-page",
+    "inputToLLM": "You are registering as a new patient. Your name is Michael Chen, date of birth is 1985-03-15, email is michael.chen@email.com, phone is 5554567890, you are male, your insurance provider is BlueCross, and your insurance ID is BC123456789.",
+    "groundTruth": {
+      "patientName": "Michael Chen",
+      "dateOfBirth": "1985-03-15",
+      "email": "michael.chen@email.com",
+      "phone": "5554567890",
+      "gender": "Male",
+      "insuranceProvider": "BlueCross",
+      "insuranceId": "BC123456789",
+      "emergencyContact": "Jane Chen",
+      "emergencyPhone": "5554567891",
+      "agreeToTerms": true
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "patientName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "gender",
+            "type": "radio",
+            "label": "Gender",
+            "options": ["Male", "Female", "Other", "Prefer not to say"],
+            "required": true
+          },
+          {
+            "id": "insuranceProvider",
+            "type": "select",
+            "label": "Insurance Provider",
+            "options": ["BlueCross", "Aetna", "UnitedHealth", "Cigna", "Medicaid", "Medicare", "None"],
+            "required": true
+          },
+          {
+            "id": "insuranceId",
+            "type": "text",
+            "label": "Insurance ID",
+            "placeholder": "Enter your insurance ID",
+            "required": true
+          },
+          {
+            "id": "emergencyContact",
+            "type": "text",
+            "label": "Emergency Contact Name",
+            "placeholder": "Full name",
+            "required": true
+          },
+          {
+            "id": "emergencyPhone",
+            "type": "phone",
+            "label": "Emergency Contact Phone",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the privacy policy and terms of service",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "event-registration": {
+    "id": "event-registration",
+    "title": "Event Registration",
+    "description": "Conference event registration form",
+    "type": "single-page",
+    "inputToLLM": "You are registering for a tech conference. Your name is Emily Rodriguez, email is emily.r@email.com, phone is 5553219876, you want to attend the full conference (3 days), you have dietary restrictions (vegetarian), and you need accommodation.",
+    "groundTruth": {
+      "attendeeName": "Emily Rodriguez",
+      "email": "emily.r@email.com",
+      "phone": "5553219876",
+      "eventType": "Full Conference",
+      "dietaryRestrictions": ["Vegetarian"],
+      "needsAccommodation": true,
+      "specialRequests": "I need a wheelchair accessible room"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "attendeeName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "eventType",
+            "type": "select",
+            "label": "Registration Type",
+            "options": ["Full Conference", "Single Day", "Workshop Only"],
+            "required": true
+          },
+          {
+            "id": "dietaryRestrictions",
+            "type": "multiselect",
+            "label": "Dietary Restrictions",
+            "options": ["None", "Vegetarian", "Vegan", "Gluten-Free", "Kosher", "Halal", "Other"],
+            "required": true
+          },
+          {
+            "id": "needsAccommodation",
+            "type": "switch",
+            "label": "Need Hotel Accommodation",
+            "required": false
+          },
+          {
+            "id": "specialRequests",
+            "type": "textarea",
+            "label": "Special Requests",
+            "placeholder": "Any special accommodations or requests...",
+            "required": false
+          }
+        ]
+      }
+    ]
+  },
+  "product-feedback": {
+    "id": "product-feedback",
+    "title": "Product Feedback",
+    "description": "Customer product feedback and rating form",
+    "type": "single-page",
+    "inputToLLM": "You are providing feedback for a product you purchased. You rate it 4 out of 5 stars, your favorite color is blue, you would recommend it to others, and your feedback is: 'Great product, very satisfied with the quality and delivery speed.'",
+    "groundTruth": {
+      "productName": "Wireless Headphones",
+      "rating": 4,
+      "favoriteColor": "#0000FF",
+      "wouldRecommend": true,
+      "feedback": "Great product, very satisfied with the quality and delivery speed."
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "productName",
+            "type": "text",
+            "label": "Product Name",
+            "placeholder": "Enter product name",
+            "required": true
+          },
+          {
+            "id": "rating",
+            "type": "star-rating",
+            "label": "Rating",
+            "maxStars": 5,
+            "required": true
+          },
+          {
+            "id": "favoriteColor",
+            "type": "color",
+            "label": "Favorite Color",
+            "required": true
+          },
+          {
+            "id": "wouldRecommend",
+            "type": "switch",
+            "label": "Would you recommend this product?",
+            "required": true
+          },
+          {
+            "id": "feedback",
+            "type": "textarea",
+            "label": "Your Feedback",
+            "placeholder": "Share your thoughts...",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "shipping-address": {
+    "id": "shipping-address",
+    "title": "Shipping Address",
+    "description": "E-commerce shipping address form",
+    "type": "single-page",
+    "inputToLLM": "You are providing shipping information. Your name is David Kim, address is 123 Main Street, city is San Francisco, state is California, zip code is 94102, country is United States, and phone is 5557890123.",
+    "groundTruth": {
+      "fullName": "David Kim",
+      "address": "123 Main Street",
+      "city": "San Francisco",
+      "state": "California",
+      "zipCode": "94102",
+      "country": "United States",
+      "phone": "5557890123"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "address",
+            "type": "address",
+            "label": "Street Address",
+            "placeholder": "Enter your address",
+            "required": true
+          },
+          {
+            "id": "city",
+            "type": "text",
+            "label": "City",
+            "placeholder": "Enter city",
+            "required": true
+          },
+          {
+            "id": "state",
+            "type": "state",
+            "label": "State/Province",
+            "required": true
+          },
+          {
+            "id": "zipCode",
+            "type": "zip",
+            "label": "ZIP/Postal Code",
+            "placeholder": "12345",
+            "required": true
+          },
+          {
+            "id": "country",
+            "type": "country",
+            "label": "Country",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "payment-form": {
+    "id": "payment-form",
+    "title": "Payment Form",
+    "description": "Credit card payment processing form",
+    "type": "single-page",
+    "inputToLLM": "You are making a payment. The card number is 4532015112830366, expiration date is 12/25, CVV is 123, and the amount is $99.99.",
+    "groundTruth": {
+      "cardNumber": "4532015112830366",
+      "expirationDate": "12/25",
+      "cvv": "123",
+      "amount": "99.99"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "cardNumber",
+            "type": "credit-card",
+            "label": "Card Number",
+            "placeholder": "1234 5678 9012 3456",
+            "required": true
+          },
+          {
+            "id": "expirationDate",
+            "type": "expiration-date",
+            "label": "Expiration Date",
+            "placeholder": "MM/YY",
+            "required": true
+          },
+          {
+            "id": "cvv",
+            "type": "cvv",
+            "label": "CVV",
+            "placeholder": "123",
+            "maxLength": 4,
+            "required": true
+          },
+          {
+            "id": "amount",
+            "type": "currency",
+            "label": "Amount",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "survey-form": {
+    "id": "survey-form",
+    "title": "Customer Survey",
+    "description": "Customer satisfaction survey",
+    "type": "single-page",
+    "inputToLLM": "You are completing a survey. Your age is 35, satisfaction level is 7 out of 10, you prefer online shopping, your favorite features are 'Easy to use' and 'Fast delivery', and additional comments: 'Overall great experience, would use again.'",
+    "groundTruth": {
+      "age": "35",
+      "satisfactionLevel": 7,
+      "preferredMethod": "Online",
+      "favoriteFeatures": ["Easy to use", "Fast delivery"],
+      "comments": "Overall great experience, would use again."
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "age",
+            "type": "number",
+            "label": "Age",
+            "min": 18,
+            "max": 100,
+            "required": true
+          },
+          {
+            "id": "satisfactionLevel",
+            "type": "slider",
+            "label": "Satisfaction Level (1-10)",
+            "min": 1,
+            "max": 10,
+            "step": 1,
+            "defaultValue": 5,
+            "required": true
+          },
+          {
+            "id": "preferredMethod",
+            "type": "radio",
+            "label": "Preferred Shopping Method",
+            "options": ["Online", "In-Store", "Both"],
+            "required": true
+          },
+          {
+            "id": "favoriteFeatures",
+            "type": "searchable-multiselect",
+            "label": "Favorite Features",
+            "options": ["Easy to use", "Fast delivery", "Good prices", "Customer service", "Product quality"],
+            "required": true
+          },
+          {
+            "id": "comments",
+            "type": "textarea",
+            "label": "Additional Comments",
+            "placeholder": "Any other feedback...",
+            "required": false
+          }
+        ]
+      }
+    ]
+  },
+  "appointment-booking": {
+    "id": "appointment-booking",
+    "title": "Appointment Booking",
+    "description": "Service appointment scheduling form",
+    "type": "single-page",
+    "inputToLLM": "You are booking an appointment. Your name is Lisa Wang, email is lisa.wang@email.com, phone is 5556543210, you want an appointment on 2024-06-15 at 14:30, service type is 'Consultation', and you prefer morning appointments.",
+    "groundTruth": {
+      "customerName": "Lisa Wang",
+      "email": "lisa.wang@email.com",
+      "phone": "5556543210",
+      "appointmentDate": "2024-06-15",
+      "appointmentTime": "14:30",
+      "serviceType": "Consultation",
+      "preferredTime": "Morning"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "customerName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "appointmentDate",
+            "type": "date",
+            "label": "Preferred Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "appointmentTime",
+            "type": "time",
+            "label": "Preferred Time",
+            "required": true
+          },
+          {
+            "id": "serviceType",
+            "type": "select",
+            "label": "Service Type",
+            "options": ["Consultation", "Follow-up", "Treatment", "Check-up"],
+            "required": true
+          },
+          {
+            "id": "preferredTime",
+            "type": "radio",
+            "label": "Preferred Time of Day",
+            "options": ["Morning", "Afternoon", "Evening"],
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "test-multipage-form": {
+    "id": "test-multipage-form",
+    "title": "Test Multipage Form",
+    "description": "Simple 3-page test form for multipage functionality",
+    "type": "multipage",
+    "inputToLLM": "You are filling out a test form. Page 1: First name is Alex, last name is Taylor, email is alex.taylor@email.com. Page 2: Phone is 5551112233, country is United States, date of birth is 1990-05-20. Page 3: Message is 'This is a test message for the multipage form.', and you agree to terms.",
+    "groundTruth": {
+      "firstName": "Alex",
+      "lastName": "Taylor",
+      "email": "alex.taylor@email.com",
+      "phone": "5551112233",
+      "country": "United States",
+      "dateOfBirth": "2025-11-20",
+      "message": "This is a test message for the multipage form.",
+      "terms": true
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "firstName",
+            "type": "text",
+            "label": "First Name",
+            "placeholder": "Enter your first name",
+            "required": true
+          },
+          {
+            "id": "lastName",
+            "type": "text",
+            "label": "Last Name",
+            "placeholder": "Enter your last name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "country",
+            "type": "country",
+            "label": "Country",
+            "required": true
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "message",
+            "type": "textarea",
+            "label": "Additional Message",
+            "placeholder": "Any additional information...",
+            "required": false
+          },
+          {
+            "id": "terms",
+            "type": "checkbox",
+            "label": "I agree to the terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}
