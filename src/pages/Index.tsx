@@ -94,17 +94,17 @@ const Index = () => {
             {/* Stats and Filter */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-wrap gap-4">
-                <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-                  <Zap className="w-3 h-3 mr-1" />
+            <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+              <Zap className="w-3 h-3 mr-1" />
                   Single Page ({allForms.filter(f => f.type === 'single-page').length})
-                </Badge>
-                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-                  <Layers className="w-3 h-3 mr-1" />
+            </Badge>
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+              <Layers className="w-3 h-3 mr-1" />
                   Multipage ({allForms.filter(f => f.type === 'multipage').length})
                 </Badge>
                 <Badge variant="outline" className="bg-muted text-muted-foreground">
                   Total ({allForms.length})
-                </Badge>
+            </Badge>
               </div>
               <div className="flex items-center gap-2">
                 <label htmlFor="filter-type" className="text-sm font-medium text-muted-foreground">
@@ -138,8 +138,8 @@ const Index = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {forms.map((form) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {forms.map((form) => (
             <Card key={form.id} className="hover:shadow-lg transition-all duration-200 border-border/50">
               <CardHeader>
                 <div className="flex items-start justify-between mb-2">
@@ -175,8 +175,8 @@ const Index = () => {
                 </Link>
               </CardFooter>
             </Card>
-            ))}
-          </div>
+          ))}
+        </div>
         )}
       </main>
     </div>

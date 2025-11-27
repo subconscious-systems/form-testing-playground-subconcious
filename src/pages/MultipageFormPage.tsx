@@ -54,8 +54,18 @@ const MultipageFormPage = () => {
     );
   }
 
+  // Debug logging
+  console.log(`[MultipageFormPage] Rendering page ${pageNum} of ${configForm.pages.length}`, {
+    formId: configForm.id,
+    pageNum,
+    totalPages: configForm.pages.length,
+    pageNumbers: configForm.pages.map(p => p.pageNumber),
+    currentPageFound: !!currentPage
+  });
+
   return (
     <DynamicForm
+      key={`${configForm.id}-page-${pageNum}`}
       formId={configForm.id}
       title={configForm.title}
       description={configForm.description}

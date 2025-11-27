@@ -1,4 +1,5 @@
 import formConfigJson from '../../config_form.json';
+import llmGeneratedConfigJson from '../../llm_generated_config.json';
 import { FormConfig, FormDefinition } from '@/types/form-config';
 
 let cachedConfig: FormConfig | null = null;
@@ -24,24 +25,15 @@ const loadLlmConfig = async (): Promise<FormConfig> => {
     return cachedLlmConfig;
   }
   
+  // Import directly from root (like config_form.json)
   try {
-    // Try public folder first (for production), then root (for development)
-    let response = await fetch('/llm_generated_config.json');
-    if (!response.ok) {
-      response = await fetch('/llm_generated_config.json', { cache: 'no-cache' });
-    }
-    if (response.ok) {
-      const data = await response.json();
-      cachedLlmConfig = (data as FormConfig) || {};
-      return cachedLlmConfig;
-    }
+    cachedLlmConfig = (llmGeneratedConfigJson as FormConfig) || {};
+    return cachedLlmConfig;
   } catch (error) {
     console.warn('Failed to load LLM generated config:', error);
+    cachedLlmConfig = {};
+    return cachedLlmConfig;
   }
-  
-  // Return empty config if fetch fails
-  cachedLlmConfig = {};
-  return cachedLlmConfig;
 };
 
 export const loadFormConfig = (): FormConfig => {

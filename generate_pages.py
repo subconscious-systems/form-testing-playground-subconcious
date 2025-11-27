@@ -7,15 +7,26 @@ inputToLLM instructions, and groundTruth values.
 
 import json
 import os
+from dotenv import load_dotenv
 from openai import OpenAI
 from typing import Dict, Any, List
 
+# Load environment variables from .env file
+load_dotenv()
+
 # Initialize OpenAI client
-client = OpenAI()
+api_key = os.getenv('OPENAI_API_KEY')
+if not api_key:
+    raise ValueError(
+        "OPENAI_API_KEY not found. Please create a .env file with OPENAI_API_KEY=your-key-here"
+    )
+
+client = OpenAI(api_key=api_key)
 
 # JSON Schema for form page generation
 FORM_PAGE_SCHEMA = {
     "type": "object",
+    "additionalProperties": False,
     "properties": {
         "id": {
             "type": "string",
@@ -38,20 +49,18 @@ FORM_PAGE_SCHEMA = {
             "type": "string",
             "description": "Detailed instructions for an LLM to fill out this form. Include all field values in a natural language format."
         },
-        "groundTruth": {
-            "type": "object",
-            "description": "Expected values for all fields. Format: dates as 'YYYY-MM-DD' strings, arrays for multi-selects, booleans for checkboxes/switches, numbers as strings or numbers, date-ranges as objects with 'from' and 'to' ISO date strings."
-        },
         "pages": {
             "type": "array",
             "items": {
                 "type": "object",
+                "additionalProperties": False,
                 "properties": {
                     "pageNumber": {"type": "integer"},
                     "fields": {
                         "type": "array",
                         "items": {
                             "type": "object",
+                            "additionalProperties": False,
                             "properties": {
                                 "id": {"type": "string"},
                                 "type": {
@@ -66,32 +75,40 @@ FORM_PAGE_SCHEMA = {
                                     ]
                                 },
                                 "label": {"type": "string"},
-                                "placeholder": {"type": "string"},
                                 "required": {"type": "boolean"},
-                                "options": {"type": "array", "items": {"type": "string"}},
-                                "min": {"type": "number"},
-                                "max": {"type": "number"},
-                                "step": {"type": "number"},
-                                "defaultValue": {"type": ["number", "string"]},
-                                "currency": {"type": "string"},
-                                "maxStars": {"type": "integer"},
-                                "maxLength": {"type": "integer"},
-                                "accept": {"type": "string"},
-                                "allowed": {"type": "string", "enum": ["before", "after"]},
+                                "placeholder": {"type": ["string", "null"]},
+                                "options": {"type": ["array", "null"], "items": {"type": "string"}},
+                                "min": {"type": ["number", "null"]},
+                                "max": {"type": ["number", "null"]},
+                                "step": {"type": ["number", "null"]},
+                                "defaultValue": {"type": ["number", "string", "null"]},
+                                "currency": {"type": ["string", "null"]},
+                                "maxStars": {"type": ["integer", "null"]},
+                                "maxLength": {"type": ["integer", "null"]},
+                                "accept": {"type": ["string", "null"]},
+                                "allowed": {"type": ["string", "null"]},
                                 "chunkFields": {
-                                    "type": "array",
-                                    "items": {"type": "object"}
+                                    "type": ["array", "null"],
+                                    "items": {
+                                        "type": "object",
+                                        "additionalProperties": False
+                                    }
                                 }
                             },
-                            "required": ["id", "type", "label", "required"]
+                            "required": ["id", "type", "label", "required", "placeholder", "options", "min", "max", "step", "defaultValue", "currency", "maxStars", "maxLength", "accept", "allowed", "chunkFields"]
                         }
                     }
                 },
                 "required": ["pageNumber", "fields"]
             }
+        },
+        "groundTruth": {
+            "type": "object",
+            "additionalProperties": True,
+            "description": "Expected values for all fields. This MUST be generated LAST after all pages and fields are defined. For each field ID in the form, provide the expected value. Format: dates as 'YYYY-MM-DD' strings, arrays for multi-selects, booleans for checkboxes/switches, numbers as strings or numbers, date-ranges as objects with 'from' and 'to' ISO date strings."
         }
     },
-    "required": ["id", "title", "description", "type", "inputToLLM", "groundTruth", "pages"]
+    "required": ["id", "title", "description", "type", "inputToLLM", "pages", "groundTruth"]
 }
 
 # Few-shot examples
@@ -195,11 +212,14 @@ def generate_form_page(page_number: int) -> Dict[str, Any]:
     
     system_prompt = """You are an expert form designer creating realistic, industry-grade forms for testing AI form-filling systems.
 
-Your task is to generate a complete form definition that includes:
-1. A realistic use case (e.g., job application, loan application, event registration, etc.)
-2. Proper field types matching the use case
-3. Detailed inputToLLM instructions that describe all field values in natural language
-4. Complete groundTruth object with expected values matching React component output formats:
+Your task is to generate a complete form definition. IMPORTANT: Generate the JSON in this exact order:
+1. id, title, description, type
+2. inputToLLM (describe all field values that will be in groundTruth)
+3. pages (all pages with all fields)
+4. groundTruth (LAST - generate this after you know all field IDs from all pages)
+
+The groundTruth object must contain an entry for EVERY field ID that appears in the pages. 
+Format groundTruth values to match React component output:
    - Dates as 'YYYY-MM-DD' strings
    - Date ranges as objects: {"from": "YYYY-MM-DD", "to": "YYYY-MM-DD"}
    - Arrays for multi-select fields
@@ -216,19 +236,25 @@ Important rules:
 - For multipage forms, distribute fields logically across pages
 - Include validation-appropriate fields (phone, email, URL, etc.)
 - Make forms industry-realistic (job apps, loan apps, registrations, etc.)
+- Generate groundTruth LAST after you have defined all pages and fields
 
 Generate diverse forms - vary industries, complexity, and field types."""
 
-    user_prompt = f"""Generate form page #{page_number}.
+    user_prompt = f"""Generate a realistic, industry-grade form. It can be single-page or multipage (if multipage, use 2-4 pages).
 
-Create a realistic, industry-grade form. It can be single-page or multipage (if multipage, use 2-4 pages).
+CRITICAL: Generate the JSON in this exact order:
+1. First: id, title, description, type
+2. Second: inputToLLM (describe what values will be filled in - this guides groundTruth)
+3. Third: pages (define ALL pages and ALL fields with their IDs)
+4. LAST: groundTruth (after you know all field IDs from pages, create groundTruth with a key for each field ID)
 
 Requirements:
 - Use a realistic industry scenario (job application, loan application, event registration, subscription, etc.)
 - Include 5-12 fields per page
 - Mix different field types appropriately
-- Ensure inputToLLM clearly describes ALL field values
-- Ensure groundTruth exactly matches inputToLLM values
+- In inputToLLM, describe ALL field values that will appear in groundTruth
+- In groundTruth, include an entry for EVERY field ID from all pages
+- Ensure groundTruth values exactly match what you described in inputToLLM
 - Use proper date formats and restrictions
 - Make it realistic and useful for testing AI form-filling
 
@@ -240,7 +266,7 @@ Examples of good forms:
 - Insurance application (personal info, coverage options, medical history)
 - Hotel booking (guest info, dates, preferences, payment)
 
-Generate a unique, realistic form that hasn't been generated yet."""
+Generate a unique, realistic form that hasn't been generated yet. Remember: groundTruth must be the LAST property in the JSON."""
 
     try:
         response = client.beta.chat.completions.parse(
@@ -254,7 +280,7 @@ Generate a unique, realistic form that hasn't been generated yet."""
                 "type": "json_schema",
                 "json_schema": {
                     "name": "form_definition",
-                    "strict": True,
+                    "strict": False,
                     "schema": FORM_PAGE_SCHEMA
                 }
             },

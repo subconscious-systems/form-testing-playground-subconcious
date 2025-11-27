@@ -63,9 +63,25 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
 
   // Load existing data for this page on mount
   useEffect(() => {
+    // Clear comparison result when navigating to a new page
+    // This ensures the form always renders on page load, not the evaluation report
+    // IMPORTANT: This must run BEFORE any other logic to prevent showing evaluation on page load
+    setComparisonResult(null);
     // Data is already loaded via useFormState hook
     // This effect can be used for any additional initialization if needed
   }, [formId, pageNumber]);
+  
+  // Debug logging to help diagnose issues
+  useEffect(() => {
+    console.log(`[DynamicForm] Rendering page ${pageNumber} of ${totalPages}`, {
+      formId,
+      pageNumber,
+      totalPages,
+      hasComparisonResult: !!comparisonResult,
+      pageFields: page.fields.length,
+      isLastPage: pageNumber === totalPages
+    });
+  }, [formId, pageNumber, totalPages, comparisonResult, page.fields.length]);
 
   const handleFieldChange = (fieldId: string, value: any) => {
     updateFieldValue(fieldId, value);

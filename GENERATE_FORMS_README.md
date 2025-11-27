@@ -9,20 +9,19 @@ This directory contains scripts to generate form definitions using OpenAI's GPT-
 pip install -r requirements.txt
 ```
 
-2. Set your OpenAI API key:
+2. Create a `.env` file in the project root:
 ```bash
-export OPENAI_API_KEY="your-api-key-here"
+cp .env.example .env
 ```
 
-Or on Windows:
-```cmd
-set OPENAI_API_KEY=your-api-key-here
-```
-
-Or create a `.env` file (if using python-dotenv):
+3. Edit `.env` and add your OpenAI API key:
 ```
 OPENAI_API_KEY=your-api-key-here
 ```
+
+You can get your API key from: https://platform.openai.com/api-keys
+
+**Note:** Make sure `.env` is in your `.gitignore` to avoid committing your API key!
 
 ## Usage
 

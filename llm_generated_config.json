@@ -1,2 +1,1376 @@
-{}
-
+{
+  "llm-form-1": {
+    "id": "llm-form-1",
+    "title": "Loan Application Form",
+    "description": "Comprehensive loan application form for personal loan requests.",
+    "type": "multipage",
+    "inputToLLM": "You are applying for a personal loan. Page 1: Your name is Alex Johnson, date of birth is 1990-04-15, email is alex.johnson@email.com, phone is 5552345678, address is 123 Elm Street, credit score is 720. Page 2: You want a loan amount of $15,000, loan term is 5 years, purpose is debt consolidation. Page 3: You are employed, employer is Tech Solutions, annual income is $75,000, employment start date is 2015-06-01.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name"
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com"
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567"
+          },
+          {
+            "id": "address",
+            "type": "textarea",
+            "label": "Address",
+            "placeholder": "123 Elm St, City, State"
+          },
+          {
+            "id": "creditScore",
+            "type": "number",
+            "label": "Credit Score",
+            "min": 300,
+            "max": 850
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Loan Amount (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "loanTerm",
+            "type": "select",
+            "label": "Loan Term",
+            "options": [
+              "1 year",
+              "3 years",
+              "5 years",
+              "7 years",
+              "10 years"
+            ]
+          },
+          {
+            "id": "loanPurpose",
+            "type": "select",
+            "label": "Purpose of Loan",
+            "options": [
+              "Debt Consolidation",
+              "Home Improvement",
+              "Medical Expenses",
+              "Education",
+              "Other"
+            ]
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "employmentStatus",
+            "type": "radio",
+            "label": "Employment Status",
+            "options": [
+              "Employed",
+              "Self-Employed",
+              "Unemployed",
+              "Retired"
+            ]
+          },
+          {
+            "id": "employerName",
+            "type": "text",
+            "label": "Employer Name",
+            "placeholder": "Enter employer name"
+          },
+          {
+            "id": "annualIncome",
+            "type": "currency",
+            "label": "Annual Income (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "employmentStartDate",
+            "type": "date",
+            "label": "Employment Start Date",
+            "allowed": "before"
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Johnson",
+      "dateOfBirth": "1990-04-15",
+      "email": "alex.johnson@email.com",
+      "phone": "5552345678",
+      "address": "123 Elm Street",
+      "creditScore": 720,
+      "loanAmount": "15000.00",
+      "loanTerm": "5 years",
+      "loanPurpose": "Debt Consolidation",
+      "employmentStatus": "Employed",
+      "employerName": "Tech Solutions",
+      "annualIncome": "75000.00",
+      "employmentStartDate": "2015-06-01"
+    }
+  },
+  "llm-form-2": {
+    "id": "llm-form-2",
+    "title": "Personal Loan Application Form",
+    "description": "Application for a personal loan, collecting applicant's personal, financial, and employment information.",
+    "type": "multipage",
+    "inputToLLM": "You are applying for a personal loan. Page 1: Your name is Emily Green, your date of birth is 1985-07-15, your email is emily.green@email.com, and your phone number is 5551239876. Page 2: Your annual income is 60000, current employer is Tech Solutions Inc., employment duration is 5 years, and you consent to a credit check. Page 3: You are requesting a loan amount of 15000, you choose a 3-year term, and your preferred contact method is email.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name"
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com"
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567"
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "annualIncome",
+            "type": "number",
+            "label": "Annual Income (USD)",
+            "placeholder": "e.g., 50000"
+          },
+          {
+            "id": "currentEmployer",
+            "type": "text",
+            "label": "Current Employer",
+            "placeholder": "Enter your employer's name"
+          },
+          {
+            "id": "employmentDuration",
+            "type": "number",
+            "label": "Employment Duration (years)",
+            "placeholder": "Enter number of years"
+          },
+          {
+            "id": "consentCreditCheck",
+            "type": "checkbox",
+            "label": "Consent to Credit Check"
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Loan Amount Requested (USD)",
+            "currency": "USD",
+            "placeholder": "e.g., 10000"
+          },
+          {
+            "id": "loanTerm",
+            "type": "select",
+            "label": "Preferred Loan Term",
+            "options": [
+              "1 year",
+              "2 years",
+              "3 years",
+              "4 years",
+              "5 years"
+            ]
+          },
+          {
+            "id": "preferredContact",
+            "type": "select",
+            "label": "Preferred Contact Method",
+            "options": [
+              "phone",
+              "email",
+              "mail"
+            ]
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Emily Green",
+      "dateOfBirth": "1985-07-15",
+      "email": "emily.green@email.com",
+      "phone": "5551239876",
+      "annualIncome": 60000,
+      "currentEmployer": "Tech Solutions Inc.",
+      "employmentDuration": 5,
+      "consentCreditCheck": true,
+      "loanAmount": "15000",
+      "loanTerm": "3 years",
+      "preferredContact": "email"
+    }
+  },
+  "llm-form-3": {
+    "id": "llm-form-3",
+    "title": "Loan Application Form",
+    "description": "Application for personal loan including personal, financial, and employment information",
+    "type": "multipage",
+    "inputToLLM": "You are applying for a personal loan. Page 1: Your full name is Alex Turner, date of birth is 1985-05-15, email is alex.turner@example.com, and phone number is 5553216789. Page 2: Your annual income is $75,000, you have no outstanding debt, and your credit score is 720. Page 3: You work for Tech Innovations as a Software Engineer, have been employed for 3 years, and your employer's phone number is 5559871234. Page 4: You are requesting a loan amount of $20,000 with a term of 5 years, and you agree to the terms and conditions.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name"
+          },
+          {
+            "id": "dob",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com"
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567"
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "annualIncome",
+            "type": "currency",
+            "label": "Annual Income",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "outstandingDebt",
+            "type": "checkbox",
+            "label": "Do you have any outstanding debt?"
+          },
+          {
+            "id": "creditScore",
+            "type": "number",
+            "label": "Credit Score",
+            "min": 300,
+            "max": 850
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "employer",
+            "type": "text",
+            "label": "Employer",
+            "placeholder": "Enter your employer"
+          },
+          {
+            "id": "jobTitle",
+            "type": "text",
+            "label": "Job Title",
+            "placeholder": "Enter your job title"
+          },
+          {
+            "id": "yearsEmployed",
+            "type": "number",
+            "label": "Years Employed",
+            "min": 0
+          },
+          {
+            "id": "employerPhone",
+            "type": "phone",
+            "label": "Employer's Phone Number",
+            "placeholder": "(555) 987-6543"
+          }
+        ]
+      },
+      {
+        "pageNumber": 4,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Loan Amount Requested",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "loanTerm",
+            "type": "select",
+            "label": "Loan Term (years)",
+            "options": [
+              "1",
+              "3",
+              "5",
+              "10"
+            ]
+          },
+          {
+            "id": "agreeTerms",
+            "type": "checkbox",
+            "label": "I agree to the terms and conditions"
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Turner",
+      "dob": "1985-05-15",
+      "email": "alex.turner@example.com",
+      "phone": "5553216789",
+      "annualIncome": "75000",
+      "outstandingDebt": false,
+      "creditScore": 720,
+      "employer": "Tech Innovations",
+      "jobTitle": "Software Engineer",
+      "yearsEmployed": 3,
+      "employerPhone": "5559871234",
+      "loanAmount": "20000",
+      "loanTerm": "5",
+      "agreeTerms": true
+    }
+  },
+  "llm-form-4": {
+    "id": "llm-form-4",
+    "title": "Personal Loan Application",
+    "description": "Application form for a personal loan including personal information, employment details, and financial information.",
+    "type": "multipage",
+    "inputToLLM": "You are applying for a personal loan. Page 1: Your full name is Michael Green, date of birth is 1985-05-20, email is michael.green@email.com, phone is 5551122334, and your address is 123 Elm St, Springfield, IL. Page 2: You are employed at TechSolutions Inc., position is Software Developer, annual salary is $95000, you've been employed since 2015-06-01. Page 3: You are requesting a loan amount of $15000, term is 36 months, purpose is debt consolidation, you have reviewed all terms and you agree to them.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "dob",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "address",
+            "type": "text",
+            "label": "Home Address",
+            "placeholder": "123 Elm St, Springfield, IL",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "employer",
+            "type": "text",
+            "label": "Employer",
+            "placeholder": "Company name",
+            "required": true
+          },
+          {
+            "id": "position",
+            "type": "text",
+            "label": "Position",
+            "placeholder": "Your job title",
+            "required": true
+          },
+          {
+            "id": "annualSalary",
+            "type": "currency",
+            "label": "Annual Salary",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "employmentStartDate",
+            "type": "date",
+            "label": "Employment Start Date",
+            "allowed": "before",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Loan Amount Requested",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "loanTerm",
+            "type": "select",
+            "label": "Loan Term (Months)",
+            "options": [
+              "12",
+              "24",
+              "36",
+              "48",
+              "60"
+            ],
+            "required": true
+          },
+          {
+            "id": "loanPurpose",
+            "type": "select",
+            "label": "Purpose of Loan",
+            "options": [
+              "Debt Consolidation",
+              "Home Improvement",
+              "Car Purchase",
+              "Education",
+              "Medical",
+              "Other"
+            ],
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the loan terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Michael Green",
+      "dob": "1985-05-20",
+      "email": "michael.green@email.com",
+      "phone": "5551122334",
+      "address": "123 Elm St, Springfield, IL",
+      "employer": "TechSolutions Inc.",
+      "position": "Software Developer",
+      "annualSalary": "95000",
+      "employmentStartDate": "2015-06-01",
+      "loanAmount": "15000",
+      "loanTerm": "36",
+      "loanPurpose": "Debt Consolidation",
+      "agreeToTerms": true
+    }
+  },
+  "llm-form-5": {
+    "id": "llm-form-5",
+    "title": "Loan Application Form",
+    "description": "Application form for personal loan requests including personal, employment, and financial information.",
+    "type": "multipage",
+    "inputToLLM": "You are applying for a personal loan. Page 1: Your name is Alex Carter, date of birth is 1985-07-20, email is alex.carter@email.com, phone is 5553219876. Page 2: You are employed at Innovatech Solutions, your job title is Software Developer, and your annual income is $85000. Page 3: You want a loan amount of $15000, the loan purpose is 'Home Improvement', you agree to the loan terms, and today's date is 2023-11-01.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name"
+          },
+          {
+            "id": "dob",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "placeholder": "YYYY-MM-DD"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com"
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567"
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "employer",
+            "type": "text",
+            "label": "Employer Name",
+            "placeholder": "Enter your employer's name"
+          },
+          {
+            "id": "jobTitle",
+            "type": "text",
+            "label": "Job Title",
+            "placeholder": "Enter your job title"
+          },
+          {
+            "id": "annualIncome",
+            "type": "currency",
+            "label": "Annual Income (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Loan Amount Requested (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "loanPurpose",
+            "type": "select",
+            "label": "Purpose of Loan",
+            "options": [
+              "Home Improvement",
+              "Debt Consolidation",
+              "Education",
+              "Medical Expenses",
+              "Other"
+            ]
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the loan terms and conditions"
+          },
+          {
+            "id": "applicationDate",
+            "type": "date",
+            "label": "Application Date",
+            "allowed": "after",
+            "placeholder": "YYYY-MM-DD"
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Carter",
+      "dob": "1985-07-20",
+      "email": "alex.carter@email.com",
+      "phone": "5553219876",
+      "employer": "Innovatech Solutions",
+      "jobTitle": "Software Developer",
+      "annualIncome": "85000.00",
+      "loanAmount": "15000.00",
+      "loanPurpose": "Home Improvement",
+      "agreeToTerms": true,
+      "applicationDate": "2023-11-01"
+    }
+  },
+  "llm-form-6": {
+    "id": "llm-form-6",
+    "title": "Online Course Registration",
+    "description": "Registration form for enrolling in an online course.",
+    "type": "multipage",
+    "inputToLLM": "You are enrolling in an online course. Page 1: Your name is Alex Johnson, email is alex.j@example.com, phone number is 5558765432, and your address is 123 Elm St, Springfield, IL, 62701. Page 2: You choose the 'Data Science Basics' course, you have a basic technical skill level, and you prefer evening classes. Page 3: You will make a one-time payment of $299.99 using card number 6011111111111117, expiration date is 10/24, and CVV is 456. You agree to the privacy policy and terms of service.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com"
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567"
+          },
+          {
+            "id": "address",
+            "type": "text",
+            "label": "Street Address",
+            "placeholder": "Street and number"
+          },
+          {
+            "id": "city",
+            "type": "text",
+            "label": "City",
+            "placeholder": "Enter your city"
+          },
+          {
+            "id": "state",
+            "type": "state",
+            "label": "State",
+            "placeholder": "Select your state"
+          },
+          {
+            "id": "zip",
+            "type": "zip",
+            "label": "ZIP Code",
+            "placeholder": "Enter ZIP code"
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "courseSelection",
+            "type": "radio",
+            "label": "Course Selection",
+            "options": [
+              "Data Science Basics",
+              "Advanced Python Programming",
+              "Web Development",
+              "AI and Machine Learning"
+            ]
+          },
+          {
+            "id": "technicalSkillLevel",
+            "type": "select",
+            "label": "Technical Skill Level",
+            "options": [
+              "Beginner",
+              "Intermediate",
+              "Advanced"
+            ]
+          },
+          {
+            "id": "classPreference",
+            "type": "select",
+            "label": "Preferred Class Time",
+            "options": [
+              "Morning",
+              "Afternoon",
+              "Evening"
+            ]
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "paymentAmount",
+            "type": "currency",
+            "label": "Payment Amount (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "cardNumber",
+            "type": "credit-card",
+            "label": "Credit Card Number",
+            "placeholder": "1234 5678 9012 3456"
+          },
+          {
+            "id": "expirationDate",
+            "type": "expiration-date",
+            "label": "Expiration Date",
+            "placeholder": "MM/YY"
+          },
+          {
+            "id": "cvv",
+            "type": "cvv",
+            "label": "CVV",
+            "placeholder": "123",
+            "maxLength": 4
+          },
+          {
+            "id": "agreeToPolicies",
+            "type": "checkbox",
+            "label": "I agree to the privacy policy and terms of service"
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Johnson",
+      "email": "alex.j@example.com",
+      "phone": "5558765432",
+      "address": "123 Elm St",
+      "city": "Springfield",
+      "state": "IL",
+      "zip": "62701",
+      "courseSelection": "Data Science Basics",
+      "technicalSkillLevel": "Beginner",
+      "classPreference": "Evening",
+      "paymentAmount": "299.99",
+      "cardNumber": "6011111111111117",
+      "expirationDate": "10/24",
+      "cvv": "456",
+      "agreeToPolicies": true
+    }
+  },
+  "llm-form-7": {
+    "id": "llm-form-7",
+    "title": "Loan Application Form",
+    "description": "Application form for personal loan",
+    "type": "multipage",
+    "inputToLLM": "You are applying for a personal loan. Page 1: Your full name is Alex Doe, date of birth is 1985-06-15, phone number is 5551234567, email is alex.doe@email.com, and address is 123 Elm Street, Springfield, IL, 62704. Page 2: You are currently employed full-time at Tech Innovations, your monthly income is 5000, and you have no existing loans. Page 3: You are applying for a loan amount of 25000 USD, you want a loan term of 5 years, you will provide bank statements, and agree to the loan terms and conditions.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name"
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before"
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com"
+          },
+          {
+            "id": "address",
+            "type": "textarea",
+            "label": "Residential Address",
+            "placeholder": "Enter full address"
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "employmentStatus",
+            "type": "select",
+            "label": "Employment Status",
+            "options": [
+              "Full-time",
+              "Part-time",
+              "Self-Employed",
+              "Unemployed"
+            ]
+          },
+          {
+            "id": "employer",
+            "type": "text",
+            "label": "Employer Name",
+            "placeholder": "Enter your employer's name"
+          },
+          {
+            "id": "monthlyIncome",
+            "type": "currency",
+            "label": "Monthly Income (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "existingLoans",
+            "type": "checkbox",
+            "label": "Do you have any existing loans?"
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Loan Amount Required (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "loanTerm",
+            "type": "select",
+            "label": "Loan Term",
+            "options": [
+              "1 year",
+              "2 years",
+              "3 years",
+              "4 years",
+              "5 years"
+            ]
+          },
+          {
+            "id": "bankStatements",
+            "type": "file",
+            "label": "Attach Bank Statements",
+            "accept": ".pdf,.doc,.docx"
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the loan terms and conditions"
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Doe",
+      "dateOfBirth": "1985-06-15",
+      "phone": "5551234567",
+      "email": "alex.doe@email.com",
+      "address": "123 Elm Street, Springfield, IL, 62704",
+      "employmentStatus": "Full-time",
+      "employer": "Tech Innovations",
+      "monthlyIncome": "5000",
+      "existingLoans": false,
+      "loanAmount": "25000",
+      "loanTerm": "5 years",
+      "bankStatements": null,
+      "agreeToTerms": true
+    }
+  },
+  "llm-form-8": {
+    "id": "llm-form-8",
+    "title": "Residential Mortgage Application",
+    "description": "Application form for applying for a residential mortgage loan",
+    "type": "multipage",
+    "inputToLLM": "You are applying for a residential mortgage. On page 1, your name is Michael Thompson, email is michael.thompson@email.com, phone is 5551236789, date of birth is 1980-05-15, and SSN is 123-45-6789. On page 2, you are employed at Tech Solutions, your job title is Software Engineer, annual income is 120000, and you have been employed since 2015-06-01. On page 3, you are seeking a loan amount of $300,000 with a term of 30 years, and you are applying jointly with your spouse, Jessica Thompson. You agree to the terms and wish to receive promotional emails.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "dob",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "ssn",
+            "type": "text",
+            "label": "Social Security Number (SSN)",
+            "placeholder": "XXX-XX-XXXX",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "employerName",
+            "type": "text",
+            "label": "Employer Name",
+            "placeholder": "Enter your employer's name",
+            "required": true
+          },
+          {
+            "id": "jobTitle",
+            "type": "text",
+            "label": "Job Title",
+            "placeholder": "Enter your job title",
+            "required": true
+          },
+          {
+            "id": "annualIncome",
+            "type": "currency",
+            "label": "Annual Income (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "employmentSince",
+            "type": "date",
+            "label": "Employed Since",
+            "allowed": "before",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Loan Amount (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "loanTerm",
+            "type": "select",
+            "label": "Loan Term",
+            "options": [
+              "15 years",
+              "20 years",
+              "30 years"
+            ],
+            "required": true
+          },
+          {
+            "id": "jointApplication",
+            "type": "switch",
+            "label": "Joint Application",
+            "required": false
+          },
+          {
+            "id": "coApplicantName",
+            "type": "text",
+            "label": "Co-Applicant Name",
+            "placeholder": "Full name",
+            "required": false
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "Agree to Terms and Conditions",
+            "required": true
+          },
+          {
+            "id": "promotionalEmails",
+            "type": "checkbox",
+            "label": "Receive Promotional Emails",
+            "required": false
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Michael Thompson",
+      "email": "michael.thompson@email.com",
+      "phone": "5551236789",
+      "dob": "1980-05-15",
+      "ssn": "123-45-6789",
+      "employerName": "Tech Solutions",
+      "jobTitle": "Software Engineer",
+      "annualIncome": "120000",
+      "employmentSince": "2015-06-01",
+      "loanAmount": "300000",
+      "loanTerm": "30 years",
+      "jointApplication": true,
+      "coApplicantName": "Jessica Thompson",
+      "agreeToTerms": true,
+      "promotionalEmails": true
+    }
+  },
+  "llm-form-9": {
+    "id": "llm-form-9",
+    "title": "Real Estate Rental Application",
+    "description": "Application form for renting a residential property",
+    "type": "multipage",
+    "inputToLLM": "You are applying to rent an apartment. Page 1: Your name is Alex Martin, email is alex.martin@email.com, phone is 5553219876, and current address is 123 Elm St, Springfield, IL 62704. Page 2: Your employer is Tech Solutions, job title is Software Developer, annual salary is 80000, move-in date is 2024-06-01, and you have no pets. Page 3: Your preferred apartment type is '2 Bedroom', you require parking, and your preferred lease term is 12 months. Page 4: You will pay $1000 as the security deposit, card number is 4111111111111111, expiration is 11/26, CVV is 456, and you agree to the rental agreement terms.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "example@domain.com"
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 555-5555"
+          },
+          {
+            "id": "currentAddress",
+            "type": "textarea",
+            "label": "Current Address",
+            "placeholder": "Enter your current address"
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "employerName",
+            "type": "text",
+            "label": "Employer Name",
+            "placeholder": "Enter your employer's name"
+          },
+          {
+            "id": "jobTitle",
+            "type": "text",
+            "label": "Job Title",
+            "placeholder": "Enter your job title"
+          },
+          {
+            "id": "annualSalary",
+            "type": "currency",
+            "label": "Annual Salary",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "moveInDate",
+            "type": "date",
+            "label": "Preferred Move-In Date",
+            "allowed": "after"
+          },
+          {
+            "id": "hasPets",
+            "type": "switch",
+            "label": "Do you have pets?"
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "apartmentType",
+            "type": "select",
+            "label": "Preferred Apartment Type",
+            "options": [
+              "Studio",
+              "1 Bedroom",
+              "2 Bedroom",
+              "3 Bedroom"
+            ]
+          },
+          {
+            "id": "requireParking",
+            "type": "checkbox",
+            "label": "Require Parking"
+          },
+          {
+            "id": "leaseTerm",
+            "type": "radio",
+            "label": "Preferred Lease Term",
+            "options": [
+              "6 months",
+              "12 months",
+              "24 months"
+            ]
+          }
+        ]
+      },
+      {
+        "pageNumber": 4,
+        "fields": [
+          {
+            "id": "securityDeposit",
+            "type": "currency",
+            "label": "Security Deposit",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "cardNumber",
+            "type": "credit-card",
+            "label": "Credit Card Number",
+            "placeholder": "1234 5678 9012 3456"
+          },
+          {
+            "id": "expirationDate",
+            "type": "expiration-date",
+            "label": "Expiration Date",
+            "placeholder": "MM/YY"
+          },
+          {
+            "id": "cvv",
+            "type": "cvv",
+            "label": "CVV",
+            "placeholder": "123"
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the rental agreement terms"
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Martin",
+      "email": "alex.martin@email.com",
+      "phone": "5553219876",
+      "currentAddress": "123 Elm St, Springfield, IL 62704",
+      "employerName": "Tech Solutions",
+      "jobTitle": "Software Developer",
+      "annualSalary": "80000",
+      "moveInDate": "2024-06-01",
+      "hasPets": false,
+      "apartmentType": "2 Bedroom",
+      "requireParking": true,
+      "leaseTerm": "12 months",
+      "securityDeposit": "1000.00",
+      "cardNumber": "4111111111111111",
+      "expirationDate": "11/26",
+      "cvv": "456",
+      "agreeToTerms": true
+    }
+  },
+  "llm-form-10": {
+    "id": "llm-form-10",
+    "title": "Personal Loan Application",
+    "description": "Application form for personal loans, including personal information, loan details, and financial background.",
+    "type": "multipage",
+    "inputToLLM": "Filling out a personal loan application. Page 1: Name is Alex Brown, date of birth is 1985-07-15, phone number is 5552345678, email is alex.brown@email.com, address is 123 Elm St, Springfield, state is IL, zip is 62701. Page 2: Loan amount requested is $15,000, purpose of loan is to consolidate debt, loan term is 36 months. Page 3: Employment status is full-time, employer is Tech Solutions Inc, annual income is 75000, monthly housing payment is 1200, agree to credit check.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name"
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before"
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 234-5678"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com"
+          },
+          {
+            "id": "address",
+            "type": "text",
+            "label": "Street Address",
+            "placeholder": "Enter your street address"
+          },
+          {
+            "id": "city",
+            "type": "text",
+            "label": "City",
+            "placeholder": "Enter your city"
+          },
+          {
+            "id": "state",
+            "type": "state",
+            "label": "State",
+            "placeholder": "Select state"
+          },
+          {
+            "id": "zip",
+            "type": "zip",
+            "label": "ZIP Code",
+            "placeholder": "Enter ZIP code"
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Loan Amount Requested (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "loanPurpose",
+            "type": "text",
+            "label": "Purpose of Loan",
+            "placeholder": "e.g., consolidate debt, purchase car, etc."
+          },
+          {
+            "id": "loanTerm",
+            "type": "select",
+            "label": "Loan Term",
+            "options": [
+              "12 months",
+              "24 months",
+              "36 months",
+              "48 months",
+              "60 months"
+            ]
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "employmentStatus",
+            "type": "select",
+            "label": "Employment Status",
+            "options": [
+              "Full-time",
+              "Part-time",
+              "Self-employed",
+              "Unemployed",
+              "Retired"
+            ]
+          },
+          {
+            "id": "employer",
+            "type": "text",
+            "label": "Employer",
+            "placeholder": "Enter your employer's name"
+          },
+          {
+            "id": "annualIncome",
+            "type": "currency",
+            "label": "Annual Income (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "monthlyHousingPayment",
+            "type": "currency",
+            "label": "Monthly Housing Payment (USD)",
+            "currency": "USD",
+            "placeholder": "0.00"
+          },
+          {
+            "id": "agreeToCreditCheck",
+            "type": "checkbox",
+            "label": "I agree to a credit check",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Brown",
+      "dateOfBirth": "1985-07-15",
+      "phone": "5552345678",
+      "email": "alex.brown@email.com",
+      "address": "123 Elm St",
+      "city": "Springfield",
+      "state": "IL",
+      "zip": "62701",
+      "loanAmount": "15000",
+      "loanPurpose": "consolidate debt",
+      "loanTerm": "36 months",
+      "employmentStatus": "Full-time",
+      "employer": "Tech Solutions Inc",
+      "annualIncome": "75000",
+      "monthlyHousingPayment": "1200",
+      "agreeToCreditCheck": true
+    }
+  }
+}
