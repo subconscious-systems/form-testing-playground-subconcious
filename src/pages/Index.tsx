@@ -1,12 +1,19 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getAllForms } from "@/utils/form-config-loader";
 import { FileText, Layers, Zap } from "lucide-react";
 
 const Index = () => {
-  const forms = getAllForms();
+  const allForms = getAllForms();
+  const [filterType, setFilterType] = useState<string>("all");
+
+  const forms = filterType === "all" 
+    ? allForms 
+    : allForms.filter(form => form.type === filterType);
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -43,18 +50,35 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8">
-          <div className="flex flex-wrap gap-4 mb-6">
-            <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-              <Zap className="w-3 h-3 mr-1" />
-              Single Page Forms ({forms.filter(f => f.type === 'single-page').length})
-            </Badge>
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-              <Layers className="w-3 h-3 mr-1" />
-              Multipage Forms ({forms.filter(f => f.type === 'multipage').length})
-            </Badge>
-            <Badge variant="outline" className="bg-muted text-muted-foreground">
-              Total Forms ({forms.length})
-            </Badge>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <div className="flex flex-wrap gap-4">
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+                <Zap className="w-3 h-3 mr-1" />
+                Single Page ({allForms.filter(f => f.type === 'single-page').length})
+              </Badge>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                <Layers className="w-3 h-3 mr-1" />
+                Multipage ({allForms.filter(f => f.type === 'multipage').length})
+              </Badge>
+              <Badge variant="outline" className="bg-muted text-muted-foreground">
+                Total ({allForms.length})
+              </Badge>
+            </div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="filter-type" className="text-sm font-medium text-muted-foreground">
+                Filter:
+              </label>
+              <Select value={filterType} onValueChange={setFilterType}>
+                <SelectTrigger id="filter-type" className="w-[180px]">
+                  <SelectValue placeholder="All Forms" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Forms</SelectItem>
+                  <SelectItem value="single-page">Single Page</SelectItem>
+                  <SelectItem value="multipage">Multipage</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 

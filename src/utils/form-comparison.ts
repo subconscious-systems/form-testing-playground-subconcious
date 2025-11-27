@@ -95,8 +95,21 @@ const compareValues = (expected: any, actual: any, fieldId: string): boolean => 
     return expected === Boolean(actual);
   }
 
+  // Handle date-range objects
+  if (fieldId.toLowerCase().includes('range') || (typeof expected === 'object' && expected !== null && !Array.isArray(expected) && (expected.from || expected.to))) {
+    try {
+      const expectedFrom = expected.from ? (expected.from instanceof Date ? expected.from.toISOString().split('T')[0] : new Date(expected.from).toISOString().split('T')[0]) : null;
+      const expectedTo = expected.to ? (expected.to instanceof Date ? expected.to.toISOString().split('T')[0] : new Date(expected.to).toISOString().split('T')[0]) : null;
+      const actualFrom = actual?.from ? (actual.from instanceof Date ? actual.from.toISOString().split('T')[0] : new Date(actual.from).toISOString().split('T')[0]) : null;
+      const actualTo = actual?.to ? (actual.to instanceof Date ? actual.to.toISOString().split('T')[0] : new Date(actual.to).toISOString().split('T')[0]) : null;
+      return expectedFrom === actualFrom && expectedTo === actualTo;
+    } catch {
+      return false;
+    }
+  }
+
   // Handle dates (normalize to ISO string date part)
-  if (fieldId.toLowerCase().includes('date') && !fieldId.toLowerCase().includes('range')) {
+  if (fieldId.toLowerCase().includes('date')) {
     try {
       // Handle both Date objects and date strings
       const expectedDate = expected instanceof Date 
