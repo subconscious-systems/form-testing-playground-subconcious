@@ -18,7 +18,6 @@ const MultipageFormPage = () => {
           const loadedForm = await getFormByIdAsync(formId);
           setConfigForm(loadedForm);
         } catch (error) {
-          console.error('Failed to load form:', error);
           setConfigForm(undefined);
         } finally {
           setLoading(false);
@@ -53,15 +52,6 @@ const MultipageFormPage = () => {
       </div>
     );
   }
-
-  // Debug logging
-  console.log(`[MultipageFormPage] Rendering page ${pageNum} of ${configForm.pages.length}`, {
-    formId: configForm.id,
-    pageNum,
-    totalPages: configForm.pages.length,
-    pageNumbers: configForm.pages.map(p => p.pageNumber),
-    currentPageFound: !!currentPage
-  });
 
   return (
     <DynamicForm

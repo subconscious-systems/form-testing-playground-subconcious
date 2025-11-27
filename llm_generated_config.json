@@ -1,6 +1,6 @@
 {
-  "form-29": {
-    "id": "form-29",
+  "29": {
+    "id": "29",
     "title": "Website Contact Us Form",
     "description": "Form for users to reach out with inquiries or feedback",
     "type": "single-page",
@@ -73,8 +73,8 @@
       "agreeToPolicy": true
     }
   },
-  "form-30": {
-    "id": "form-30",
+  "30": {
+    "id": "30",
     "title": "Consulting Project Bid Submission",
     "description": "Form for submitting project bids for consulting opportunities",
     "type": "multipage",
@@ -197,8 +197,8 @@
       "agreeToTerms": true
     }
   },
-  "form-31": {
-    "id": "form-31",
+  "31": {
+    "id": "31",
     "title": "Loan Refinancing Application",
     "description": "Application form for refinancing a home loan",
     "type": "multipage",
@@ -324,8 +324,8 @@
       "agreeToTerms": true
     }
   },
-  "form-32": {
-    "id": "form-32",
+  "32": {
+    "id": "32",
     "title": "Wholesale Seller Post Form",
     "description": "Form for wholesale sellers to post product information and business details",
     "type": "multipage",
@@ -440,8 +440,8 @@
       "agreeTerms": true
     }
   },
-  "form-33": {
-    "id": "form-33",
+  "33": {
+    "id": "33",
     "title": "Research Grant Application Form",
     "description": "Application form for submitting a research grant proposal to the National Science Fund.",
     "type": "multipage",
@@ -544,8 +544,8 @@
       "agreeToTerms": true
     }
   },
-  "form-34": {
-    "id": "form-34",
+  "34": {
+    "id": "34",
     "title": "Construction Project Bid Submission",
     "description": "Form for contractors to submit bids for construction projects.",
     "type": "multipage",
@@ -654,8 +654,8 @@
       "agreeToTerms": true
     }
   },
-  "form-35": {
-    "id": "form-35",
+  "35": {
+    "id": "35",
     "title": "Insurance Claim Form",
     "description": "Form for submitting an insurance claim including personal information, incident details, and claim specifics.",
     "type": "multipage",
@@ -762,8 +762,8 @@
       "damagePhotos": null
     }
   },
-  "form-36": {
-    "id": "form-36",
+  "36": {
+    "id": "36",
     "title": "Pet Adoption Application",
     "description": "Application form for individuals interested in adopting a pet",
     "type": "multipage",
@@ -909,8 +909,8 @@
       "cvv": "321"
     }
   },
-  "form-37": {
-    "id": "form-37",
+  "37": {
+    "id": "37",
     "title": "Non-Disclosure Agreement Form",
     "description": "Form to formalize confidentiality agreements between parties",
     "type": "single-page",
@@ -990,8 +990,8 @@
       "signature": "Alex Brown"
     }
   },
-  "form-38": {
-    "id": "form-38",
+  "38": {
+    "id": "38",
     "title": "Train Booking Form",
     "description": "A form for booking train tickets including passenger details, journey information, and payment details.",
     "type": "multipage",

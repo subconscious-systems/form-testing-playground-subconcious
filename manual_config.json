@@ -1,6 +1,6 @@
 {
-  "form-1": {
-    "id": "form-1",
+  "1": {
+    "id": "1",
     "title": "Text Input - Name Entry",
     "description": "Single text input field for name collection",
     "type": "single-page",
@@ -23,8 +23,8 @@
       }
     ]
   },
-  "form-2": {
-    "id": "form-2",
+  "2": {
+    "id": "2",
     "title": "Textarea Input - Feedback",
     "description": "Single textarea field for detailed feedback",
     "type": "single-page",
@@ -47,8 +47,8 @@
       }
     ]
   },
-  "form-3": {
-    "id": "form-3",
+  "3": {
+    "id": "3",
     "title": "Phone Input - Contact Number",
     "description": "Single phone number input field",
     "type": "single-page",
@@ -71,8 +71,8 @@
       }
     ]
   },
-  "form-4": {
-    "id": "form-4",
+  "4": {
+    "id": "4",
     "title": "Email Input - Email Address",
     "description": "Single email address input field",
     "type": "single-page",
@@ -95,8 +95,8 @@
       }
     ]
   },
-  "form-5": {
-    "id": "form-5",
+  "5": {
+    "id": "5",
     "title": "URL Input - Website Link",
     "description": "Single URL input field for website links",
     "type": "single-page",
@@ -119,8 +119,8 @@
       }
     ]
   },
-  "form-6": {
-    "id": "form-6",
+  "6": {
+    "id": "6",
     "title": "File Upload - Document",
     "description": "Single file upload input field",
     "type": "single-page",
@@ -143,8 +143,8 @@
       }
     ]
   },
-  "form-7": {
-    "id": "form-7",
+  "7": {
+    "id": "7",
     "title": "Checkbox - Terms Agreement",
     "description": "Single checkbox for terms and conditions",
     "type": "single-page",
@@ -166,8 +166,8 @@
       }
     ]
   },
-  "form-8": {
-    "id": "form-8",
+  "8": {
+    "id": "8",
     "title": "Switch - Notification Preference",
     "description": "Single switch toggle for notification settings",
     "type": "single-page",
@@ -189,8 +189,8 @@
       }
     ]
   },
-  "form-9": {
-    "id": "form-9",
+  "9": {
+    "id": "9",
     "title": "Select - Country Selection",
     "description": "Single dropdown select field",
     "type": "single-page",
@@ -221,8 +221,8 @@
       }
     ]
   },
-  "form-10": {
-    "id": "form-10",
+  "10": {
+    "id": "10",
     "title": "Radio - Payment Method",
     "description": "Single radio button group selection",
     "type": "single-page",
@@ -250,8 +250,8 @@
       }
     ]
   },
-  "form-11": {
-    "id": "form-11",
+  "11": {
+    "id": "11",
     "title": "Multi Select - Interests",
     "description": "Single multi-select dropdown field",
     "type": "single-page",
@@ -286,8 +286,8 @@
       }
     ]
   },
-  "form-12": {
-    "id": "form-12",
+  "12": {
+    "id": "12",
     "title": "Searchable Multi Select - Skills",
     "description": "Single searchable multi-select field",
     "type": "single-page",
@@ -324,8 +324,8 @@
       }
     ]
   },
-  "form-13": {
-    "id": "form-13",
+  "13": {
+    "id": "13",
     "title": "Date Picker - Birth Date",
     "description": "Single date picker field",
     "type": "single-page",
@@ -348,8 +348,8 @@
       }
     ]
   },
-  "form-14": {
-    "id": "form-14",
+  "14": {
+    "id": "14",
     "title": "Time Picker - Meeting Time",
     "description": "Single time picker field",
     "type": "single-page",
@@ -371,8 +371,8 @@
       }
     ]
   },
-  "form-15": {
-    "id": "form-15",
+  "15": {
+    "id": "15",
     "title": "Date Range - Vacation Period",
     "description": "Single date range picker field",
     "type": "single-page",
@@ -397,8 +397,8 @@
       }
     ]
   },
-  "form-16": {
-    "id": "form-16",
+  "16": {
+    "id": "16",
     "title": "Number Input - Age",
     "description": "Single number input field",
     "type": "single-page",
@@ -422,8 +422,8 @@
       }
     ]
   },
-  "form-17": {
-    "id": "form-17",
+  "17": {
+    "id": "17",
     "title": "Slider - Satisfaction Level",
     "description": "Single slider input field",
     "type": "single-page",
@@ -449,8 +449,8 @@
       }
     ]
   },
-  "form-18": {
-    "id": "form-18",
+  "18": {
+    "id": "18",
     "title": "Color Picker - Favorite Color",
     "description": "Single color picker field",
     "type": "single-page",
@@ -472,8 +472,8 @@
       }
     ]
   },
-  "form-19": {
-    "id": "form-19",
+  "19": {
+    "id": "19",
     "title": "Currency Input - Salary",
     "description": "Single currency input field",
     "type": "single-page",
@@ -497,8 +497,8 @@
       }
     ]
   },
-  "form-20": {
-    "id": "form-20",
+  "20": {
+    "id": "20",
     "title": "Star Rating - Product Review",
     "description": "Single star rating field",
     "type": "single-page",
@@ -521,8 +521,8 @@
       }
     ]
   },
-  "form-21": {
-    "id": "form-21",
+  "21": {
+    "id": "21",
     "title": "Address Input - Home Address",
     "description": "Single address autocomplete field",
     "type": "single-page",
@@ -545,8 +545,8 @@
       }
     ]
   },
-  "form-22": {
-    "id": "form-22",
+  "22": {
+    "id": "22",
     "title": "Country Selector - Residence",
     "description": "Single country selector field",
     "type": "single-page",
@@ -568,8 +568,8 @@
       }
     ]
   },
-  "form-23": {
-    "id": "form-23",
+  "23": {
+    "id": "23",
     "title": "State Selector - Location",
     "description": "Single state/province selector field",
     "type": "single-page",
@@ -591,8 +591,8 @@
       }
     ]
   },
-  "form-24": {
-    "id": "form-24",
+  "24": {
+    "id": "24",
     "title": "ZIP Code - Postal Code",
     "description": "Single ZIP/postal code input field",
     "type": "single-page",
@@ -615,8 +615,8 @@
       }
     ]
   },
-  "form-25": {
-    "id": "form-25",
+  "25": {
+    "id": "25",
     "title": "Credit Card - Card Number",
     "description": "Single credit card number input field",
     "type": "single-page",
@@ -639,8 +639,8 @@
       }
     ]
   },
-  "form-26": {
-    "id": "form-26",
+  "26": {
+    "id": "26",
     "title": "Expiration Date - Card Expiry",
     "description": "Single expiration date input field",
     "type": "single-page",
@@ -663,8 +663,8 @@
       }
     ]
   },
-  "form-27": {
-    "id": "form-27",
+  "27": {
+    "id": "27",
     "title": "CVV - Security Code",
     "description": "Single CVV input field",
     "type": "single-page",
@@ -688,8 +688,8 @@
       }
     ]
   },
-  "form-28": {
-    "id": "form-28",
+  "28": {
+    "id": "28",
     "title": "Reactive Chunks - Work Experience",
     "description": "Single reactive chunks field for multiple entries",
     "type": "single-page",

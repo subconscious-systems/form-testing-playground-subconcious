@@ -72,7 +72,7 @@ FORM_PAGE_SCHEMA = {
     "properties": {
         "id": {
             "type": "string",
-            "description": "Unique identifier for the form (e.g., 'form-29', 'form-30')"
+            "description": "Unique identifier for the form (e.g., '29', '30') - just the number as a string"
         },
         "title": {
             "type": "string",
@@ -248,7 +248,7 @@ def generate_form_page(page_number: int, industry: str, form_id: str) -> Dict[st
     Args:
         page_number: The page number (1-10)
         industry: The industry/use case for the form
-        form_id: The sequential form ID (e.g., "form-29")
+        form_id: The sequential form ID (e.g., "29") - just the number as a string
     
     Returns:
         A dictionary containing the generated form definition
@@ -281,6 +281,7 @@ Important rules:
 - Include validation-appropriate fields (phone, email, URL, etc.)
 - Make forms industry-realistic (job apps, loan apps, registrations, etc.)
 - Generate groundTruth LAST after you have defined all pages and fields
+- IMPORTANT: Set the "required" field appropriately for each field. Fields that are essential for the form purpose should be required=true, while optional fields should be required=false. This affects form validation.
 
 Generate diverse forms - vary industries, complexity, and field types."""
 
@@ -294,10 +295,11 @@ CRITICAL: Generate the JSON in this exact order:
 
 Requirements:
 - The form MUST be for: {industry}
-- Use the exact form ID: "{form_id}" (do not generate a different ID)
+- Use the exact form ID: "{form_id}" (do not generate a different ID, just use the number as a string)
 - It can be single-page or multipage (if multipage, use 2-4 pages)
 - Include 5-12 fields per page
 - Mix different field types appropriately
+- IMPORTANT: Set "required": true for essential fields and "required": false for optional fields. This is critical for form validation.
 - In inputToLLM, describe ALL field values that will appear in groundTruth
 - In groundTruth, include an entry for EVERY field ID from all pages
 - Ensure groundTruth values exactly match what you described in inputToLLM
@@ -305,7 +307,7 @@ Requirements:
 - Make it realistic and useful for testing AI form-filling
 - The form should be specific to the {industry} industry/use case
 
-Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, and use the exact ID "{form_id}"."""
+Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), and set "required" appropriately for each field."""
 
     try:
         response = client.beta.chat.completions.parse(
@@ -377,7 +379,7 @@ def main():
     
     for i in range(1, 11):
         form_number = start_id + i - 1
-        form_id = f"form-{form_number}"
+        form_id = str(form_number)  # Use just the number as string
         
         # Skip if already exists
         if form_id in existing_config:

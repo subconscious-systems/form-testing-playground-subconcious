@@ -17,7 +17,6 @@ const FormPage = () => {
           const loadedForm = await getFormByIdAsync(formId);
           setForm(loadedForm);
         } catch (error) {
-          console.error('Failed to load form:', error);
           setForm(undefined);
         } finally {
           setLoading(false);

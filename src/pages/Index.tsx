@@ -21,7 +21,6 @@ const Index = () => {
         const forms = await getAllFormsAsync();
         setAllForms(forms);
       } catch (error) {
-        console.error('Failed to load forms:', error);
         setAllForms([]);
       } finally {
         setLoading(false);

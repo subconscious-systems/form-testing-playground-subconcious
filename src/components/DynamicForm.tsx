@@ -71,17 +71,6 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
     // This effect can be used for any additional initialization if needed
   }, [formId, pageNumber]);
   
-  // Debug logging to help diagnose issues
-  useEffect(() => {
-    console.log(`[DynamicForm] Rendering page ${pageNumber} of ${totalPages}`, {
-      formId,
-      pageNumber,
-      totalPages,
-      hasComparisonResult: !!comparisonResult,
-      pageFields: page.fields.length,
-      isLastPage: pageNumber === totalPages
-    });
-  }, [formId, pageNumber, totalPages, comparisonResult, page.fields.length]);
 
   const handleFieldChange = (fieldId: string, value: any) => {
     updateFieldValue(fieldId, value);
@@ -167,26 +156,11 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
       const allFormData = submitForm();
       
       toast.success("Form submitted successfully!");
-      console.log("=== FORM SUBMISSION ===");
-      console.log("Form ID:", formId);
-      if (totalPages > 1) {
-        console.log("Form Type: Multipage");
-        console.log("Total Pages:", totalPages);
-      } else {
-        console.log("Form Type: Single Page");
-      }
-      console.log("Complete Form Data:", allFormData);
-      console.log("======================");
       
       // Compare with ground truth if available
       if (groundTruth) {
         const comparison = compareWithGroundTruth(allFormData, groundTruth);
         setComparisonResult(comparison);
-        console.log("=== COMPARISON RESULT ===");
-        console.log("Accuracy:", comparison.accuracy + "%");
-        console.log("Correct:", comparison.correctFields, "/", comparison.totalFields);
-        console.log("Field Results:", comparison.fieldResults);
-        console.log("========================");
       } else {
         // If no ground truth, still navigate away after a delay
         setTimeout(() => navigate("/"), 1500);
