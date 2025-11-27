@@ -1,69 +1,29 @@
-import formConfigJson from '../../config_form.json';
+import manualConfigJson from '../../manual_config.json';
 import llmGeneratedConfigJson from '../../llm_generated_config.json';
 import { FormConfig, FormDefinition } from '@/types/form-config';
 
-let cachedConfig: FormConfig | null = null;
-let cachedLlmConfig: FormConfig | null = null;
-let useLlmGenerated = false;
+let cachedCombinedConfig: FormConfig | null = null;
 
-export const setUseLlmGenerated = (useLlm: boolean) => {
-  useLlmGenerated = useLlm;
-  // Clear cache when switching to force reload
-  if (useLlm) {
-    cachedLlmConfig = null;
-  } else {
-    cachedConfig = null;
-  }
-};
-
-export const getUseLlmGenerated = (): boolean => {
-  return useLlmGenerated;
-};
-
-const loadLlmConfig = async (): Promise<FormConfig> => {
-  if (cachedLlmConfig) {
-    return cachedLlmConfig;
+const loadCombinedConfig = (): FormConfig => {
+  if (cachedCombinedConfig) {
+    return cachedCombinedConfig;
   }
   
-  // Import directly from root (like config_form.json)
-  try {
-    cachedLlmConfig = (llmGeneratedConfigJson as FormConfig) || {};
-    return cachedLlmConfig;
-  } catch (error) {
-    console.warn('Failed to load LLM generated config:', error);
-    cachedLlmConfig = {};
-    return cachedLlmConfig;
-  }
+  // Combine manual and LLM generated configs
+  const manualConfig = (manualConfigJson as FormConfig) || {};
+  const llmConfig = (llmGeneratedConfigJson as FormConfig) || {};
+  
+  // Merge both configs (LLM forms will overwrite manual forms if same ID, but shouldn't happen)
+  cachedCombinedConfig = { ...manualConfig, ...llmConfig };
+  return cachedCombinedConfig;
 };
 
 export const loadFormConfig = (): FormConfig => {
-  if (useLlmGenerated) {
-    // For LLM config, we need to load it synchronously on first call
-    // This is a limitation - we'll need to handle async loading in components
-    if (cachedLlmConfig) {
-      return cachedLlmConfig;
-    }
-    // Return empty config initially, will be loaded async
-    return {};
-  } else {
-    if (cachedConfig) {
-      return cachedConfig;
-    }
-    cachedConfig = formConfigJson as FormConfig;
-    return cachedConfig;
-  }
+  return loadCombinedConfig();
 };
 
 export const loadFormConfigAsync = async (): Promise<FormConfig> => {
-  if (useLlmGenerated) {
-    return await loadLlmConfig();
-  } else {
-    if (cachedConfig) {
-      return cachedConfig;
-    }
-    cachedConfig = formConfigJson as FormConfig;
-    return cachedConfig;
-  }
+  return loadCombinedConfig();
 };
 
 export const getFormById = (formId: string): FormDefinition | undefined => {
@@ -85,4 +45,5 @@ export const getAllFormsAsync = async (): Promise<FormDefinition[]> => {
   const config = await loadFormConfigAsync();
   return Object.values(config);
 };
+
 

@@ -1,0 +1,756 @@
+{
+  "form-1": {
+    "id": "form-1",
+    "title": "Text Input - Name Entry",
+    "description": "Single text input field for name collection",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your full name. The name is Robert Martinez.",
+    "groundTruth": {
+      "fullName": "Robert Martinez"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-2": {
+    "id": "form-2",
+    "title": "Textarea Input - Feedback",
+    "description": "Single textarea field for detailed feedback",
+    "type": "single-page",
+    "inputToLLM": "You need to provide feedback about a service. Your feedback is: 'The service was excellent and exceeded my expectations. I would definitely recommend it to others.'",
+    "groundTruth": {
+      "feedback": "The service was excellent and exceeded my expectations. I would definitely recommend it to others."
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "feedback",
+            "type": "textarea",
+            "label": "Your Feedback",
+            "placeholder": "Enter your feedback here...",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-3": {
+    "id": "form-3",
+    "title": "Phone Input - Contact Number",
+    "description": "Single phone number input field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your phone number. The phone number is 5551234567.",
+    "groundTruth": {
+      "phone": "5551234567"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-4": {
+    "id": "form-4",
+    "title": "Email Input - Email Address",
+    "description": "Single email address input field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your email address. The email is jennifer.white@email.com.",
+    "groundTruth": {
+      "email": "jennifer.white@email.com"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-5": {
+    "id": "form-5",
+    "title": "URL Input - Website Link",
+    "description": "Single URL input field for website links",
+    "type": "single-page",
+    "inputToLLM": "You need to enter a website URL. The URL is https://www.example-portfolio.com.",
+    "groundTruth": {
+      "website": "https://www.example-portfolio.com"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "website",
+            "type": "url",
+            "label": "Website URL",
+            "placeholder": "https://example.com",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-6": {
+    "id": "form-6",
+    "title": "File Upload - Document",
+    "description": "Single file upload input field",
+    "type": "single-page",
+    "inputToLLM": "You need to upload a resume document. The file name is Orijeet_Mukherjee_Resume.pdf.",
+    "groundTruth": {
+      "resume": "Orijeet_Mukherjee_Resume.pdf"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "resume",
+            "type": "file",
+            "label": "Upload Resume",
+            "accept": ".pdf,.doc,.docx",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-7": {
+    "id": "form-7",
+    "title": "Checkbox - Terms Agreement",
+    "description": "Single checkbox for terms and conditions",
+    "type": "single-page",
+    "inputToLLM": "You need to agree to the terms and conditions. You agree to them.",
+    "groundTruth": {
+      "agreeToTerms": true
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-8": {
+    "id": "form-8",
+    "title": "Switch - Notification Preference",
+    "description": "Single switch toggle for notification settings",
+    "type": "single-page",
+    "inputToLLM": "You want to enable email notifications. Set the switch to enabled.",
+    "groundTruth": {
+      "notifications": true
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "notifications",
+            "type": "switch",
+            "label": "Enable Email Notifications",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-9": {
+    "id": "form-9",
+    "title": "Select - Country Selection",
+    "description": "Single dropdown select field",
+    "type": "single-page",
+    "inputToLLM": "You need to select your country. Your country is Canada.",
+    "groundTruth": {
+      "country": "Canada"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "country",
+            "type": "select",
+            "label": "Select Country",
+            "options": [
+              "United States",
+              "Canada",
+              "United Kingdom",
+              "Australia",
+              "Germany",
+              "France",
+              "Japan"
+            ],
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-10": {
+    "id": "form-10",
+    "title": "Radio - Payment Method",
+    "description": "Single radio button group selection",
+    "type": "single-page",
+    "inputToLLM": "You need to select a payment method. You prefer to pay by credit card.",
+    "groundTruth": {
+      "paymentMethod": "Credit Card"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "paymentMethod",
+            "type": "radio",
+            "label": "Payment Method",
+            "options": [
+              "Credit Card",
+              "PayPal",
+              "Bank Transfer",
+              "Cash"
+            ],
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-11": {
+    "id": "form-11",
+    "title": "Multi Select - Interests",
+    "description": "Single multi-select dropdown field",
+    "type": "single-page",
+    "inputToLLM": "You need to select your interests. You are interested in Technology, Sports, and Music.",
+    "groundTruth": {
+      "interests": [
+        "Technology",
+        "Sports",
+        "Music"
+      ]
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "interests",
+            "type": "multiselect",
+            "label": "Select Your Interests",
+            "options": [
+              "Technology",
+              "Sports",
+              "Music",
+              "Travel",
+              "Reading",
+              "Cooking",
+              "Art"
+            ],
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-12": {
+    "id": "form-12",
+    "title": "Searchable Multi Select - Skills",
+    "description": "Single searchable multi-select field",
+    "type": "single-page",
+    "inputToLLM": "You need to select your programming skills. You know Python, JavaScript, and React.",
+    "groundTruth": {
+      "skills": [
+        "Python",
+        "JavaScript",
+        "React"
+      ]
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "skills",
+            "type": "searchable-multiselect",
+            "label": "Programming Skills",
+            "options": [
+              "Python",
+              "JavaScript",
+              "React",
+              "Node.js",
+              "Java",
+              "C++",
+              "TypeScript",
+              "Vue.js",
+              "Angular"
+            ],
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-13": {
+    "id": "form-13",
+    "title": "Date Picker - Birth Date",
+    "description": "Single date picker field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your date of birth. Your birth date is 1992-08-15.",
+    "groundTruth": {
+      "dateOfBirth": "1992-08-15"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-14": {
+    "id": "form-14",
+    "title": "Time Picker - Meeting Time",
+    "description": "Single time picker field",
+    "type": "single-page",
+    "inputToLLM": "You need to select a meeting time. The preferred time is 14:30.",
+    "groundTruth": {
+      "meetingTime": "14:30"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "meetingTime",
+            "type": "time",
+            "label": "Preferred Meeting Time",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-15": {
+    "id": "form-15",
+    "title": "Date Range - Vacation Period",
+    "description": "Single date range picker field",
+    "type": "single-page",
+    "inputToLLM": "You need to select a vacation date range. The vacation starts on 2024-07-01 and ends on 2024-07-15.",
+    "groundTruth": {
+      "vacationRange": {
+        "from": "2024-07-01T00:00:00.000Z",
+        "to": "2024-07-15T00:00:00.000Z"
+      }
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "vacationRange",
+            "type": "date-range",
+            "label": "Vacation Date Range",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-16": {
+    "id": "form-16",
+    "title": "Number Input - Age",
+    "description": "Single number input field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your age. You are 28 years old.",
+    "groundTruth": {
+      "age": "28"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "age",
+            "type": "number",
+            "label": "Age",
+            "min": 18,
+            "max": 100,
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-17": {
+    "id": "form-17",
+    "title": "Slider - Satisfaction Level",
+    "description": "Single slider input field",
+    "type": "single-page",
+    "inputToLLM": "You need to rate your satisfaction level on a scale of 1 to 10. Your satisfaction level is 8.",
+    "groundTruth": {
+      "satisfaction": 8
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "satisfaction",
+            "type": "slider",
+            "label": "Satisfaction Level (1-10)",
+            "min": 1,
+            "max": 10,
+            "step": 1,
+            "defaultValue": 5,
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-18": {
+    "id": "form-18",
+    "title": "Color Picker - Favorite Color",
+    "description": "Single color picker field",
+    "type": "single-page",
+    "inputToLLM": "You need to select your favorite color. Your favorite color is blue, which is #0000FF.",
+    "groundTruth": {
+      "favoriteColor": "#0000FF"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "favoriteColor",
+            "type": "color",
+            "label": "Favorite Color",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-19": {
+    "id": "form-19",
+    "title": "Currency Input - Salary",
+    "description": "Single currency input field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your expected salary. Your expected salary is $95000.",
+    "groundTruth": {
+      "salary": "95000"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "salary",
+            "type": "currency",
+            "label": "Expected Salary (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-20": {
+    "id": "form-20",
+    "title": "Star Rating - Product Review",
+    "description": "Single star rating field",
+    "type": "single-page",
+    "inputToLLM": "You need to rate a product. You give it 5 stars out of 5.",
+    "groundTruth": {
+      "rating": 5
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "rating",
+            "type": "star-rating",
+            "label": "Product Rating",
+            "maxStars": 5,
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-21": {
+    "id": "form-21",
+    "title": "Address Input - Home Address",
+    "description": "Single address autocomplete field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your home address. Your address is 456 Oak Avenue, New York, NY 10001.",
+    "groundTruth": {
+      "address": "456 Oak Avenue, New York, NY 10001"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "address",
+            "type": "address",
+            "label": "Home Address",
+            "placeholder": "Enter your address",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-22": {
+    "id": "form-22",
+    "title": "Country Selector - Residence",
+    "description": "Single country selector field",
+    "type": "single-page",
+    "inputToLLM": "You need to select your country of residence. You live in United Kingdom.",
+    "groundTruth": {
+      "country": "United Kingdom"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "country",
+            "type": "country",
+            "label": "Country of Residence",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-23": {
+    "id": "form-23",
+    "title": "State Selector - Location",
+    "description": "Single state/province selector field",
+    "type": "single-page",
+    "inputToLLM": "You need to select your state. You live in Texas.",
+    "groundTruth": {
+      "state": "Texas"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "state",
+            "type": "state",
+            "label": "State/Province",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-24": {
+    "id": "form-24",
+    "title": "ZIP Code - Postal Code",
+    "description": "Single ZIP/postal code input field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your ZIP code. Your ZIP code is 90210.",
+    "groundTruth": {
+      "zipCode": "90210"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "zipCode",
+            "type": "zip",
+            "label": "ZIP/Postal Code",
+            "placeholder": "12345",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-25": {
+    "id": "form-25",
+    "title": "Credit Card - Card Number",
+    "description": "Single credit card number input field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your credit card number. The card number is 4532015112830366.",
+    "groundTruth": {
+      "cardNumber": "4532015112830366"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "cardNumber",
+            "type": "credit-card",
+            "label": "Credit Card Number",
+            "placeholder": "1234 5678 9012 3456",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-26": {
+    "id": "form-26",
+    "title": "Expiration Date - Card Expiry",
+    "description": "Single expiration date input field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your card expiration date. The expiration date is 12/25.",
+    "groundTruth": {
+      "expirationDate": "12/25"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "expirationDate",
+            "type": "expiration-date",
+            "label": "Expiration Date",
+            "placeholder": "MM/YY",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-27": {
+    "id": "form-27",
+    "title": "CVV - Security Code",
+    "description": "Single CVV input field",
+    "type": "single-page",
+    "inputToLLM": "You need to enter your CVV code. The CVV is 456.",
+    "groundTruth": {
+      "cvv": "456"
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "cvv",
+            "type": "cvv",
+            "label": "CVV",
+            "placeholder": "123",
+            "maxLength": 4,
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "form-28": {
+    "id": "form-28",
+    "title": "Reactive Chunks - Work Experience",
+    "description": "Single reactive chunks field for multiple entries",
+    "type": "single-page",
+    "inputToLLM": "You need to add your work experience. You have one job: Title is Software Engineer, Company is Tech Corp, Start Date is 2020-01-15, End Date is 2023-06-30, Description is 'Developed web applications using React and Node.js'.",
+    "groundTruth": {
+      "workExperience": [
+        {
+          "title": "Software Engineer",
+          "company": "Tech Corp",
+          "startDate": "2020-01-15",
+          "endDate": "2023-06-30",
+          "description": "Developed web applications using React and Node.js"
+        }
+      ]
+    },
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "workExperience",
+            "type": "reactive-chunks",
+            "label": "Work Experience",
+            "chunkFields": [
+              {
+                "id": "title",
+                "type": "text",
+                "label": "Job Title",
+                "required": true
+              },
+              {
+                "id": "company",
+                "type": "text",
+                "label": "Company",
+                "required": true
+              },
+              {
+                "id": "startDate",
+                "type": "date",
+                "label": "Start Date",
+                "allowed": "before",
+                "required": true
+              },
+              {
+                "id": "endDate",
+                "type": "date",
+                "label": "End Date",
+                "allowed": "before",
+                "required": false
+              },
+              {
+                "id": "description",
+                "type": "textarea",
+                "label": "Description",
+                "required": true
+              }
+            ],
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

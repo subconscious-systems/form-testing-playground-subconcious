@@ -4,23 +4,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { getAllFormsAsync, setUseLlmGenerated, getUseLlmGenerated } from "@/utils/form-config-loader";
+import { getAllFormsAsync } from "@/utils/form-config-loader";
 import { FormDefinition } from "@/types/form-config";
 import { FileText, Layers, Zap } from "lucide-react";
 
 const Index = () => {
-  const [useLlmGenerated, setUseLlmGeneratedState] = useState<boolean>(getUseLlmGenerated());
   const [filterType, setFilterType] = useState<string>("all");
   const [allForms, setAllForms] = useState<FormDefinition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Load forms when toggle or filter changes
+  // Load forms on mount
   useEffect(() => {
     const loadForms = async () => {
       setLoading(true);
-      setUseLlmGenerated(useLlmGenerated);
       try {
         const forms = await getAllFormsAsync();
         setAllForms(forms);
@@ -32,7 +28,7 @@ const Index = () => {
       }
     };
     loadForms();
-  }, [useLlmGenerated]);
+  }, []);
 
   const forms = filterType === "all" 
     ? allForms 
@@ -60,6 +56,7 @@ const Index = () => {
     }
   };
 
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
@@ -74,23 +71,6 @@ const Index = () => {
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8">
           <div className="flex flex-col gap-4 mb-6">
-            {/* Toggle for LLM Generated vs Manual */}
-            <div className="flex items-center justify-between p-4 border rounded-lg bg-card">
-              <div className="flex items-center gap-3">
-                <Switch
-                  id="llm-toggle"
-                  checked={useLlmGenerated}
-                  onCheckedChange={setUseLlmGeneratedState}
-                />
-                <Label htmlFor="llm-toggle" className="text-base font-medium cursor-pointer">
-                  {useLlmGenerated ? "LLM Generated Forms" : "Manual Forms"}
-                </Label>
-              </div>
-              <Badge variant={useLlmGenerated ? "default" : "outline"}>
-                {useLlmGenerated ? "AI Generated" : "Manual"}
-              </Badge>
-            </div>
-
             {/* Stats and Filter */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-wrap gap-4">
@@ -131,11 +111,7 @@ const Index = () => {
           </div>
         ) : forms.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              {useLlmGenerated 
-                ? "No LLM generated forms available. Run generate_pages.py to generate forms."
-                : "No forms available."}
-            </p>
+            <p className="text-muted-foreground">No forms available.</p>
           </div>
         ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -148,33 +124,33 @@ const Index = () => {
                 </div>
                 <CardDescription className="text-base">{form.description}</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className={getTypeColor(form.type)}>
-                    {form.type}
-                  </Badge>
-                  {form.pages.length > 1 && (
-                    <Badge variant="outline" className="bg-muted text-muted-foreground">
-                      {form.pages.length} pages
+                <CardContent>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className={getTypeColor(form.type)}>
+                      {form.type}
                     </Badge>
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Link
-                  to={
-                    form.type === 'multipage'
-                      ? `/${form.id}/page/1`
-                      : `/${form.id}`
-                  }
-                  className="w-full"
-                >
-                  <Button className="w-full" variant="default">
-                    Fill Form
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
+                    {form.pages.length > 1 && (
+                      <Badge variant="outline" className="bg-muted text-muted-foreground">
+                        {form.pages.length} pages
+                      </Badge>
+                    )}
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Link
+                    to={
+                      form.type === 'multipage'
+                        ? `/${form.id}/page/1`
+                        : `/${form.id}`
+                    }
+                    className="w-full"
+                  >
+                    <Button className="w-full" variant="default">
+                      Fill Form
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
           ))}
         </div>
         )}

@@ -7,6 +7,7 @@ inputToLLM instructions, and groundTruth values.
 
 import json
 import os
+import random
 from dotenv import load_dotenv
 from openai import OpenAI
 from typing import Dict, Any, List
@@ -23,6 +24,47 @@ if not api_key:
 
 client = OpenAI(api_key=api_key)
 
+# Industries for form generation
+INDUSTRIES = [
+    "Job Applications",
+    "Grant Applications",
+    "Scholarship Applications",
+    "Lease application",
+    "Restaurant reservation",
+    "Appointment scheduling (dental, salon, etc.)",
+    "Flight booking",
+    "Train booking",
+    "Bus booking",
+    "Hotel booking",
+    "Workout class booking",
+    "Event registration/ticket purchase",
+    "E-commerce → clothing",
+    "E-commerce → gaming",
+    "E-commerce → furniture",
+    "Software bug reporting",
+    "Personal loan application",
+    "Loan refinancing application",
+    "Mortgage application",
+    "Insurance claim",
+    "Medical doctors office form",
+    "Research study",
+    "NDA form",
+    "Background check form",
+    "Project bid → Construction",
+    "Project bid → Consulting",
+    "Project bid → freelance",
+    "Tax filing forms",
+    "Passport/Visa applications",
+    "Subscription cancellation",
+    "Contact us forms",
+    "Product return form",
+    "Vehicle registration/DMV forms",
+    "Pet adoption application",
+    "Contest/Sweepstakes entry",
+    "Wholesale purchase form",
+    "Wholesale seller post form"
+]
+
 # JSON Schema for form page generation
 FORM_PAGE_SCHEMA = {
     "type": "object",
@@ -30,7 +72,7 @@ FORM_PAGE_SCHEMA = {
     "properties": {
         "id": {
             "type": "string",
-            "description": "Unique identifier for the form (e.g., 'llm-form-1', 'llm-form-2')"
+            "description": "Unique identifier for the form (e.g., 'form-29', 'form-30')"
         },
         "title": {
             "type": "string",
@@ -199,12 +241,14 @@ FEW_SHOT_EXAMPLES = [
     }
 ]
 
-def generate_form_page(page_number: int) -> Dict[str, Any]:
+def generate_form_page(page_number: int, industry: str, form_id: str) -> Dict[str, Any]:
     """
     Generate a single form page using OpenAI GPT-4o.
     
     Args:
         page_number: The page number (1-10)
+        industry: The industry/use case for the form
+        form_id: The sequential form ID (e.g., "form-29")
     
     Returns:
         A dictionary containing the generated form definition
@@ -240,16 +284,18 @@ Important rules:
 
 Generate diverse forms - vary industries, complexity, and field types."""
 
-    user_prompt = f"""Generate a realistic, industry-grade form. It can be single-page or multipage (if multipage, use 2-4 pages).
+    user_prompt = f"""Generate a realistic, industry-grade form for: {industry}
 
 CRITICAL: Generate the JSON in this exact order:
-1. First: id, title, description, type
+1. First: id (use exactly "{form_id}"), title, description, type
 2. Second: inputToLLM (describe what values will be filled in - this guides groundTruth)
 3. Third: pages (define ALL pages and ALL fields with their IDs)
 4. LAST: groundTruth (after you know all field IDs from pages, create groundTruth with a key for each field ID)
 
 Requirements:
-- Use a realistic industry scenario (job application, loan application, event registration, subscription, etc.)
+- The form MUST be for: {industry}
+- Use the exact form ID: "{form_id}" (do not generate a different ID)
+- It can be single-page or multipage (if multipage, use 2-4 pages)
 - Include 5-12 fields per page
 - Mix different field types appropriately
 - In inputToLLM, describe ALL field values that will appear in groundTruth
@@ -257,16 +303,9 @@ Requirements:
 - Ensure groundTruth values exactly match what you described in inputToLLM
 - Use proper date formats and restrictions
 - Make it realistic and useful for testing AI form-filling
+- The form should be specific to the {industry} industry/use case
 
-Examples of good forms:
-- Job application (personal info, experience, skills, salary)
-- Loan application (personal info, financial details, employment, terms)
-- Event registration (attendee info, preferences, payment)
-- Subscription signup (user info, plan selection, payment)
-- Insurance application (personal info, coverage options, medical history)
-- Hotel booking (guest info, dates, preferences, payment)
-
-Generate a unique, realistic form that hasn't been generated yet. Remember: groundTruth must be the LAST property in the JSON."""
+Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, and use the exact ID "{form_id}"."""
 
     try:
         response = client.beta.chat.completions.parse(
@@ -288,7 +327,9 @@ Generate a unique, realistic form that hasn't been generated yet. Remember: grou
         )
         
         generated_form = json.loads(response.choices[0].message.content)
-        print(f"✓ Generated form #{page_number}: {generated_form.get('title', 'Unknown')}")
+        # Ensure the ID matches what we requested
+        generated_form["id"] = form_id
+        print(f"✓ Generated form #{page_number} ({industry}): {generated_form.get('title', 'Unknown')}")
         return generated_form
         
     except Exception as e:
@@ -301,7 +342,19 @@ def main():
     print("Starting form generation with OpenAI GPT-4o...")
     print("=" * 60)
     
-    # Load existing config if it exists
+    # Load manual config to count existing forms
+    manual_config = {}
+    manual_config_file = "manual_config.json"
+    if os.path.exists(manual_config_file):
+        try:
+            with open(manual_config_file, 'r', encoding='utf-8') as f:
+                manual_config = json.load(f)
+            print(f"Loaded {len(manual_config)} forms from {manual_config_file}")
+        except Exception as e:
+            print(f"Warning: Could not load manual config: {e}")
+            manual_config = {}
+    
+    # Load existing LLM config if it exists
     output_file = "llm_generated_config.json"
     existing_config = {}
     
@@ -309,27 +362,36 @@ def main():
         try:
             with open(output_file, 'r', encoding='utf-8') as f:
                 existing_config = json.load(f)
-            print(f"Loaded {len(existing_config)} existing forms from {output_file}")
+            print(f"Loaded {len(existing_config)} existing LLM forms from {output_file}")
         except Exception as e:
             print(f"Warning: Could not load existing config: {e}")
             existing_config = {}
+    
+    # Calculate starting ID for LLM forms (after manual forms)
+    manual_form_count = len(manual_config)
+    existing_llm_count = len(existing_config)
+    start_id = manual_form_count + existing_llm_count + 1
     
     # Generate 10 new forms
     generated_forms = {}
     
     for i in range(1, 11):
-        form_id = f"llm-form-{i}"
+        form_number = start_id + i - 1
+        form_id = f"form-{form_number}"
         
         # Skip if already exists
         if form_id in existing_config:
             print(f"⚠ Form {form_id} already exists, skipping...")
             continue
         
+        # Randomly select an industry
+        industry = random.choice(INDUSTRIES)
+        
         try:
-            form = generate_form_page(i)
-            form["id"] = form_id  # Ensure ID matches
+            form = generate_form_page(i, industry, form_id)
             generated_forms[form_id] = form
             print(f"  Form ID: {form_id}")
+            print(f"  Industry: {industry}")
             print(f"  Title: {form.get('title', 'N/A')}")
             print(f"  Type: {form.get('type', 'N/A')}")
             print(f"  Pages: {len(form.get('pages', []))}")
