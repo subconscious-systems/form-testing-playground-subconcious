@@ -1,10 +1,39 @@
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getFormById } from "@/utils/form-config-loader";
+import { getFormByIdAsync } from "@/utils/form-config-loader";
 import DynamicForm from "@/components/DynamicForm";
+import { FormDefinition } from "@/types/form-config";
 
 const FormPage = () => {
   const { formId } = useParams();
-  const form = formId ? getFormById(formId) : undefined;
+  const [form, setForm] = useState<FormDefinition | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const loadForm = async () => {
+      if (formId) {
+        setLoading(true);
+        try {
+          const loadedForm = await getFormByIdAsync(formId);
+          setForm(loadedForm);
+        } catch (error) {
+          console.error('Failed to load form:', error);
+          setForm(undefined);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    loadForm();
+  }, [formId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Loading form...</p>
+      </div>
+    );
+  }
 
   if (!form) {
     return (
