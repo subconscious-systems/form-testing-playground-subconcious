@@ -136,7 +136,7 @@
     "title": "Software Bug Reporting Form",
     "description": "Form for reporting software bugs and issues to the development team",
     "type": "multipage",
-    "layout": "wizard-style",
+    "layout": "website-style",
     "inputToLLM": "You are reporting a software bug. Page 1: Your name is Alex Turner, your email address is alex.turner@techmail.com, the software version is 2.3.4, and the severity of the bug is Critical. Page 2: The bug description is 'The application crashes on startup', and steps to reproduce are '1. Open the application, 2. Click the login button'. Page 3: The expected result was 'User should be able to log in without error', and actual result observed is 'Application crashes and displays error code 500'. You have attached a screenshot file named 'crash_error.png' and you agree to share this information with the development team.",
     "pages": [
       {
@@ -247,7 +247,7 @@
     "title": "Workout Class Booking",
     "description": "Book your spot in a workout class at our fitness center.",
     "type": "multipage",
-    "layout": "wizard-style",
+    "layout": "website-style",
     "inputToLLM": "You are booking a workout class at a fitness center. Page 1: Your name is Emily Turner, email is emily.turner@example.com, and phone is 5552468101. You prefer the morning class. Page 2: You want to book a Yoga class on 2023-11-15, and you need a yoga mat. You have no medical conditions. Page 3: You will pay with card number 4111111111111111, expiration date is 11/24, and CVV is 321. You agree to the terms and conditions.",
     "pages": [
       {
@@ -378,7 +378,7 @@
     "title": "Residential Lease Application",
     "description": "Application form for prospective tenants to apply for a residential lease",
     "type": "multipage",
-    "layout": "wizard-style",
+    "layout": "website-style",
     "inputToLLM": "You are applying for a residential lease. On Page 1, your full name is Alice Johnson, date of birth is 1985-06-15, email is alice.johnson@example.com, phone number is 5551236789, and you currently live at 123 Main St, Springfield, IL 62701. On Page 2, your employment status is Employed, you work at Tech Solutions with a monthly income of $4000.00, your employment start date was 2015-05-10, and your supervisor's name is Robert Smith with phone 5559876543. On Page 3, you are applying for the apartment at 456 Elm St, Springfield, IL 62702 starting from 2024-02-01, and you have no pets. You agree to the lease terms.",
     "pages": [
       {
@@ -972,7 +972,7 @@
     "title": "Flight Booking Form",
     "description": "Form for booking a flight, including personal details, flight preferences, and payment information",
     "type": "multipage",
-    "layout": "wizard-style",
+    "layout": "website-style",
     "inputToLLM": "You are booking a flight. Page 1: Your full name is Alice Johnson, email is alice.johnson@example.com, phone number is 5551239876, and you have a frequent flyer number of 123456789. Page 2: You are flying from New York (JFK) to Los Angeles (LAX), your flight is on 2024-05-15, and you prefer a window seat. Page 3: Your payment is $350.00, card number is 4111111111111111, expiration is 11/25, and CVV is 321, you agree to the booking terms.",
     "pages": [
       {
@@ -1115,7 +1115,7 @@
     "title": "Residential Lease Application",
     "description": "Application form for prospective tenants applying for a residential lease.",
     "type": "multipage",
-    "layout": "wizard-style",
+    "layout": "website-style",
     "inputToLLM": "You are applying for a residential lease. Page 1: Your full name is Alex Johnson, email is alex.johnson@email.com, phone number is 5551234567, and current address is 123 Elm Street, Springfield. Page 2: Your date of birth is 1990-05-15, you are employed at Tech Innovations, your monthly income is 5000, and you have no pets. Page 3: You want to move in on 2024-01-15, prefer a 12-month lease, have a reference from Jane Doe with phone 5559876543, and agree to the lease terms.",
     "pages": [
       {

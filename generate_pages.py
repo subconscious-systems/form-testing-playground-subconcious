@@ -89,8 +89,8 @@ FORM_PAGE_SCHEMA = {
         },
         "layout": {
             "type": "string",
-            "enum": ["single-column", "two-column", "split-screen", "wizard-style"],
-            "description": "Layout style for the form: 'single-column' (vertical stack), 'two-column' (grid), 'split-screen' (two columns with sidebar), 'wizard-style' (sectioned with dividers)"
+            "enum": ["single-column", "two-column", "split-screen", "wizard-style", "website-style"],
+            "description": "Layout style for the form: 'single-column' (vertical stack), 'two-column' (grid), 'split-screen' (two columns with sidebar), 'wizard-style' (sectioned with dividers), 'website-style' (professional website layout with header, navigation, and side-by-side content)"
         },
         "inputToLLM": {
             "type": "string",
@@ -398,7 +398,7 @@ def main():
         industry = random.choice(INDUSTRIES)
         
         # Randomly select a layout
-        layouts = ["single-column", "two-column", "split-screen", "wizard-style"]
+        layouts = ["single-column", "two-column", "split-screen", "wizard-style", "website-style"]
         selected_layout = random.choice(layouts)
         
         try:

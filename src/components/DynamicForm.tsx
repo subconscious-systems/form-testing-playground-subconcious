@@ -49,7 +49,7 @@ interface DynamicFormProps {
   totalPages?: number;
   inputToLLM?: string;
   groundTruth?: Record<string, any>;
-  layout?: 'single-column' | 'two-column' | 'split-screen' | 'wizard-style';
+  layout?: 'single-column' | 'two-column' | 'split-screen' | 'wizard-style' | 'website-style';
 }
 
 const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPages = 1, inputToLLM, groundTruth, layout = 'single-column' }: DynamicFormProps) => {
@@ -315,20 +315,21 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
           </Card>
         )}
 
-        {/* Form Card */}
-        <Card className="w-full">
-          <CardHeader>
-            <div className="flex items-center justify-between mb-2">
-              <CardTitle>{title}</CardTitle>
-              {totalPages > 1 && (
-                <span className="text-sm text-muted-foreground">
-                  Page {pageNumber} of {totalPages}
-                </span>
-              )}
-            </div>
-            <CardDescription>{description}</CardDescription>
-          </CardHeader>
-          <CardContent>
+        {/* Form Card - Only show if not website-style layout */}
+        {layout !== 'website-style' && (
+          <Card className="w-full">
+            <CardHeader>
+              <div className="flex items-center justify-between mb-2">
+                <CardTitle>{title}</CardTitle>
+                {totalPages > 1 && (
+                  <span className="text-sm text-muted-foreground">
+                    Page {pageNumber} of {totalPages}
+                  </span>
+                )}
+              </div>
+              <CardDescription>{description}</CardDescription>
+            </CardHeader>
+            <CardContent>
             {comparisonResult ? (
               // Show comparison report
               <div className="space-y-4">
@@ -447,6 +448,82 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
             )}
           </CardContent>
         </Card>
+        )}
+
+        {/* Website-style layout - renders its own full page structure */}
+        {layout === 'website-style' && (
+          <div>
+            {comparisonResult ? (
+              // Show comparison report in website style
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <Card className="w-full">
+                  <CardHeader>
+                    <CardTitle className="text-2xl">Submission Results</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="text-center space-y-2">
+                      <div className="text-4xl font-bold">
+                        {comparisonResult.accuracy.toFixed(1)}%
+                      </div>
+                      <div className="flex gap-2 justify-center">
+                        <Badge variant="outline" className="text-green-600">
+                          <CheckCircle2 className="w-4 h-4 mr-1" />
+                          {comparisonResult.correctFields} Correct
+                        </Badge>
+                        <Badge variant="outline" className="text-red-600">
+                          <XCircle className="w-4 h-4 mr-1" />
+                          {comparisonResult.incorrectFields} Incorrect
+                        </Badge>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        setComparisonResult(null);
+                        navigate("/");
+                      }}
+                      className="w-full"
+                    >
+                      Back to Forms
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                {(() => {
+                  const LayoutComponent = layoutComponents[layout] || layoutComponents['single-column'];
+                  return <LayoutComponent fields={page.fields} renderField={renderField} />;
+                })()}
+                {/* Submit buttons integrated into website layout */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+                  <div className="flex gap-3 mt-6">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleBack}
+                      className="flex-1"
+                    >
+                      {pageNumber > 1 ? "Back" : "Cancel"}
+                    </Button>
+                    {pageNumber < totalPages ? (
+                      <Button
+                        type="button"
+                        onClick={handleNext}
+                        className="flex-1"
+                      >
+                        Next
+                      </Button>
+                    ) : (
+                      <Button type="submit" className="flex-1">
+                        Submit
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </form>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

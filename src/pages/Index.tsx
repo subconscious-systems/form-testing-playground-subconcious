@@ -9,9 +9,18 @@ import { FormDefinition } from "@/types/form-config";
 import { FileText, Layers, Zap } from "lucide-react";
 
 const Index = () => {
-  const [filterType, setFilterType] = useState<string>("all");
+  // Load filter preference from localStorage on mount
+  const [filterType, setFilterType] = useState<string>(() => {
+    const saved = localStorage.getItem('form-playground-filter-preference');
+    return saved || "all";
+  });
   const [allForms, setAllForms] = useState<FormDefinition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  // Save filter preference to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('form-playground-filter-preference', filterType);
+  }, [filterType]);
 
   // Load forms on mount
   useEffect(() => {
