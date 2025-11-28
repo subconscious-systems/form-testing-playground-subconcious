@@ -6,5 +6,8 @@ export type LayoutType = 'single-column' | 'two-column' | 'split-screen' | 'wiza
 export interface LayoutProps {
   fields: FormField[];
   renderField: (field: FormField) => ReactNode;
+  websiteContext?: any; // Using any to avoid circular dependency or import issues, but ideally should be WebsiteContext
+  pageNumber?: number;
+  totalPages?: number;
 }
 

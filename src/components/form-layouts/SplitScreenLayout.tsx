@@ -1,50 +1,48 @@
 import { LayoutProps } from "./types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { FileText, ArrowRight } from "lucide-react";
 
 export const SplitScreenLayout = ({ fields, renderField }: LayoutProps) => {
-  // Split fields roughly in half
-  const midpoint = Math.ceil(fields.length / 2);
-  const leftFields = fields.slice(0, midpoint);
-  const rightFields = fields.slice(midpoint);
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 bg-gradient-to-r from-purple-50/40 to-pink-50/40 rounded-lg border-2 border-purple-200/50">
-      {/* Left Column - Form Fields */}
-      <div className="space-y-6 bg-white/80 p-6 rounded-lg border-l-4 border-purple-400">
-        <h3 className="text-sm font-semibold text-purple-700 mb-4 uppercase tracking-wide">Primary Information</h3>
-        {leftFields.map((field) => (
-          <div key={field.id}>
-            {renderField(field)}
+    <div className="flex flex-col lg:flex-row min-h-[600px] bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
+      {/* Left Decoration Panel */}
+      <div className="lg:w-1/3 bg-gradient-to-br from-slate-800 to-slate-900 p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+        <div className="relative z-10">
+          <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-8 backdrop-blur-sm">
+            <FileText className="w-6 h-6 text-white" />
           </div>
-        ))}
+          <h2 className="text-3xl font-bold mb-4">Complete Your Application</h2>
+          <p className="text-slate-300 leading-relaxed">
+            Please fill out the form accurately. Your information helps us process your request faster.
+          </p>
+        </div>
+
+        <div className="relative z-10 mt-8">
+          <div className="flex items-center gap-2 text-sm font-medium text-slate-400">
+            <span>Secure Form</span>
+            <div className="h-1 w-1 bg-slate-400 rounded-full" />
+            <span>Encrypted</span>
+          </div>
+        </div>
+
+        {/* Decorative Circles */}
+        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white/5 blur-3xl" />
+        <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-blue-500/10 blur-3xl" />
       </div>
 
-      {/* Right Column - Form Fields (or summary area) */}
-      <div className="space-y-6 bg-white/80 p-6 rounded-lg border-l-4 border-pink-400">
-        <h3 className="text-sm font-semibold text-pink-700 mb-4 uppercase tracking-wide">Additional Details</h3>
-        {rightFields.length > 0 ? (
-          rightFields.map((field) => (
-            <div key={field.id}>
-              {renderField(field)}
-            </div>
-          ))
-        ) : (
-          <Card className="border-dashed border-2 border-pink-300">
-            <CardHeader>
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Additional Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Complete the fields on the left to continue.
-              </p>
-            </CardContent>
-          </Card>
-        )}
+      {/* Right Form Panel */}
+      <div className="flex-1 p-8 md:p-12 bg-gray-50/50 overflow-y-auto">
+        <div className="max-w-2xl mx-auto space-y-8">
+          <div className="space-y-6">
+            {fields.map((field) => (
+              <div key={field.id} className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                {renderField(field)}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-

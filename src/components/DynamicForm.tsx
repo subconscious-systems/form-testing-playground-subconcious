@@ -50,9 +50,10 @@ interface DynamicFormProps {
   inputToLLM?: string;
   groundTruth?: Record<string, any>;
   layout?: 'single-column' | 'two-column' | 'split-screen' | 'wizard-style' | 'website-style';
+  websiteContext?: any; // Should be WebsiteContext
 }
 
-const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPages = 1, inputToLLM, groundTruth, layout = 'single-column' }: DynamicFormProps) => {
+const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPages = 1, inputToLLM, groundTruth, layout = 'single-column', websiteContext }: DynamicFormProps) => {
   const { pageData, updateFieldValue, getAllData, handleSubmit: submitForm } = useFormState({
     formId,
     pageNumber,
@@ -72,7 +73,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
     // Data is already loaded via useFormState hook
     // This effect can be used for any additional initialization if needed
   }, [formId, pageNumber]);
-  
+
 
   const handleFieldChange = (fieldId: string, value: any) => {
     updateFieldValue(fieldId, value);
@@ -136,10 +137,10 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate all fields on current page
     const validationErrors: string[] = [];
-    
+
     page.fields.forEach((field) => {
       const value = pageData[field.id];
       const error = validateField(field, value);
@@ -147,7 +148,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         validationErrors.push(error);
       }
     });
-    
+
     if (validationErrors.length > 0) {
       toast.error(validationErrors[0]);
       return;
@@ -156,9 +157,9 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
     // If this is the last page, submit the entire form
     if (pageNumber === totalPages) {
       const allFormData = submitForm();
-      
+
       toast.success("Form submitted successfully!");
-      
+
       // Compare with ground truth if available
       if (groundTruth) {
         const comparison = compareWithGroundTruth(allFormData, groundTruth);
@@ -176,7 +177,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
   const handleNext = () => {
     // Validate all fields before moving to next page
     const validationErrors: string[] = [];
-    
+
     page.fields.forEach((field) => {
       const value = pageData[field.id];
       const error = validateField(field, value);
@@ -184,7 +185,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         validationErrors.push(error);
       }
     });
-    
+
     if (validationErrors.length > 0) {
       toast.error(validationErrors[0]);
       return;
@@ -250,9 +251,11 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         return <TimeField {...commonProps} value={value || ""} />;
       case "date-range":
         // Ensure date-range value is properly structured
-        const dateRangeValue = value && (value.from || value.to) 
-          ? { from: value.from ? (typeof value.from === "string" ? new Date(value.from) : value.from) : undefined, 
-              to: value.to ? (typeof value.to === "string" ? new Date(value.to) : value.to) : undefined }
+        const dateRangeValue = value && (value.from || value.to)
+          ? {
+            from: value.from ? (typeof value.from === "string" ? new Date(value.from) : value.from) : undefined,
+            to: value.to ? (typeof value.to === "string" ? new Date(value.to) : value.to) : undefined
+          }
           : undefined;
         return <DateRangeField {...commonProps} value={dateRangeValue} />;
       case "number":
@@ -330,124 +333,130 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
               <CardDescription>{description}</CardDescription>
             </CardHeader>
             <CardContent>
-            {comparisonResult ? (
-              // Show comparison report
-              <div className="space-y-4">
-                <div className="text-center space-y-2">
-                  <h3 className="text-2xl font-bold">Submission Results</h3>
-                  <div className="text-4xl font-bold">
-                    {comparisonResult.accuracy.toFixed(1)}%
-                  </div>
-                  <div className="flex gap-2 justify-center">
-                    <Badge variant="outline" className="text-green-600">
-                      <CheckCircle2 className="w-4 h-4 mr-1" />
-                      {comparisonResult.correctFields} Correct
-                    </Badge>
-                    <Badge variant="outline" className="text-red-600">
-                      <XCircle className="w-4 h-4 mr-1" />
-                      {comparisonResult.incorrectFields} Incorrect
-                    </Badge>
-                    {comparisonResult.missingFields.length > 0 && (
-                      <Badge variant="outline" className="text-yellow-600">
-                        <AlertCircle className="w-4 h-4 mr-1" />
-                        {comparisonResult.missingFields.length} Missing
+              {comparisonResult ? (
+                // Show comparison report
+                <div className="space-y-4">
+                  <div className="text-center space-y-2">
+                    <h3 className="text-2xl font-bold">Submission Results</h3>
+                    <div className="text-4xl font-bold">
+                      {comparisonResult.accuracy.toFixed(1)}%
+                    </div>
+                    <div className="flex gap-2 justify-center">
+                      <Badge variant="outline" className="text-green-600">
+                        <CheckCircle2 className="w-4 h-4 mr-1" />
+                        {comparisonResult.correctFields} Correct
                       </Badge>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <h4 className="font-semibold">Correct Fields:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.entries(comparisonResult.fieldResults)
-                      .filter(([_, result]) => result.match)
-                      .map(([fieldId]) => (
-                        <Badge key={fieldId} variant="outline" className="text-green-600 bg-green-50">
-                          <CheckCircle2 className="w-3 h-3 mr-1" />
-                          {fieldId}
+                      <Badge variant="outline" className="text-red-600">
+                        <XCircle className="w-4 h-4 mr-1" />
+                        {comparisonResult.incorrectFields} Incorrect
+                      </Badge>
+                      {comparisonResult.missingFields.length > 0 && (
+                        <Badge variant="outline" className="text-yellow-600">
+                          <AlertCircle className="w-4 h-4 mr-1" />
+                          {comparisonResult.missingFields.length} Missing
                         </Badge>
-                      ))}
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <h4 className="font-semibold">Incorrect/Missing Fields:</h4>
                   <div className="space-y-2">
-                    {Object.entries(comparisonResult.fieldResults)
-                      .filter(([_, result]) => !result.match)
-                      .map(([fieldId, result]) => (
-                        <div key={fieldId} className="p-3 bg-red-50 border border-red-200 rounded text-sm">
-                          <div className="font-semibold mb-1">{fieldId}</div>
-                          <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div>
-                              <span className="text-muted-foreground">Expected: </span>
-                              <span className="font-mono">{JSON.stringify(result.expected)}</span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground">Actual: </span>
-                              <span className="font-mono">
-                                {result.actual === null ? (
-                                  <span className="text-red-600">(Missing)</span>
-                                ) : (
-                                  JSON.stringify(result.actual)
-                                )}
-                              </span>
+                    <h4 className="font-semibold">Correct Fields:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {Object.entries(comparisonResult.fieldResults)
+                        .filter(([_, result]) => result.match)
+                        .map(([fieldId]) => (
+                          <Badge key={fieldId} variant="outline" className="text-green-600 bg-green-50">
+                            <CheckCircle2 className="w-3 h-3 mr-1" />
+                            {fieldId}
+                          </Badge>
+                        ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Incorrect/Missing Fields:</h4>
+                    <div className="space-y-2">
+                      {Object.entries(comparisonResult.fieldResults)
+                        .filter(([_, result]) => !result.match)
+                        .map(([fieldId, result]) => (
+                          <div key={fieldId} className="p-3 bg-red-50 border border-red-200 rounded text-sm">
+                            <div className="font-semibold mb-1">{fieldId}</div>
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                              <div>
+                                <span className="text-muted-foreground">Expected: </span>
+                                <span className="font-mono">{JSON.stringify(result.expected)}</span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">Actual: </span>
+                                <span className="font-mono">
+                                  {result.actual === null ? (
+                                    <span className="text-red-600">(Missing)</span>
+                                  ) : (
+                                    JSON.stringify(result.actual)
+                                  )}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                    </div>
                   </div>
-                </div>
 
-                <Button
-                  onClick={() => {
-                    setComparisonResult(null);
-                    navigate("/");
-                  }}
-                  className="w-full"
-                >
-                  Back to Forms
-                </Button>
-              </div>
-            ) : (
-              // Show form
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4 flex items-center justify-between">
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 font-medium">
-                    Layout: {layout.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  </Badge>
-                </div>
-                {(() => {
-                  const LayoutComponent = layoutComponents[layout] || layoutComponents['single-column'];
-                  return <LayoutComponent fields={page.fields} renderField={renderField} />;
-                })()}
-                <div className="flex gap-3 mt-6">
                   <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleBack}
-                    className="flex-1"
+                    onClick={() => {
+                      setComparisonResult(null);
+                      navigate("/");
+                    }}
+                    className="w-full"
                   >
-                    {pageNumber > 1 ? "Back" : "Cancel"}
+                    Back to Forms
                   </Button>
-                  {pageNumber < totalPages ? (
+                </div>
+              ) : (
+                // Show form
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-4 flex items-center justify-between">
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 font-medium">
+                      Layout: {layout.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </Badge>
+                  </div>
+                  {(() => {
+                    const LayoutComponent = layoutComponents[layout] || layoutComponents['single-column'];
+                    return <LayoutComponent
+                      fields={page.fields}
+                      renderField={renderField}
+                      websiteContext={websiteContext}
+                      pageNumber={pageNumber}
+                      totalPages={totalPages}
+                    />;
+                  })()}
+                  <div className="flex gap-3 mt-6">
                     <Button
                       type="button"
-                      onClick={handleNext}
+                      variant="outline"
+                      onClick={handleBack}
                       className="flex-1"
                     >
-                      Next
+                      {pageNumber > 1 ? "Back" : "Cancel"}
                     </Button>
-                  ) : (
-                    <Button type="submit" className="flex-1">
-                      Submit
-                    </Button>
-                  )}
-                </div>
-              </form>
-            )}
-          </CardContent>
-        </Card>
+                    {pageNumber < totalPages ? (
+                      <Button
+                        type="button"
+                        onClick={handleNext}
+                        className="flex-1"
+                      >
+                        Next
+                      </Button>
+                    ) : (
+                      <Button type="submit" className="flex-1">
+                        Submit
+                      </Button>
+                    )}
+                  </div>
+                </form>
+              )}
+            </CardContent>
+          </Card>
         )}
 
         {/* Website-style layout - renders its own full page structure */}
@@ -492,7 +501,13 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
               <form onSubmit={handleSubmit}>
                 {(() => {
                   const LayoutComponent = layoutComponents[layout] || layoutComponents['single-column'];
-                  return <LayoutComponent fields={page.fields} renderField={renderField} />;
+                  return <LayoutComponent
+                    fields={page.fields}
+                    renderField={renderField}
+                    websiteContext={websiteContext}
+                    pageNumber={pageNumber}
+                    totalPages={totalPages}
+                  />;
                 })()}
                 {/* Submit buttons integrated into website layout */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">

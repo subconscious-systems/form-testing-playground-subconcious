@@ -63,6 +63,7 @@ const FormPage = () => {
       inputToLLM={form.inputToLLM}
       groundTruth={form.groundTruth}
       layout={form.layout || 'single-column'}
+      websiteContext={form.websiteContext}
     />
   );
 };

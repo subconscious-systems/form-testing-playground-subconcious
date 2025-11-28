@@ -1,14 +1,18 @@
 import { LayoutProps } from "./types";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const SingleColumnLayout = ({ fields, renderField }: LayoutProps) => {
   return (
-    <div className="space-y-6 p-4 bg-gray-50/30 rounded-lg border-2 border-gray-200/50">
-      {fields.map((field) => (
-        <div key={field.id} className="bg-white p-4 rounded-md border border-gray-100">
-          {renderField(field)}
-        </div>
-      ))}
+    <div className="max-w-2xl mx-auto">
+      <Card className="shadow-sm border-gray-200">
+        <CardContent className="p-6 md:p-8 space-y-6">
+          {fields.map((field) => (
+            <div key={field.id} className="bg-white">
+              {renderField(field)}
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 };
-

@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-"""
-Generate form pages using OpenAI GPT-4o model.
-This script generates realistic form definitions with proper structure,
-inputToLLM instructions, and groundTruth values.
-"""
-
 import json
 import os
 import random
@@ -149,6 +142,71 @@ FORM_PAGE_SCHEMA = {
                 "required": ["pageNumber", "fields"]
             }
         },
+        "websiteContext": {
+            "type": "object",
+            "additionalProperties": False,
+            "description": "Context for website-style layout. REQUIRED if layout is 'website-style'.",
+            "properties": {
+                "companyName": {"type": "string"},
+                "logoUrl": {"type": "string", "description": "Optional URL or just use initials"},
+                "themeColor": {"type": "string", "description": "Hex code, e.g., #2563EB"},
+                "navigationItems": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "label": {"type": "string"},
+                            "href": {"type": "string"},
+                            "active": {"type": "boolean"}
+                        },
+                        "required": ["label", "href"]
+                    }
+                },
+                "heroTitle": {"type": "string"},
+                "heroSubtitle": {"type": "string"},
+                "sidebarContent": {
+                    "type": "object",
+                    "properties": {
+                        "title": {"type": "string"},
+                        "content": {"type": "string"},
+                        "links": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "label": {"type": "string"},
+                                    "href": {"type": "string"}
+                                },
+                                "required": ["label", "href"]
+                            }
+                        }
+                    },
+                    "required": ["title", "content"]
+                },
+                "footerLinks": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {"type": "string"},
+                            "links": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "label": {"type": "string"},
+                                        "href": {"type": "string"}
+                                    },
+                                    "required": ["label", "href"]
+                                }
+                            }
+                        },
+                        "required": ["title", "links"]
+                    }
+                }
+            },
+            "required": ["companyName", "themeColor", "navigationItems", "heroTitle", "heroSubtitle", "footerLinks"]
+        },
         "groundTruth": {
             "type": "object",
             "additionalProperties": True,
@@ -263,10 +321,11 @@ def generate_form_page(page_number: int, industry: str, form_id: str, layout: st
     system_prompt = """You are an expert form designer creating realistic, industry-grade forms for testing AI form-filling systems.
 
 Your task is to generate a complete form definition. IMPORTANT: Generate the JSON in this exact order:
-1. id, title, description, type
-2. inputToLLM (describe all field values that will be in groundTruth)
-3. pages (all pages with all fields)
-4. groundTruth (LAST - generate this after you know all field IDs from all pages)
+1. id, title, description, type, layout
+2. websiteContext (IF layout is 'website-style' - generate realistic company info, nav, hero, footer)
+3. inputToLLM (describe all field values that will be in groundTruth)
+4. pages (all pages with all fields)
+5. groundTruth (LAST - generate this after you know all field IDs from all pages)
 
 The groundTruth object must contain an entry for EVERY field ID that appears in the pages. 
 Format groundTruth values to match React component output:
@@ -288,16 +347,19 @@ Important rules:
 - Make forms industry-realistic (job apps, loan apps, registrations, etc.)
 - Generate groundTruth LAST after you have defined all pages and fields
 - IMPORTANT: Set the "required" field appropriately for each field. Fields that are essential for the form purpose should be required=true, while optional fields should be required=false. This affects form validation.
+- If layout is 'website-style', you MUST generate a rich 'websiteContext' object with realistic branding, navigation, and footer links appropriate for the industry.
+- For 'website-style', make the heroTitle and heroSubtitle very engaging and professional.
 
 Generate diverse forms - vary industries, complexity, and field types."""
 
     user_prompt = f"""Generate a realistic, industry-grade form for: {industry}
 
 CRITICAL: Generate the JSON in this exact order:
-1. First: id (use exactly "{form_id}"), title, description, type
-2. Second: inputToLLM (describe what values will be filled in - this guides groundTruth)
-3. Third: pages (define ALL pages and ALL fields with their IDs)
-4. LAST: groundTruth (after you know all field IDs from pages, create groundTruth with a key for each field ID)
+1. First: id (use exactly "{form_id}"), title, description, type, layout ("{layout}")
+2. Second: websiteContext (only if layout is 'website-style')
+3. Third: inputToLLM (describe what values will be filled in - this guides groundTruth)
+4. Fourth: pages (define ALL pages and ALL fields with their IDs)
+5. LAST: groundTruth (after you know all field IDs from pages, create groundTruth with a key for each field ID)
 
 Requirements:
 - The form MUST be for: {industry}
@@ -314,7 +376,7 @@ Requirements:
 - Make it realistic and useful for testing AI form-filling
 - The form should be specific to the {industry} industry/use case
 
-Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), use the exact layout "{layout}", and set "required" appropriately for each field."""
+Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), use the exact layout "{layout}", and set "required" appropriately for each field. If layout is 'website-style', include detailed websiteContext."""
 
     try:
         response = client.beta.chat.completions.parse(
@@ -347,7 +409,6 @@ Generate a unique, realistic form for {industry}. Remember: groundTruth must be 
         raise
 
 def main():
-    """Main function to generate 10 form pages."""
     
     print("Starting form generation with OpenAI GPT-4o...")
     print("=" * 60)

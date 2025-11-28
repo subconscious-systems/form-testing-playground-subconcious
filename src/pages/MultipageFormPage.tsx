@@ -26,7 +26,7 @@ const MultipageFormPage = () => {
     };
     loadForm();
   }, [formId]);
-  
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -44,7 +44,7 @@ const MultipageFormPage = () => {
   }
 
   const currentPage = configForm.pages.find((p) => p.pageNumber === pageNum);
-  
+
   if (!currentPage) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -65,6 +65,7 @@ const MultipageFormPage = () => {
       inputToLLM={configForm.inputToLLM}
       groundTruth={configForm.groundTruth}
       layout={configForm.layout || 'single-column'}
+      websiteContext={configForm.websiteContext}
     />
   );
 
