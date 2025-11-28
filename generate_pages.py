@@ -1,6 +1,7 @@
 import json
 import os
 import random
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from openai import OpenAI
 from typing import Dict, Any, List
@@ -318,7 +319,23 @@ def generate_form_page(page_number: int, industry: str, form_id: str, layout: st
         A dictionary containing the generated form definition
     """
     
-    system_prompt = """You are an expert form designer creating realistic, industry-grade forms for testing AI form-filling systems.
+    # Get current date information
+    today = datetime.now()
+    current_date_str = today.strftime("%Y-%m-%d")
+    current_day_name = today.strftime("%A")
+    current_date_formatted = today.strftime("%B %d, %Y")
+    
+    # Calculate date range (2 years before and 2 years after)
+    two_years_ago = today - timedelta(days=730)  # Approximately 2 years
+    two_years_from_now = today + timedelta(days=730)  # Approximately 2 years
+    min_date_str = two_years_ago.strftime("%Y-%m-%d")
+    max_date_str = two_years_from_now.strftime("%Y-%m-%d")
+    
+    system_prompt = f"""You are an expert form designer creating realistic, industry-grade forms for testing AI form-filling systems.
+
+CURRENT DATE INFORMATION:
+- Today's date: {current_date_str} ({current_day_name}, {current_date_formatted})
+- Date range for all generated dates: {min_date_str} to {max_date_str} (2 years before today to 2 years after today)
 
 Your task is to generate a complete form definition. IMPORTANT: Generate the JSON in this exact order:
 1. id, title, description, type, layout
@@ -338,6 +355,14 @@ Format groundTruth values to match React component output:
    - Credit card numbers as strings without spaces
    - CVV as 3-4 digit strings
 
+CRITICAL DATE RULES:
+- ALL dates in groundTruth MUST be between {min_date_str} and {max_date_str} (2 years before today to 2 years after today)
+- For past dates (e.g., date of birth, past events, historical data): Use dates between {min_date_str} and {current_date_str}
+- For future dates (e.g., booking dates, appointment dates, event dates, expiration dates): Use dates between {current_date_str} and {max_date_str}
+- For date ranges: Both "from" and "to" dates must be within the allowed range ({min_date_str} to {max_date_str})
+- NEVER use dates outside this range (e.g., dates from 2023 when today is 2025, or dates far in the future)
+- Base all date generation on today's date: {current_date_str}
+
 Important rules:
 - Use realistic field combinations (e.g., don't mix unrelated fields)
 - Ensure groundTruth matches the inputToLLM description exactly
@@ -354,6 +379,10 @@ Generate diverse forms - vary industries, complexity, and field types."""
 
     user_prompt = f"""Generate a realistic, industry-grade form for: {industry}
 
+CURRENT DATE CONTEXT:
+- Today is: {current_date_str} ({current_day_name}, {current_date_formatted})
+- All dates in groundTruth MUST be between {min_date_str} and {max_date_str} (2 years before today to 2 years after today)
+
 CRITICAL: Generate the JSON in this exact order:
 1. First: id (use exactly "{form_id}"), title, description, type, layout ("{layout}")
 2. Second: websiteContext (only if layout is 'website-style')
@@ -369,14 +398,20 @@ Requirements:
 - Include 5-12 fields per page
 - Mix different field types appropriately
 - IMPORTANT: Set "required": true for essential fields and "required": false for optional fields. This is critical for form validation.
-- In inputToLLM, describe ALL field values that will appear in groundTruth
+- In inputToLLM, describe ALL field values that will appear in groundTruth, including dates relative to today ({current_date_str})
 - In groundTruth, include an entry for EVERY field ID from all pages
 - Ensure groundTruth values exactly match what you described in inputToLLM
+- DATE REQUIREMENTS FOR groundTruth:
+  * ALL dates must be between {min_date_str} and {max_date_str}
+  * For past dates (birth dates, past events): Use dates from {min_date_str} to {current_date_str}
+  * For future dates (bookings, appointments, events): Use dates from {current_date_str} to {max_date_str}
+  * NEVER use dates outside this 4-year range (2 years before to 2 years after today)
+  * Format all dates as 'YYYY-MM-DD' strings
 - Use proper date formats and restrictions
 - Make it realistic and useful for testing AI form-filling
 - The form should be specific to the {industry} industry/use case
 
-Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), use the exact layout "{layout}", and set "required" appropriately for each field. If layout is 'website-style', include detailed websiteContext."""
+Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), use the exact layout "{layout}", set "required" appropriately for each field, and ensure ALL dates in groundTruth are within the allowed range ({min_date_str} to {max_date_str}). If layout is 'website-style', include detailed websiteContext."""
 
     try:
         response = client.beta.chat.completions.parse(
