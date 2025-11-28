@@ -1,11 +1,11 @@
 {
   "29": {
     "id": "29",
-    "title": "Hotel Booking Form",
-    "description": "Book a hotel room with personal details, room selection, and payment information",
+    "title": "Bus Ticket Booking Form",
+    "description": "Form for booking bus tickets for intercity travel.",
     "type": "multipage",
-    "layout": "wizard-style",
-    "inputToLLM": "You are booking a hotel room. Page 1: Your name is Alex Turner, email is alex.turner@mail.com, phone is 5551234567, and your check-in date is 2024-06-15 and check-out date is 2024-06-20. Page 2: You prefer a King bed, you select breakfast as an additional service, and leave a special request for a sea view room. Page 3: You will pay with a card number 4532015112830366, the expiration date is 11/26, CVV is 345, and you agree to the hotel policy.",
+    "layout": "two-column",
+    "inputToLLM": "You are booking a bus ticket for an intercity travel. Page 1: Your name is Alice Brown, phone number is 5558765432, and email is alice.brown@example.com. Page 2: Departure city is New York, destination city is Boston, travel date is 2026-06-15, and you prefer a morning departure. Page 3: You have selected a standard seat, will pay $45.00, card number is 4532015112830366, expiration is 11/27, CVV is 321, and you agree to terms and conditions.",
     "pages": [
       {
         "pageNumber": 1,
@@ -18,33 +18,17 @@
             "required": true
           },
           {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "Enter your phone number",
+            "required": true
+          },
+          {
             "id": "email",
             "type": "email",
             "label": "Email Address",
             "placeholder": "you@example.com",
-            "required": true
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567",
-            "required": true
-          },
-          {
-            "id": "checkInDate",
-            "type": "date",
-            "label": "Check-In Date",
-            "placeholder": null,
-            "allowed": "after",
-            "required": true
-          },
-          {
-            "id": "checkOutDate",
-            "type": "date",
-            "label": "Check-Out Date",
-            "placeholder": null,
-            "allowed": "after",
             "required": true
           }
         ]
@@ -53,34 +37,47 @@
         "pageNumber": 2,
         "fields": [
           {
-            "id": "bedType",
-            "type": "radio",
-            "label": "Bed Type",
+            "id": "departureCity",
+            "type": "select",
+            "label": "Departure City",
             "options": [
-              "Single",
-              "Double",
-              "Queen",
-              "King"
+              "New York",
+              "Los Angeles",
+              "Chicago",
+              "Houston",
+              "Phoenix"
             ],
             "required": true
           },
           {
-            "id": "additionalServices",
-            "type": "multiselect",
-            "label": "Additional Services",
+            "id": "destinationCity",
+            "type": "select",
+            "label": "Destination City",
             "options": [
-              "Breakfast",
-              "Airport Pickup",
-              "Spa Access",
-              "Gym Access"
+              "Boston",
+              "San Francisco",
+              "Seattle",
+              "Miami",
+              "Atlanta"
             ],
-            "required": false
+            "required": true
           },
           {
-            "id": "specialRequests",
-            "type": "textarea",
-            "label": "Special Requests",
-            "placeholder": "Add any special requests here",
+            "id": "travelDate",
+            "type": "date",
+            "label": "Date of Travel",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "departureTimePref",
+            "type": "radio",
+            "label": "Preferred Departure Time",
+            "options": [
+              "Morning",
+              "Afternoon",
+              "Evening"
+            ],
             "required": false
           }
         ]
@@ -88,6 +85,25 @@
       {
         "pageNumber": 3,
         "fields": [
+          {
+            "id": "seatType",
+            "type": "select",
+            "label": "Seat Type",
+            "options": [
+              "Standard",
+              "Premium",
+              "VIP"
+            ],
+            "required": true
+          },
+          {
+            "id": "paymentAmount",
+            "type": "currency",
+            "label": "Total Payment (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
           {
             "id": "cardNumber",
             "type": "credit-card",
@@ -111,109 +127,37 @@
             "required": true
           },
           {
-            "id": "agreeToPolicy",
+            "id": "agreeToTerms",
             "type": "checkbox",
-            "label": "I agree to the hotel policy terms and conditions",
+            "label": "I agree to the terms and conditions",
             "required": true
           }
         ]
       }
     ],
     "groundTruth": {
-      "fullName": "Alex Turner",
-      "email": "alex.turner@mail.com",
-      "phone": "5551234567",
-      "checkInDate": "2024-06-15",
-      "checkOutDate": "2024-06-20",
-      "bedType": "King",
-      "additionalServices": [
-        "Breakfast"
-      ],
-      "specialRequests": "Sea view room",
+      "fullName": "Alice Brown",
+      "phone": "5558765432",
+      "email": "alice.brown@example.com",
+      "departureCity": "New York",
+      "destinationCity": "Boston",
+      "travelDate": "2026-06-15",
+      "departureTimePref": "Morning",
+      "seatType": "Standard",
+      "paymentAmount": "45.00",
       "cardNumber": "4532015112830366",
-      "expirationDate": "11/26",
-      "cvv": "345",
-      "agreeToPolicy": true
+      "expirationDate": "11/27",
+      "cvv": "321",
+      "agreeToTerms": true
     }
   },
   "30": {
     "id": "30",
-    "title": "Furniture Order Form",
-    "description": "Complete your furniture purchase by providing necessary details.",
+    "title": "Workout Class Booking Form",
+    "description": "Book your spot in our exclusive workout classes and customize your experience.",
     "type": "multipage",
-    "layout": "website-style",
-    "websiteContext": {
-      "companyName": "HomeStyle Furnishings",
-      "logoUrl": "HSF",
-      "themeColor": "#8B4513",
-      "navigationItems": [
-        {
-          "label": "Home",
-          "href": "/home",
-          "active": true
-        },
-        {
-          "label": "Shop",
-          "href": "/shop",
-          "active": false
-        },
-        {
-          "label": "About Us",
-          "href": "/about",
-          "active": false
-        },
-        {
-          "label": "Contact",
-          "href": "/contact",
-          "active": false
-        }
-      ],
-      "heroTitle": "Bring Comfort to Your Home",
-      "heroSubtitle": "Explore our wide range of furniture and find the perfect fit for your space.",
-      "sidebarContent": {
-        "title": "Why Choose Us?",
-        "content": "High-quality furniture at affordable prices. Excellent customer service and timely delivery.",
-        "links": [
-          {
-            "label": "Customer Reviews",
-            "href": "/reviews"
-          },
-          {
-            "label": "Warranty Info",
-            "href": "/warranty"
-          }
-        ]
-      },
-      "footerLinks": [
-        {
-          "title": "Customer Service",
-          "links": [
-            {
-              "label": "Help Center",
-              "href": "/help"
-            },
-            {
-              "label": "Return Policy",
-              "href": "/returns"
-            }
-          ]
-        },
-        {
-          "title": "Company",
-          "links": [
-            {
-              "label": "About Us",
-              "href": "/about"
-            },
-            {
-              "label": "Careers",
-              "href": "/careers"
-            }
-          ]
-        }
-      ]
-    },
-    "inputToLLM": "You are ordering furniture from HomeStyle Furnishings. Page 1: Your name is Alex Johnson, email is alex.johnson@example.com, phone is 5551234567, and delivery address is 123 Elm Street, Springfield. Page 2: You are purchasing a 'Luxury Sofa', opting for 'Standard Delivery', and want to receive promotional emails. Page 3: You are paying $1500.00 with the card number 4111111111111111, expiration date is 11/26, and CVV is 321. You agree to the terms and conditions.",
+    "layout": "wizard-style",
+    "inputToLLM": "You are booking a spot in a workout class. Your name is Alex Taylor, and your email is alex.taylor@example.com. You prefer a Yoga class and are available for sessions in the morning. You want a one-month membership starting on 2026-02-05. You're interested in receiving promotional offers, and your emergency contact is Jamie Taylor with phone number 5551234567.",
     "pages": [
       {
         "pageNumber": 1,
@@ -240,10 +184,27 @@
             "required": true
           },
           {
-            "id": "deliveryAddress",
-            "type": "textarea",
-            "label": "Delivery Address",
-            "placeholder": "Enter your full delivery address",
+            "id": "classType",
+            "type": "select",
+            "label": "Preferred Class Type",
+            "options": [
+              "Yoga",
+              "Pilates",
+              "Zumba",
+              "HIIT",
+              "Spin"
+            ],
+            "required": true
+          },
+          {
+            "id": "availability",
+            "type": "multiselect",
+            "label": "Available Session Times",
+            "options": [
+              "Morning",
+              "Afternoon",
+              "Evening"
+            ],
             "required": true
           }
         ]
@@ -252,32 +213,386 @@
         "pageNumber": 2,
         "fields": [
           {
-            "id": "product",
+            "id": "membershipDuration",
             "type": "select",
-            "label": "Product",
+            "label": "Membership Duration",
             "options": [
-              "Luxury Sofa",
-              "Modern Dining Table",
-              "Ergonomic Office Chair",
-              "Queen Bed Frame"
+              "1 Month",
+              "3 Months",
+              "6 Months",
+              "1 Year"
             ],
             "required": true
           },
           {
-            "id": "deliveryOption",
-            "type": "radio",
-            "label": "Delivery Option",
+            "id": "startDate",
+            "type": "date",
+            "label": "Preferred Start Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "promotionalOffers",
+            "type": "switch",
+            "label": "Receive Promotional Offers",
+            "required": false
+          },
+          {
+            "id": "emergencyContactName",
+            "type": "text",
+            "label": "Emergency Contact Name",
+            "placeholder": "Full name",
+            "required": true
+          },
+          {
+            "id": "emergencyContactPhone",
+            "type": "phone",
+            "label": "Emergency Contact Phone",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Taylor",
+      "email": "alex.taylor@example.com",
+      "phone": "5551234567",
+      "classType": "Yoga",
+      "availability": [
+        "Morning"
+      ],
+      "membershipDuration": "1 Month",
+      "startDate": "2026-02-05",
+      "promotionalOffers": true,
+      "emergencyContactName": "Jamie Taylor",
+      "emergencyContactPhone": "5551234567"
+    }
+  },
+  "31": {
+    "id": "31",
+    "title": "Insurance Claim Form",
+    "description": "Form for filing an insurance claim for personal property damage or loss.",
+    "type": "multipage",
+    "layout": "wizard-style",
+    "inputToLLM": "You are filling out an insurance claim for property damage caused by a recent storm. On Page 1: Your name is Alex Parker, date of birth is 1985-07-15, email is alex.parker@email.com, and phone is 5551239876. On Page 2: The incident occurred on 2025-08-10 due to a severe storm, and the affected property is your residential home at 123 Elm Street, Springfield. On Page 3: You estimate the damage cost to be $15,000, provide your bank account number 987654321 for claim payout, and you agree to the claim terms.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Contact Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "incidentDate",
+            "type": "date",
+            "label": "Date of Incident",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "incidentCause",
+            "type": "select",
+            "label": "Cause of Incident",
             "options": [
-              "Standard Delivery",
-              "Express Delivery",
-              "In-Store Pickup"
+              "Storm",
+              "Fire",
+              "Theft",
+              "Flood",
+              "Vandalism"
             ],
             "required": true
           },
           {
-            "id": "subscribePromotions",
+            "id": "propertyType",
+            "type": "select",
+            "label": "Type of Property",
+            "options": [
+              "Residential",
+              "Commercial",
+              "Automobile",
+              "Other"
+            ],
+            "required": true
+          },
+          {
+            "id": "propertyAddress",
+            "type": "textarea",
+            "label": "Property Address",
+            "placeholder": "Enter the address of the affected property",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "damageEstimate",
+            "type": "currency",
+            "label": "Estimated Damage Cost (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "bankAccountNumber",
+            "type": "text",
+            "label": "Bank Account Number for Payout",
+            "placeholder": "Enter your bank account number",
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
             "type": "checkbox",
-            "label": "Subscribe to Promotional Emails",
+            "label": "I agree to the terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Parker",
+      "dateOfBirth": "1985-07-15",
+      "email": "alex.parker@email.com",
+      "phone": "5551239876",
+      "incidentDate": "2025-08-10",
+      "incidentCause": "Storm",
+      "propertyType": "Residential",
+      "propertyAddress": "123 Elm Street, Springfield",
+      "damageEstimate": "15000.00",
+      "bankAccountNumber": "987654321",
+      "agreeToTerms": true
+    }
+  },
+  "32": {
+    "id": "32",
+    "title": "Scholarship Application Form",
+    "description": "Application form for academic scholarships for the 2026-2027 academic year",
+    "type": "multipage",
+    "layout": "split-screen",
+    "inputToLLM": "You are applying for a scholarship. Page 1: Your full name is Mary Ann Parker, date of birth is 2005-08-15, email is mary.parker@email.com, phone is 5558765432. Page 2: You are applying for the 'Excellence in STEM' scholarship, have a GPA of 3.9, and will upload a transcript. Page 3: Your personal statement describes your passion for engineering and dedication to community service. You agree to the scholarship terms and your application submission date is 2025-12-10.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "scholarshipName",
+            "type": "select",
+            "label": "Scholarship Name",
+            "options": [
+              "Excellence in STEM",
+              "Leadership in Arts",
+              "Community Service Award",
+              "Diversity in Education"
+            ],
+            "required": true
+          },
+          {
+            "id": "gpa",
+            "type": "number",
+            "label": "Current GPA",
+            "placeholder": "4.0",
+            "min": 0,
+            "max": 4,
+            "step": 0.1,
+            "required": true
+          },
+          {
+            "id": "transcript",
+            "type": "file",
+            "label": "Upload Transcript",
+            "accept": ".pdf,.docx,.txt",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "personalStatement",
+            "type": "textarea",
+            "label": "Personal Statement",
+            "placeholder": "Describe your achievements and goals",
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the scholarship terms and conditions",
+            "required": true
+          },
+          {
+            "id": "submissionDate",
+            "type": "date",
+            "label": "Application Submission Date",
+            "allowed": "after",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Mary Ann Parker",
+      "dateOfBirth": "2005-08-15",
+      "email": "mary.parker@email.com",
+      "phone": "5558765432",
+      "scholarshipName": "Excellence in STEM",
+      "gpa": 3.9,
+      "transcript": "(uploaded file)",
+      "personalStatement": "My passion for engineering is driven by a desire to innovate and improve lives. I am dedicated to community service and have volunteered over 100 hours at local shelters, combining my love for technology with humanitarian efforts.",
+      "agreeToTerms": true,
+      "submissionDate": "2025-12-10"
+    }
+  },
+  "33": {
+    "id": "33",
+    "title": "Bus Booking Form",
+    "description": "Book your bus tickets conveniently using our form. Provide your journey details, personal information, and payment for a seamless travel experience.",
+    "type": "multipage",
+    "layout": "wizard-style",
+    "inputToLLM": "You are booking a bus journey. Page 1: Your departure city is New York, destination is Washington D.C., departure date is 2026-01-15. Page 2: Your full name is Alex Johnson, email is alex.johnson@example.com, phone is 5551234567, and date of birth is 1990-05-10. Page 3: You are paying a total amount of $120.00, card number is 4111111111111111, expiration date is 11/27, CVV is 321, and you agree to the terms and conditions.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "departureCity",
+            "type": "text",
+            "label": "Departure City",
+            "placeholder": "Enter your departure city",
+            "required": true
+          },
+          {
+            "id": "destinationCity",
+            "type": "text",
+            "label": "Destination City",
+            "placeholder": "Enter your destination city",
+            "required": true
+          },
+          {
+            "id": "departureDate",
+            "type": "date",
+            "label": "Departure Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "returnDate",
+            "type": "date",
+            "label": "Return Date",
+            "allowed": "after",
+            "required": false
+          },
+          {
+            "id": "numberOfPassengers",
+            "type": "number",
+            "label": "Number of Passengers",
+            "placeholder": "1",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 123-4567",
+            "required": true
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "specialRequests",
+            "type": "textarea",
+            "label": "Special Requests",
+            "placeholder": "Any special requests (optional)",
             "required": false
           }
         ]
@@ -286,7 +601,7 @@
         "pageNumber": 3,
         "fields": [
           {
-            "id": "totalAmount",
+            "id": "paymentAmount",
             "type": "currency",
             "label": "Total Amount (USD)",
             "currency": "USD",
@@ -325,435 +640,46 @@
       }
     ],
     "groundTruth": {
+      "departureCity": "New York",
+      "destinationCity": "Washington D.C.",
+      "departureDate": "2026-01-15",
+      "returnDate": null,
+      "numberOfPassengers": 1,
       "fullName": "Alex Johnson",
       "email": "alex.johnson@example.com",
       "phone": "5551234567",
-      "deliveryAddress": "123 Elm Street, Springfield",
-      "product": "Luxury Sofa",
-      "deliveryOption": "Standard Delivery",
-      "subscribePromotions": true,
-      "totalAmount": "1500.00",
+      "dateOfBirth": "1990-05-10",
+      "specialRequests": "",
+      "paymentAmount": "120.00",
       "cardNumber": "4111111111111111",
-      "expirationDate": "11/26",
+      "expirationDate": "11/27",
       "cvv": "321",
       "agreeToTerms": true
-    }
-  },
-  "31": {
-    "id": "31",
-    "title": "Mortgage Application Form",
-    "description": "Application form for applying for a mortgage loan",
-    "type": "multipage",
-    "layout": "single-column",
-    "inputToLLM": "You are applying for a mortgage. On Page 1, your full name is Alex Turner, your email is alex.turner@example.com, your phone number is 1234567890, and your date of birth is 1985-07-22. On Page 2, your current address is 123 Elm Street, Springfield, IL 62704 and your social security number is 123456789. On Page 3, your employment status is Employed, employer name is TechCorp, annual income is 85000, and you agree to income verification. On Page 4, the property value is 300000, loan amount requested is 250000, and the loan term is 30 years.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "fullName",
-            "type": "text",
-            "label": "Full Name",
-            "placeholder": "Enter your full name",
-            "required": true
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com",
-            "required": true
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(123) 456-7890",
-            "required": true
-          },
-          {
-            "id": "dateOfBirth",
-            "type": "date",
-            "label": "Date of Birth",
-            "allowed": "before",
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "currentAddress",
-            "type": "address",
-            "label": "Current Address",
-            "placeholder": "Enter your current address",
-            "required": true
-          },
-          {
-            "id": "socialSecurityNumber",
-            "type": "text",
-            "label": "Social Security Number",
-            "placeholder": "123-45-6789",
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "employmentStatus",
-            "type": "select",
-            "label": "Employment Status",
-            "options": [
-              "Employed",
-              "Self-Employed",
-              "Unemployed",
-              "Retired"
-            ],
-            "required": true
-          },
-          {
-            "id": "employerName",
-            "type": "text",
-            "label": "Employer Name",
-            "placeholder": "Enter your employer's name",
-            "required": false
-          },
-          {
-            "id": "annualIncome",
-            "type": "currency",
-            "label": "Annual Income (USD)",
-            "currency": "USD",
-            "placeholder": "50000",
-            "required": true
-          },
-          {
-            "id": "incomeVerification",
-            "type": "checkbox",
-            "label": "I agree to income verification",
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 4,
-        "fields": [
-          {
-            "id": "propertyValue",
-            "type": "currency",
-            "label": "Property Value (USD)",
-            "currency": "USD",
-            "placeholder": "0.00",
-            "required": true
-          },
-          {
-            "id": "loanAmount",
-            "type": "currency",
-            "label": "Loan Amount Requested (USD)",
-            "currency": "USD",
-            "placeholder": "0.00",
-            "required": true
-          },
-          {
-            "id": "loanTerm",
-            "type": "select",
-            "label": "Loan Term",
-            "options": [
-              "15 years",
-              "20 years",
-              "30 years"
-            ],
-            "required": true
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "fullName": "Alex Turner",
-      "email": "alex.turner@example.com",
-      "phone": "1234567890",
-      "dateOfBirth": "1985-07-22",
-      "currentAddress": "123 Elm Street, Springfield, IL 62704",
-      "socialSecurityNumber": "123456789",
-      "employmentStatus": "Employed",
-      "employerName": "TechCorp",
-      "annualIncome": "85000",
-      "incomeVerification": true,
-      "propertyValue": "300000",
-      "loanAmount": "250000",
-      "loanTerm": "30 years"
-    }
-  },
-  "32": {
-    "id": "32",
-    "title": "Workout Class Booking Form",
-    "description": "Reserve your spot for a workout class at our fitness center.",
-    "type": "multipage",
-    "layout": "wizard-style",
-    "inputToLLM": "You are booking a workout class. Page 1: Your name is Alex Turner, email is alex.turner@example.com, and phone is 5551234567. Page 2: You choose Yoga and HIIT classes, your preferred schedule is morning, and you need a yoga mat. Page 3: You will pay $150.00 with card number 4242424242424242, expiration date is 11/24, CVV is 321, and you agree to the terms and conditions.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "fullName",
-            "type": "text",
-            "label": "Full Name",
-            "placeholder": "Enter your full name",
-            "required": true
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com",
-            "required": true
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567",
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "selectedClasses",
-            "type": "searchable-multiselect",
-            "label": "Select Classes",
-            "options": [
-              "Yoga",
-              "HIIT",
-              "Pilates",
-              "Zumba",
-              "Spin"
-            ],
-            "required": true
-          },
-          {
-            "id": "preferredSchedule",
-            "type": "select",
-            "label": "Preferred Schedule",
-            "options": [
-              "Morning",
-              "Afternoon",
-              "Evening"
-            ],
-            "required": true
-          },
-          {
-            "id": "additionalEquipment",
-            "type": "checkbox",
-            "label": "Need a yoga mat",
-            "required": false
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "paymentAmount",
-            "type": "currency",
-            "label": "Payment Amount (USD)",
-            "currency": "USD",
-            "placeholder": "0.00",
-            "required": true
-          },
-          {
-            "id": "cardNumber",
-            "type": "credit-card",
-            "label": "Credit Card Number",
-            "placeholder": "1234 5678 9012 3456",
-            "required": true
-          },
-          {
-            "id": "expirationDate",
-            "type": "expiration-date",
-            "label": "Expiration Date",
-            "placeholder": "MM/YY",
-            "required": true
-          },
-          {
-            "id": "cvv",
-            "type": "cvv",
-            "label": "CVV",
-            "placeholder": "123",
-            "maxLength": 4,
-            "required": true
-          },
-          {
-            "id": "agreeToTerms",
-            "type": "checkbox",
-            "label": "I agree to the terms and conditions",
-            "required": true
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "fullName": "Alex Turner",
-      "email": "alex.turner@example.com",
-      "phone": "5551234567",
-      "selectedClasses": [
-        "Yoga",
-        "HIIT"
-      ],
-      "preferredSchedule": "Morning",
-      "additionalEquipment": true,
-      "paymentAmount": "150.00",
-      "cardNumber": "4242424242424242",
-      "expirationDate": "11/24",
-      "cvv": "321",
-      "agreeToTerms": true
-    }
-  },
-  "33": {
-    "id": "33",
-    "title": "Passport/Visa Application Form",
-    "description": "Complete the form to apply for a passport or visa",
-    "type": "multipage",
-    "layout": "split-screen",
-    "inputToLLM": "Filling a passport/visa application: Page 1: Your first name is Michael, last name is Anderson, date of birth is 1985-04-12, nationality is Canadian, place of birth is Toronto, gender is male. Page 2: Your passport number is P123456789, date of issue is 2015-05-20, date of expiry is 2025-05-19, you are applying for a tourist visa, and you acknowledge the terms and conditions.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "firstName",
-            "type": "text",
-            "label": "First Name",
-            "placeholder": "Enter your first name",
-            "required": true
-          },
-          {
-            "id": "lastName",
-            "type": "text",
-            "label": "Last Name",
-            "placeholder": "Enter your last name",
-            "required": true
-          },
-          {
-            "id": "dob",
-            "type": "date",
-            "label": "Date of Birth",
-            "allowed": "before",
-            "required": true
-          },
-          {
-            "id": "nationality",
-            "type": "select",
-            "label": "Nationality",
-            "options": [
-              "Canadian",
-              "American",
-              "British",
-              "Australian",
-              "Indian"
-            ],
-            "required": true
-          },
-          {
-            "id": "placeOfBirth",
-            "type": "text",
-            "label": "Place of Birth",
-            "placeholder": "City of birth",
-            "required": true
-          },
-          {
-            "id": "gender",
-            "type": "select",
-            "label": "Gender",
-            "options": [
-              "Male",
-              "Female",
-              "Other"
-            ],
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "passportNumber",
-            "type": "text",
-            "label": "Passport Number",
-            "placeholder": "Enter your passport number",
-            "required": true
-          },
-          {
-            "id": "issueDate",
-            "type": "date",
-            "label": "Date of Issue",
-            "allowed": "before",
-            "required": true
-          },
-          {
-            "id": "expiryDate",
-            "type": "date",
-            "label": "Date of Expiry",
-            "allowed": "after",
-            "required": true
-          },
-          {
-            "id": "visaType",
-            "type": "select",
-            "label": "Type of Visa",
-            "options": [
-              "Tourist",
-              "Business",
-              "Student",
-              "Work"
-            ],
-            "required": true
-          },
-          {
-            "id": "termsAcknowledged",
-            "type": "checkbox",
-            "label": "I acknowledge the terms and conditions",
-            "required": true
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "firstName": "Michael",
-      "lastName": "Anderson",
-      "dob": "1985-04-12",
-      "nationality": "Canadian",
-      "placeOfBirth": "Toronto",
-      "gender": "Male",
-      "passportNumber": "P123456789",
-      "issueDate": "2015-05-20",
-      "expiryDate": "2025-05-19",
-      "visaType": "Tourist",
-      "termsAcknowledged": true
     }
   },
   "34": {
     "id": "34",
-    "title": "Furniture Purchase Form",
-    "description": "Form for purchasing furniture items online",
-    "type": "multipage",
-    "layout": "two-column",
-    "inputToLLM": "You are buying furniture from an online store. Page 1: Your name is Alex Johnson, email is alex.johnson@example.com, phone is 5551234567, and shipping address is 123 Maple Street, Springfield, IL, 62701. Page 2: You want to purchase a couch and a dining table, with payment via credit card (number 4111111111111111, expiration 08/26, CVV 321), you subscribe to the newsletter, and wish to receive updates on sales and offers.",
+    "title": "Restaurant Reservation Form",
+    "description": "Book your table at our exclusive restaurant",
+    "type": "single-page",
+    "layout": "split-screen",
+    "inputToLLM": "You want to reserve a table for 4 people at 'Ocean's Delight' restaurant. The reservation is under the name Emily Carter for the date 2025-12-10 at 7:00 PM. Your contact number is 5559871234 and email is emily.carter@example.com. You prefer a window seat, have no special requests, and would like to receive promotional emails.",
     "pages": [
       {
         "pageNumber": 1,
         "fields": [
           {
-            "id": "fullName",
+            "id": "name",
             "type": "text",
-            "label": "Full Name",
+            "label": "Reservation Name",
             "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Contact Number",
+            "placeholder": "(555) 123-4567",
             "required": true
           },
           {
@@ -764,453 +690,127 @@
             "required": true
           },
           {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567",
+            "id": "reservationDate",
+            "type": "date",
+            "label": "Reservation Date",
+            "allowed": "after",
             "required": true
           },
           {
-            "id": "address",
-            "type": "textarea",
-            "label": "Shipping Address",
-            "placeholder": "Enter your full shipping address",
+            "id": "reservationTime",
+            "type": "time",
+            "label": "Reservation Time",
+            "placeholder": "HH:MM AM/PM",
             "required": true
           },
           {
-            "id": "city",
-            "type": "text",
-            "label": "City",
-            "placeholder": "Enter city",
+            "id": "partySize",
+            "type": "number",
+            "label": "Number of Guests",
+            "min": 1,
+            "max": 20,
+            "placeholder": "4",
             "required": true
           },
           {
-            "id": "state",
-            "type": "state",
-            "label": "State",
-            "required": true
-          },
-          {
-            "id": "zip",
-            "type": "zip",
-            "label": "ZIP Code",
-            "placeholder": "ZIP code",
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "itemsToPurchase",
-            "type": "multiselect",
-            "label": "Items to Purchase",
+            "id": "seatingPreference",
+            "type": "select",
+            "label": "Seating Preference",
             "options": [
-              "Couch",
-              "Dining Table",
-              "Bed Frame",
-              "Desk",
-              "Chair"
+              "Window",
+              "Booth",
+              "Patio",
+              "No Preference"
             ],
-            "required": true
-          },
-          {
-            "id": "cardNumber",
-            "type": "credit-card",
-            "label": "Credit Card Number",
-            "placeholder": "1234 5678 9012 3456",
-            "required": true
-          },
-          {
-            "id": "expirationDate",
-            "type": "expiration-date",
-            "label": "Expiration Date",
-            "placeholder": "MM/YY",
-            "required": true
-          },
-          {
-            "id": "cvv",
-            "type": "cvv",
-            "label": "CVV",
-            "placeholder": "123",
-            "maxLength": 3,
-            "required": true
-          },
-          {
-            "id": "newsletterSubscription",
-            "type": "checkbox",
-            "label": "Subscribe to newsletter",
             "required": false
           },
           {
-            "id": "receiveUpdates",
+            "id": "specialRequests",
+            "type": "textarea",
+            "label": "Special Requests",
+            "placeholder": "Enter any special requests...",
+            "required": false
+          },
+          {
+            "id": "promotionalEmails",
             "type": "checkbox",
-            "label": "Receive updates on sales and offers",
+            "label": "Subscribe to promotional emails",
             "required": false
           }
         ]
       }
     ],
     "groundTruth": {
-      "fullName": "Alex Johnson",
-      "email": "alex.johnson@example.com",
-      "phone": "5551234567",
-      "address": "123 Maple Street, Springfield, IL",
-      "city": "Springfield",
-      "state": "IL",
-      "zip": "62701",
-      "itemsToPurchase": [
-        "Couch",
-        "Dining Table"
-      ],
-      "cardNumber": "4111111111111111",
-      "expirationDate": "08/26",
-      "cvv": "321",
-      "newsletterSubscription": true,
-      "receiveUpdates": true
+      "name": "Emily Carter",
+      "phone": "5559871234",
+      "email": "emily.carter@example.com",
+      "reservationDate": "2025-12-10",
+      "reservationTime": "19:00",
+      "partySize": 4,
+      "seatingPreference": "Window",
+      "specialRequests": "",
+      "promotionalEmails": true
     }
   },
   "35": {
     "id": "35",
-    "title": "Workout Class Booking Form",
-    "description": "A detailed form to book a workout class with personal details and preferences.",
-    "type": "multipage",
-    "layout": "wizard-style",
-    "inputToLLM": "You are booking a workout class. Page 1: Your name is Emily Carter, email is emily.carter@example.com, and phone number is 1234567890. Page 2: You wish to book Yoga on 2023-11-15 at 3:00 PM, prefer a small group class, and require personal training. Page 3: You have a membership ID of MBR12345, payment is $45.00, card number is 4111111111111111, expiration is 11/24, CVV is 321, and you accept the cancellation policy.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "fullName",
-            "type": "text",
-            "label": "Full Name",
-            "placeholder": "Enter your full name",
-            "required": true
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com",
-            "required": true
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "1234567890",
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "classType",
-            "type": "select",
-            "label": "Workout Class Type",
-            "options": [
-              "Yoga",
-              "Pilates",
-              "HIIT",
-              "Zumba",
-              "Strength Training"
-            ],
-            "required": true
-          },
-          {
-            "id": "classDate",
-            "type": "date",
-            "label": "Preferred Class Date",
-            "allowed": "after",
-            "required": true
-          },
-          {
-            "id": "classTime",
-            "type": "time",
-            "label": "Preferred Class Time",
-            "placeholder": "Select time",
-            "required": true
-          },
-          {
-            "id": "groupSize",
-            "type": "radio",
-            "label": "Class Group Size",
-            "options": [
-              "Small Group",
-              "Large Group"
-            ],
-            "required": false
-          },
-          {
-            "id": "personalTraining",
-            "type": "checkbox",
-            "label": "Add Personal Training",
-            "required": false
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "membershipId",
-            "type": "text",
-            "label": "Membership ID",
-            "placeholder": "Enter membership ID",
-            "required": false
-          },
-          {
-            "id": "paymentAmount",
-            "type": "currency",
-            "label": "Payment Amount (USD)",
-            "currency": "USD",
-            "placeholder": "0.00",
-            "required": true
-          },
-          {
-            "id": "cardNumber",
-            "type": "credit-card",
-            "label": "Credit Card Number",
-            "placeholder": "1234 5678 9012 3456",
-            "required": true
-          },
-          {
-            "id": "expirationDate",
-            "type": "expiration-date",
-            "label": "Expiration Date",
-            "placeholder": "MM/YY",
-            "required": true
-          },
-          {
-            "id": "cvv",
-            "type": "cvv",
-            "label": "CVV",
-            "placeholder": "123",
-            "maxLength": 4,
-            "required": true
-          },
-          {
-            "id": "acceptCancellationPolicy",
-            "type": "checkbox",
-            "label": "I accept the cancellation policy",
-            "required": true
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "fullName": "Emily Carter",
-      "email": "emily.carter@example.com",
-      "phone": "1234567890",
-      "classType": "Yoga",
-      "classDate": "2023-11-15",
-      "classTime": "15:00",
-      "groupSize": "Small Group",
-      "personalTraining": true,
-      "membershipId": "MBR12345",
-      "paymentAmount": "45.00",
-      "cardNumber": "4111111111111111",
-      "expirationDate": "11/24",
-      "cvv": "321",
-      "acceptCancellationPolicy": true
-    }
-  },
-  "36": {
-    "id": "36",
-    "title": "Wholesale Purchase Order Form",
-    "description": "Complete this form to place a wholesale order with our company.",
-    "type": "single-page",
-    "layout": "single-column",
-    "inputToLLM": "You are placing a wholesale order for your store. The company name is 'Gourmet Supplies', contact person is 'Michael Tan', email is 'michael.tan@gourmetsupplies.com', phone is '2125557890', purchase order number is 'PO12345', delivery date is '2024-05-15', you will purchase 50 units of 'Organic Olive Oil', payment method is 'Bank Transfer', and you agree to the terms and conditions.",
-    "pages": [
-      {
-        "pageNumber": 1,
-        "fields": [
-          {
-            "id": "companyName",
-            "type": "text",
-            "label": "Company Name",
-            "placeholder": "Enter your company name",
-            "required": true
-          },
-          {
-            "id": "contactPerson",
-            "type": "text",
-            "label": "Contact Person",
-            "placeholder": "Full name",
-            "required": true
-          },
-          {
-            "id": "email",
-            "type": "email",
-            "label": "Email Address",
-            "placeholder": "you@example.com",
-            "required": true
-          },
-          {
-            "id": "phone",
-            "type": "phone",
-            "label": "Phone Number",
-            "placeholder": "(555) 123-4567",
-            "required": true
-          },
-          {
-            "id": "purchaseOrderNumber",
-            "type": "text",
-            "label": "Purchase Order Number",
-            "placeholder": "PO12345",
-            "required": true
-          },
-          {
-            "id": "deliveryDate",
-            "type": "date",
-            "label": "Requested Delivery Date",
-            "allowed": "after",
-            "required": true
-          },
-          {
-            "id": "product",
-            "type": "select",
-            "label": "Product",
-            "options": [
-              "Organic Olive Oil",
-              "Bulk Coffee Beans",
-              "Gourmet Chocolate",
-              "Herbal Tea",
-              "Spices Collection"
-            ],
-            "required": true
-          },
-          {
-            "id": "quantity",
-            "type": "number",
-            "label": "Quantity",
-            "placeholder": "Enter quantity",
-            "min": 1,
-            "required": true
-          },
-          {
-            "id": "paymentMethod",
-            "type": "select",
-            "label": "Payment Method",
-            "options": [
-              "Credit Card",
-              "Bank Transfer",
-              "PayPal"
-            ],
-            "required": true
-          },
-          {
-            "id": "agreeTerms",
-            "type": "checkbox",
-            "label": "I agree to the terms and conditions",
-            "required": true
-          }
-        ]
-      }
-    ],
-    "groundTruth": {
-      "companyName": "Gourmet Supplies",
-      "contactPerson": "Michael Tan",
-      "email": "michael.tan@gourmetsupplies.com",
-      "phone": "2125557890",
-      "purchaseOrderNumber": "PO12345",
-      "deliveryDate": "2024-05-15",
-      "product": "Organic Olive Oil",
-      "quantity": 50,
-      "paymentMethod": "Bank Transfer",
-      "agreeTerms": true
-    }
-  },
-  "37": {
-    "id": "37",
-    "title": "Hotel Booking Form",
-    "description": "Reserve your stay at our luxurious hotel",
+    "title": "Personal Loan Application Form",
+    "description": "Apply for a personal loan by providing your personal, financial, and employment details.",
     "type": "multipage",
     "layout": "website-style",
     "websiteContext": {
-      "companyName": "Oceanview Getaways",
-      "logoUrl": "OG",
-      "themeColor": "#0077CC",
+      "companyName": "FinServe Loans",
+      "logoUrl": "FS",
+      "themeColor": "#0047AB",
       "navigationItems": [
         {
           "label": "Home",
-          "href": "/",
+          "href": "/home",
+          "active": false
+        },
+        {
+          "label": "Loans",
+          "href": "/loans",
           "active": true
         },
         {
-          "label": "Rooms",
-          "href": "/rooms",
+          "label": "About Us",
+          "href": "/about",
           "active": false
         },
         {
-          "label": "Dining",
-          "href": "/dining",
-          "active": false
-        },
-        {
-          "label": "Amenities",
-          "href": "/amenities",
-          "active": false
-        },
-        {
-          "label": "Contact Us",
+          "label": "Contact",
           "href": "/contact",
           "active": false
         }
       ],
-      "heroTitle": "Book Your Dream Stay Today",
-      "heroSubtitle": "Experience luxury and comfort with unparalleled ocean views.",
+      "heroTitle": "Secure Your Future with Our Personal Loans",
+      "heroSubtitle": "Flexible and affordable personal loans tailored to your needs.",
       "sidebarContent": {
-        "title": "Why Choose Us?",
-        "content": "Discover the ultimate in comfort and convenience at Oceanview Getaways. Enjoy world-class amenities and breathtaking views.",
+        "title": "Loan Application Tips",
+        "content": "Ensure all information is accurate. Prepare necessary documents to expedite your application process.",
         "links": [
           {
-            "label": "View Our Rooms",
-            "href": "/rooms"
+            "label": "Eligibility Criteria",
+            "href": "/eligibility"
           },
           {
-            "label": "Explore Amenities",
-            "href": "/amenities"
+            "label": "Loan Calculator",
+            "href": "/calculator"
           },
           {
-            "label": "Contact Us",
-            "href": "/contact"
+            "label": "FAQ",
+            "href": "/faq"
           }
         ]
       },
       "footerLinks": [
         {
-          "title": "Explore",
+          "title": "Company",
           "links": [
             {
-              "label": "Home",
-              "href": "/"
-            },
-            {
-              "label": "Rooms",
-              "href": "/rooms"
-            },
-            {
-              "label": "Dining",
-              "href": "/dining"
-            }
-          ]
-        },
-        {
-          "title": "About Us",
-          "links": [
-            {
-              "label": "Our Story",
-              "href": "/our-story"
-            },
-            {
-              "label": "Sustainability",
-              "href": "/sustainability"
+              "label": "About Us",
+              "href": "/about"
             },
             {
               "label": "Careers",
@@ -1219,25 +819,337 @@
           ]
         },
         {
-          "title": "Help",
+          "title": "Support",
           "links": [
             {
-              "label": "FAQs",
-              "href": "/faqs"
-            },
-            {
-              "label": "Customer Support",
-              "href": "/support"
+              "label": "Help Center",
+              "href": "/help"
             },
             {
               "label": "Privacy Policy",
-              "href": "/privacy-policy"
+              "href": "/privacy"
+            }
+          ]
+        },
+        {
+          "title": "Follow Us",
+          "links": [
+            {
+              "label": "Facebook",
+              "href": "https://facebook.com/finserveloans"
+            },
+            {
+              "label": "Twitter",
+              "href": "https://twitter.com/finserveloans"
             }
           ]
         }
       ]
     },
-    "inputToLLM": "You are booking a hotel room for a vacation. Page 1: Your name is Emily Clark, email is emily.clark@example.com, phone is 5558675309, check-in date is 2023-12-20, check-out date is 2023-12-27, and you need an additional cot. Page 2: You prefer a sea view room, the guest count is 2 adults and 1 child. Page 3: You will pay with a credit card, number is 6011111111111117, expiration is 04/25, CVV is 456. You agree to the hotel terms and policies.",
+    "inputToLLM": "You are applying for a personal loan. Page 1: Your name is Michael Brown, date of birth is 1990-05-15, social security number is 123-45-6789, and email is mike.brown@email.com. Page 2: You have a monthly income of $4,500, monthly expenses of $2,000, and a requested loan amount of $10,000. You have an excellent credit score of 750. Page 3: Your employer is TechSolutions Inc., you have worked there for 5 years since 2020-05-01, your position is Software Developer, and your employment type is Full-Time. You agree to the terms and conditions.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "socialSecurityNumber",
+            "type": "text",
+            "label": "Social Security Number",
+            "placeholder": "123-45-6789",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "monthlyIncome",
+            "type": "currency",
+            "label": "Monthly Income (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "monthlyExpenses",
+            "type": "currency",
+            "label": "Monthly Expenses (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "loanAmount",
+            "type": "currency",
+            "label": "Requested Loan Amount (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          },
+          {
+            "id": "creditScore",
+            "type": "number",
+            "label": "Credit Score",
+            "min": 300,
+            "max": 850,
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "employerName",
+            "type": "text",
+            "label": "Employer Name",
+            "placeholder": "Enter your employer's name",
+            "required": true
+          },
+          {
+            "id": "employmentStartDate",
+            "type": "date",
+            "label": "Employment Start Date",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "position",
+            "type": "text",
+            "label": "Position",
+            "placeholder": "Your job title",
+            "required": true
+          },
+          {
+            "id": "employmentType",
+            "type": "select",
+            "label": "Employment Type",
+            "options": [
+              "Full-Time",
+              "Part-Time",
+              "Contract",
+              "Temporary"
+            ],
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Michael Brown",
+      "dateOfBirth": "1990-05-15",
+      "socialSecurityNumber": "123-45-6789",
+      "email": "mike.brown@email.com",
+      "monthlyIncome": "4500.00",
+      "monthlyExpenses": "2000.00",
+      "loanAmount": "10000.00",
+      "creditScore": 750,
+      "employerName": "TechSolutions Inc.",
+      "employmentStartDate": "2020-05-01",
+      "position": "Software Developer",
+      "employmentType": "Full-Time",
+      "agreeToTerms": true
+    }
+  },
+  "36": {
+    "id": "36",
+    "title": "Personal Loan Application",
+    "description": "Complete this form to apply for a personal loan. Ensure all required fields are filled accurately.",
+    "type": "multipage",
+    "layout": "split-screen",
+    "inputToLLM": "You are applying for a personal loan. On Page 1: Your name is Alex Morgan, date of birth is 1990-05-15, social security number is 123456789, phone number is 5556781234, and email is alex.morgan@email.com. On Page 2: Your current address is 789 Elm Street, Apt 6B, Springfield, IL, 62701, you have been living there since 2024-06-20, your employment status is Full-time, employer is Tech Solutions Inc., and your annual income is $85,000. On Page 3: You request a loan amount of $15,000, loan purpose is Debt Consolidation, preferred repayment term is 36 months, and the anticipated loan start date is 2026-01-10. You agree to the terms and conditions.",
+    "pages": [
+      {
+        "pageNumber": 1,
+        "fields": [
+          {
+            "id": "fullName",
+            "type": "text",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
+            "required": true
+          },
+          {
+            "id": "dateOfBirth",
+            "type": "date",
+            "label": "Date of Birth",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "ssn",
+            "type": "text",
+            "label": "Social Security Number",
+            "placeholder": "123-45-6789",
+            "required": true
+          },
+          {
+            "id": "phone",
+            "type": "phone",
+            "label": "Phone Number",
+            "placeholder": "(555) 678-1234",
+            "required": true
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email Address",
+            "placeholder": "you@example.com",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 2,
+        "fields": [
+          {
+            "id": "address",
+            "type": "address",
+            "label": "Current Address",
+            "placeholder": "Street Address, City, State, ZIP",
+            "required": true
+          },
+          {
+            "id": "residenceSince",
+            "type": "date",
+            "label": "Residence Since",
+            "allowed": "before",
+            "required": true
+          },
+          {
+            "id": "employmentStatus",
+            "type": "select",
+            "label": "Employment Status",
+            "options": [
+              "Full-time",
+              "Part-time",
+              "Self-employed",
+              "Unemployed"
+            ],
+            "required": true
+          },
+          {
+            "id": "employerName",
+            "type": "text",
+            "label": "Employer Name",
+            "placeholder": "Enter your employer's name",
+            "required": true
+          },
+          {
+            "id": "annualIncome",
+            "type": "currency",
+            "label": "Annual Income (USD)",
+            "currency": "USD",
+            "placeholder": "0.00",
+            "required": true
+          }
+        ]
+      },
+      {
+        "pageNumber": 3,
+        "fields": [
+          {
+            "id": "loanAmount",
+            "type": "number",
+            "label": "Requested Loan Amount",
+            "placeholder": "Enter desired loan amount",
+            "required": true
+          },
+          {
+            "id": "loanPurpose",
+            "type": "select",
+            "label": "Loan Purpose",
+            "options": [
+              "Debt Consolidation",
+              "Home Improvement",
+              "Medical Expenses",
+              "Major Purchase",
+              "Other"
+            ],
+            "required": true
+          },
+          {
+            "id": "repaymentTerm",
+            "type": "select",
+            "label": "Preferred Repayment Term",
+            "options": [
+              "12 months",
+              "24 months",
+              "36 months",
+              "48 months",
+              "60 months"
+            ],
+            "required": true
+          },
+          {
+            "id": "loanStartDate",
+            "type": "date",
+            "label": "Anticipated Loan Start Date",
+            "allowed": "after",
+            "required": true
+          },
+          {
+            "id": "agreeToTerms",
+            "type": "checkbox",
+            "label": "I agree to the terms and conditions",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "groundTruth": {
+      "fullName": "Alex Morgan",
+      "dateOfBirth": "1990-05-15",
+      "ssn": "123456789",
+      "phone": "5556781234",
+      "email": "alex.morgan@email.com",
+      "address": "789 Elm Street, Apt 6B, Springfield, IL, 62701",
+      "residenceSince": "2024-06-20",
+      "employmentStatus": "Full-time",
+      "employerName": "Tech Solutions Inc.",
+      "annualIncome": "85000.00",
+      "loanAmount": 15000,
+      "loanPurpose": "Debt Consolidation",
+      "repaymentTerm": "36 months",
+      "loanStartDate": "2026-01-10",
+      "agreeToTerms": true
+    }
+  },
+  "37": {
+    "id": "37",
+    "title": "Salon Appointment Scheduling",
+    "description": "Schedule your salon appointment with ease using our online form.",
+    "type": "single-page",
+    "layout": "two-column",
+    "inputToLLM": "You are scheduling a salon appointment. Your name is Emily Davis, email is emily.davis@example.com, phone is 5551234321, preferred stylist is Jessica Taylor, and you want a haircut. The appointment date is 2026-01-15 at 10:30 AM. You have no special requests, but you agree to the booking terms.",
     "pages": [
       {
         "pageNumber": 1,
@@ -1260,142 +1172,98 @@
             "id": "phone",
             "type": "phone",
             "label": "Phone Number",
-            "placeholder": "555-123-4567",
+            "placeholder": "5551234567",
             "required": true
           },
           {
-            "id": "checkInDate",
-            "type": "date",
-            "label": "Check-In Date",
-            "allowed": "after",
-            "required": true
-          },
-          {
-            "id": "checkOutDate",
-            "type": "date",
-            "label": "Check-Out Date",
-            "allowed": "after",
-            "required": true
-          },
-          {
-            "id": "additionalCot",
-            "type": "checkbox",
-            "label": "Need Additional Cot",
-            "required": false
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "roomPreference",
+            "id": "serviceType",
             "type": "select",
-            "label": "Room Preference",
+            "label": "Service Type",
             "options": [
-              "Sea View",
-              "Garden View",
-              "City View"
+              "Haircut",
+              "Coloring",
+              "Styling",
+              "Manicure",
+              "Pedicure"
             ],
             "required": true
           },
           {
-            "id": "guestCount",
-            "type": "number",
-            "label": "Number of Guests",
-            "placeholder": "0",
-            "min": 1,
-            "required": true
-          },
-          {
-            "id": "childrenCount",
-            "type": "number",
-            "label": "Number of Children",
-            "placeholder": "0",
-            "min": 0,
+            "id": "stylistPreference",
+            "type": "select",
+            "label": "Preferred Stylist",
+            "options": [
+              "Jessica Taylor",
+              "Alex Morgan",
+              "Sam Lee"
+            ],
             "required": false
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
+          },
           {
-            "id": "paymentCardNumber",
-            "type": "credit-card",
-            "label": "Credit Card Number",
-            "placeholder": "1234 5678 1234 5678",
+            "id": "appointmentDate",
+            "type": "date",
+            "label": "Appointment Date",
+            "allowed": "after",
             "required": true
           },
           {
-            "id": "expirationDate",
-            "type": "expiration-date",
-            "label": "Expiration Date",
-            "placeholder": "MM/YY",
+            "id": "appointmentTime",
+            "type": "time",
+            "label": "Appointment Time",
+            "placeholder": "HH:MM AM/PM",
             "required": true
           },
           {
-            "id": "cvv",
-            "type": "cvv",
-            "label": "CVV",
-            "placeholder": "123",
-            "required": true
+            "id": "specialRequests",
+            "type": "textarea",
+            "label": "Special Requests",
+            "placeholder": "Any additional information or requests",
+            "required": false
           },
           {
             "id": "agreeToTerms",
             "type": "checkbox",
-            "label": "I agree to the hotel terms and policies",
+            "label": "I agree to the booking terms and conditions",
             "required": true
           }
         ]
       }
     ],
     "groundTruth": {
-      "fullName": "Emily Clark",
-      "email": "emily.clark@example.com",
-      "phone": "5558675309",
-      "checkInDate": "2023-12-20",
-      "checkOutDate": "2023-12-27",
-      "additionalCot": true,
-      "roomPreference": "Sea View",
-      "guestCount": 2,
-      "childrenCount": 1,
-      "paymentCardNumber": "6011111111111117",
-      "expirationDate": "04/25",
-      "cvv": "456",
+      "fullName": "Emily Davis",
+      "email": "emily.davis@example.com",
+      "phone": "5551234321",
+      "serviceType": "Haircut",
+      "stylistPreference": "Jessica Taylor",
+      "appointmentDate": "2026-01-15",
+      "appointmentTime": "10:30",
+      "specialRequests": "",
       "agreeToTerms": true
     }
   },
   "38": {
     "id": "38",
-    "title": "Wholesale Purchase Order Form",
-    "description": "Form to facilitate and process wholesale purchase orders for businesses.",
-    "type": "multipage",
-    "layout": "split-screen",
-    "inputToLLM": "You are placing a wholesale purchase order for your business. Page 1: Company Name is 'Global Supplies Inc.', contact person is 'Alice Green', email is 'alice.green@globalsupplies.com', phone is '5558765432'. Page 2: You want to order 100 units of 'Office Chairs', 50 units of 'Desks', and 200 units of 'Monitors'. Delivery address is '123 Supply Lane, Business City, 54321'. Page 3: Preferred delivery date is 2023-12-15, payment method is 'Credit Card', card number is '4111111111111111', expiration date is 11/24, CVV is 321, and you agree to the terms and conditions.",
+    "title": "Contact Us Form",
+    "description": "A form for customers to reach out with inquiries, feedback, or support requests.",
+    "type": "single-page",
+    "layout": "two-column",
+    "inputToLLM": "You are filling out a contact us form. Your full name is Alice Johnson, email is alice.johnson@example.com, phone number is 5556782345, you are contacting about a product inquiry, your preferred contact method is email, you need a response by 2025-12-10, and your message is 'I have a question about product availability.' You have attached a document named 'Product Inquiry.pdf'.",
     "pages": [
       {
         "pageNumber": 1,
         "fields": [
           {
-            "id": "companyName",
+            "id": "fullName",
             "type": "text",
-            "label": "Company Name",
-            "placeholder": "Enter your company name",
-            "required": true
-          },
-          {
-            "id": "contactPerson",
-            "type": "text",
-            "label": "Contact Person",
-            "placeholder": "Full Name",
+            "label": "Full Name",
+            "placeholder": "Enter your full name",
             "required": true
           },
           {
             "id": "email",
             "type": "email",
             "label": "Email Address",
-            "placeholder": "you@company.com",
+            "placeholder": "you@example.com",
             "required": true
           },
           {
@@ -1403,94 +1271,63 @@
             "type": "phone",
             "label": "Phone Number",
             "placeholder": "(555) 123-4567",
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 2,
-        "fields": [
-          {
-            "id": "orderItems",
-            "type": "textarea",
-            "label": "Order Items and Quantities",
-            "placeholder": "e.g., 100 units of Office Chairs",
-            "required": true
+            "required": false
           },
           {
-            "id": "deliveryAddress",
-            "type": "address",
-            "label": "Delivery Address",
-            "placeholder": "Enter delivery address",
-            "required": true
-          }
-        ]
-      },
-      {
-        "pageNumber": 3,
-        "fields": [
-          {
-            "id": "deliveryDate",
-            "type": "date",
-            "label": "Preferred Delivery Date",
-            "allowed": "after",
-            "required": true
-          },
-          {
-            "id": "paymentMethod",
+            "id": "contactReason",
             "type": "select",
-            "label": "Payment Method",
+            "label": "Reason for Contact",
             "options": [
-              "Credit Card",
-              "Bank Transfer",
-              "PayPal"
+              "Product Inquiry",
+              "Technical Support",
+              "Feedback",
+              "Other"
             ],
             "required": true
           },
           {
-            "id": "cardNumber",
-            "type": "credit-card",
-            "label": "Credit Card Number",
-            "placeholder": "1234 5678 9012 3456",
+            "id": "preferredContactMethod",
+            "type": "radio",
+            "label": "Preferred Contact Method",
+            "options": [
+              "Email",
+              "Phone"
+            ],
             "required": true
           },
           {
-            "id": "expirationDate",
-            "type": "expiration-date",
-            "label": "Expiration Date",
-            "placeholder": "MM/YY",
+            "id": "responseNeededBy",
+            "type": "date",
+            "label": "Response Needed By",
+            "allowed": "after",
+            "required": false
+          },
+          {
+            "id": "message",
+            "type": "textarea",
+            "label": "Your Message",
+            "placeholder": "Type your message here",
             "required": true
           },
           {
-            "id": "cvv",
-            "type": "cvv",
-            "label": "CVV",
-            "placeholder": "123",
-            "maxLength": 4,
-            "required": true
-          },
-          {
-            "id": "agreeToTerms",
-            "type": "checkbox",
-            "label": "I agree to the terms and conditions",
-            "required": true
+            "id": "attachment",
+            "type": "file",
+            "label": "Attach a File",
+            "accept": ".pdf,.doc,.docx,.jpg,.png",
+            "required": false
           }
         ]
       }
     ],
     "groundTruth": {
-      "companyName": "Global Supplies Inc.",
-      "contactPerson": "Alice Green",
-      "email": "alice.green@globalsupplies.com",
-      "phone": "5558765432",
-      "orderItems": "100 units of Office Chairs, 50 units of Desks, and 200 units of Monitors",
-      "deliveryAddress": "123 Supply Lane, Business City, 54321",
-      "deliveryDate": "2023-12-15",
-      "paymentMethod": "Credit Card",
-      "cardNumber": "4111111111111111",
-      "expirationDate": "11/24",
-      "cvv": "321",
-      "agreeToTerms": true
+      "fullName": "Alice Johnson",
+      "email": "alice.johnson@example.com",
+      "phone": "5556782345",
+      "contactReason": "Product Inquiry",
+      "preferredContactMethod": "Email",
+      "responseNeededBy": "2025-12-10",
+      "message": "I have a question about product availability.",
+      "attachment": "Product Inquiry.pdf"
     }
   }
 }

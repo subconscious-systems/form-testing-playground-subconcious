@@ -347,7 +347,7 @@ Your task is to generate a complete form definition. IMPORTANT: Generate the JSO
 The groundTruth object must contain an entry for EVERY field ID that appears in the pages. 
 Format groundTruth values to match React component output:
    - Dates as 'YYYY-MM-DD' strings
-   - Date ranges as objects: {"from": "YYYY-MM-DD", "to": "YYYY-MM-DD"}
+   - Date ranges as objects: {{"from": "YYYY-MM-DD", "to": "YYYY-MM-DD"}}
    - Arrays for multi-select fields
    - Booleans for checkboxes/switches
    - Numbers as strings or numbers
