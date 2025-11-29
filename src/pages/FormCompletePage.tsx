@@ -90,11 +90,14 @@ const FormCompletePage = () => {
       if (stored) {
         try {
           const data = JSON.parse(stored);
+          
+          // Load the data (only accessible during initial flow)
           setComparison(data.comparison);
           setSubmittedData(data.submittedData);
           setFormDefinition(data.formDefinition);
         } catch (error) {
-          // Invalid data, redirect to form
+          // Invalid data, clear it and redirect to form
+          sessionStorage.removeItem(`form-evaluation-${formId}`);
           navigate(`/${formId}`);
         }
       } else {
@@ -103,11 +106,20 @@ const FormCompletePage = () => {
       }
       setLoading(false);
     }
+    
+    // Cleanup: Clear data when component unmounts (navigating away)
+    // This ensures data is only accessible during the initial submission flow
+    return () => {
+      if (formId) {
+        sessionStorage.removeItem(`form-evaluation-${formId}`);
+      }
+    };
   }, [formId, navigate]);
 
   const handleBack = () => {
     if (formId) {
       // Navigate back to the form
+      // Data will be cleared by the cleanup function in useEffect
       if (formDefinition?.type === 'multipage') {
         navigate(`/${formId}/page/1`);
       } else {
@@ -388,7 +400,10 @@ const FormCompletePage = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Form
           </Button>
-          <Button onClick={() => navigate("/")}>
+          <Button onClick={() => {
+            // Navigate home - data will be cleared by cleanup function
+            navigate("/");
+          }}>
             Return to Home
           </Button>
         </div>

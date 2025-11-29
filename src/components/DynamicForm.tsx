@@ -220,10 +220,6 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
                 };
               }
             }
-            
-            // Hide loading screen
-            setIsEvaluating(false);
-            setEvaluationProgress(null);
           } catch (error) {
             setIsEvaluating(false);
             setEvaluationProgress(null);
@@ -241,6 +237,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         );
 
         // Store comparison result in sessionStorage for the complete page
+        // Data will be cleared when navigating away from complete page
         sessionStorage.setItem(`form-evaluation-${formId}`, JSON.stringify({
           comparison,
           submittedData: allFormData,
@@ -289,8 +286,12 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         }
 
         // Clear form data and navigate to complete page
+        // Keep loading screen visible - don't set isEvaluating to false
+        // The component will unmount on navigation, so state cleanup isn't needed
         submitForm();
         navigate(`/${formId}/complete`);
+        // Note: isEvaluating stays true until component unmounts
+        // This prevents the form from flashing before navigation completes
       } else {
         // If no ground truth, clear and navigate home
         submitForm();
