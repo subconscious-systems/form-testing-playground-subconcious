@@ -8,45 +8,132 @@ export interface ComparisonResult {
     expected: any;
     actual: any;
     match: boolean;
+    score?: number; // 0-1 for both fixed and dynamic fields
+    llmScore?: number; // 0-1 for dynamic fields evaluated by LLM (deprecated, use score)
+    llmFeedback?: string; // One-line feedback from LLM
+    fieldType?: string; // Field type for categorization
   }>;
   accuracy: number; // 0-100
+  fixedFieldScore: number; // Average accuracy of fixed/deterministic fields (0-100)
+  dynamicFieldScore: number; // Average LLM score of dynamic fields (0-100)
+  fixedFields: string[]; // Field IDs that are fixed/deterministic
+  dynamicFields: string[]; // Field IDs that are dynamic/non-deterministic
 }
 
 /**
- * Compare form submission data against ground truth
+ * Check if a field type is dynamic (requires LLM evaluation)
  */
-export const compareWithGroundTruth = (
+const isDynamicField = (fieldType: string): boolean => {
+  return fieldType === 'text' || fieldType === 'textarea' || fieldType === 'address';
+};
+
+/**
+ * Compare form submission data against ground truth
+ * @param submittedData - The submitted form data
+ * @param groundTruth - The expected ground truth values
+ * @param formDefinition - Optional form definition to determine field types
+ * @param llmEvaluations - Optional pre-computed LLM evaluations for dynamic fields
+ */
+export const compareWithGroundTruth = async (
   submittedData: Record<string, any>,
-  groundTruth: Record<string, any>
-): ComparisonResult => {
+  groundTruth: Record<string, any>,
+  formDefinition?: { pages: Array<{ fields: Array<{ id: string; type: string; label?: string }> }> },
+  llmEvaluations?: Record<string, { score: number; feedback?: string }>
+): Promise<ComparisonResult> => {
+  // Build field type map from form definition
+  const fieldTypeMap: Record<string, string> = {};
+  if (formDefinition) {
+    formDefinition.pages.forEach(page => {
+      page.fields.forEach(field => {
+        fieldTypeMap[field.id] = field.type;
+      });
+    });
+  }
+
   const fieldResults: ComparisonResult['fieldResults'] = {};
   let correctFields = 0;
   let totalFields = 0;
   const missingFields: string[] = [];
   const extraFields: string[] = [];
+  const fixedFields: string[] = [];
+  const dynamicFields: string[] = [];
+  let fixedFieldCorrect = 0;
+  let fixedFieldTotal = 0;
+  let dynamicFieldScoreSum = 0;
+  let dynamicFieldTotal = 0;
 
   // Check all ground truth fields
-  Object.keys(groundTruth).forEach(fieldId => {
+  for (const fieldId of Object.keys(groundTruth)) {
     totalFields++;
     const expected = groundTruth[fieldId];
     const actual = submittedData[fieldId];
-    const match = compareValues(expected, actual, fieldId);
+    const fieldType = fieldTypeMap[fieldId] || 'text'; // Default to text if unknown
+    const isDynamic = isDynamicField(fieldType);
     
-    fieldResults[fieldId] = {
-      expected,
-      actual: actual ?? null,
-      match
-    };
-
-    if (match) {
-      correctFields++;
+    if (isDynamic) {
+      dynamicFields.push(fieldId);
+      dynamicFieldTotal++;
+      
+      // MUST use LLM evaluation for dynamic fields - no fallback
+      if (llmEvaluations && llmEvaluations[fieldId]) {
+        const llmScore = llmEvaluations[fieldId].score;
+        const llmFeedback = llmEvaluations[fieldId].feedback || '';
+        const match = llmScore >= 0.8; // Threshold for "correct" (80% similarity)
+        
+        fieldResults[fieldId] = {
+          expected,
+          actual: actual ?? null,
+          match,
+          score: llmScore, // Use score instead of llmScore
+          llmScore, // Keep for backward compatibility
+          llmFeedback,
+          fieldType
+        };
+        
+        if (match) {
+          correctFields++;
+        }
+        dynamicFieldScoreSum += llmScore;
+      } else {
+        // If no LLM evaluation, mark as incorrect (should not happen)
+        fieldResults[fieldId] = {
+          expected,
+          actual: actual ?? null,
+          match: false,
+          score: 0.0,
+          llmScore: 0,
+          llmFeedback: 'LLM evaluation not available',
+          fieldType
+        };
+        dynamicFieldScoreSum += 0.0;
+      }
     } else {
-      if (actual === undefined || actual === null || actual === '' || 
-          (Array.isArray(actual) && actual.length === 0)) {
-        missingFields.push(fieldId);
+      // Fixed/deterministic field
+      fixedFields.push(fieldId);
+      fixedFieldTotal++;
+      const match = compareValues(expected, actual, fieldId);
+      // For fixed fields, score is 1.0 if match, 0.0 if not
+      const score = match ? 1.0 : 0.0;
+      
+      fieldResults[fieldId] = {
+        expected,
+        actual: actual ?? null,
+        match,
+        score, // Add score for fixed fields (0.0 or 1.0)
+        fieldType
+      };
+
+      if (match) {
+        correctFields++;
+        fixedFieldCorrect++;
+      } else {
+        if (actual === undefined || actual === null || actual === '' || 
+            (Array.isArray(actual) && actual.length === 0)) {
+          missingFields.push(fieldId);
+        }
       }
     }
-  });
+  }
 
   // Check for extra fields in submission
   Object.keys(submittedData).forEach(fieldId => {
@@ -55,7 +142,19 @@ export const compareWithGroundTruth = (
     }
   });
 
-  const accuracy = totalFields > 0 ? (correctFields / totalFields) * 100 : 0;
+  // Calculate scores: sum all field scores (0-1) and divide by total
+  let totalScoreSum = 0;
+  
+  // Add all field scores (both fixed and dynamic use the score field)
+  Object.keys(fieldResults).forEach(fieldId => {
+    const score = fieldResults[fieldId].score ?? 0.0;
+    totalScoreSum += score;
+  });
+
+  // Overall accuracy: average of all field scores (0-1) converted to percentage
+  const accuracy = totalFields > 0 ? (totalScoreSum / totalFields) * 100 : 0;
+  const fixedFieldScore = fixedFieldTotal > 0 ? (fixedFieldCorrect / fixedFieldTotal) * 100 : 100;
+  const dynamicFieldScore = dynamicFieldTotal > 0 ? (dynamicFieldScoreSum / dynamicFieldTotal) * 100 : 100;
 
   return {
     totalFields,
@@ -64,8 +163,54 @@ export const compareWithGroundTruth = (
     missingFields,
     extraFields,
     fieldResults,
-    accuracy: Math.round(accuracy * 100) / 100
+    accuracy: Math.round(accuracy * 100) / 100,
+    fixedFieldScore: Math.round(fixedFieldScore * 100) / 100,
+    dynamicFieldScore: Math.round(dynamicFieldScore * 100) / 100,
+    fixedFields,
+    dynamicFields
   };
+};
+
+/**
+ * Extract date portion (YYYY-MM-DD) from various date formats
+ */
+const extractDatePortion = (value: any): string | null => {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+
+  try {
+    // If it's already a Date object
+    if (value instanceof Date) {
+      return value.toISOString().split('T')[0];
+    }
+
+    // If it's a string, try to extract YYYY-MM-DD
+    const str = String(value).trim();
+    
+    // If it's already in YYYY-MM-DD format
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+      return str;
+    }
+
+    // If it's an ISO string (YYYY-MM-DDTHH:mm:ss.sssZ), extract date part
+    if (str.includes('T')) {
+      const datePart = str.split('T')[0];
+      if (/^\d{4}-\d{2}-\d{2}$/.test(datePart)) {
+        return datePart;
+      }
+    }
+
+    // Try to parse as Date and extract date portion
+    const date = new Date(str);
+    if (!isNaN(date.getTime())) {
+      return date.toISOString().split('T')[0];
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
 };
 
 /**
@@ -98,10 +243,10 @@ const compareValues = (expected: any, actual: any, fieldId: string): boolean => 
   // Handle date-range objects
   if (fieldId.toLowerCase().includes('range') || (typeof expected === 'object' && expected !== null && !Array.isArray(expected) && (expected.from || expected.to))) {
     try {
-      const expectedFrom = expected.from ? (expected.from instanceof Date ? expected.from.toISOString().split('T')[0] : new Date(expected.from).toISOString().split('T')[0]) : null;
-      const expectedTo = expected.to ? (expected.to instanceof Date ? expected.to.toISOString().split('T')[0] : new Date(expected.to).toISOString().split('T')[0]) : null;
-      const actualFrom = actual?.from ? (actual.from instanceof Date ? actual.from.toISOString().split('T')[0] : new Date(actual.from).toISOString().split('T')[0]) : null;
-      const actualTo = actual?.to ? (actual.to instanceof Date ? actual.to.toISOString().split('T')[0] : new Date(actual.to).toISOString().split('T')[0]) : null;
+      const expectedFrom = extractDatePortion(expected.from);
+      const expectedTo = extractDatePortion(expected.to);
+      const actualFrom = extractDatePortion(actual?.from);
+      const actualTo = extractDatePortion(actual?.to);
       return expectedFrom === actualFrom && expectedTo === actualTo;
     } catch {
       return false;
@@ -109,15 +254,16 @@ const compareValues = (expected: any, actual: any, fieldId: string): boolean => 
   }
 
   // Handle dates (normalize to ISO string date part)
-  if (fieldId.toLowerCase().includes('date')) {
+  if (fieldId.toLowerCase().includes('date') && !fieldId.toLowerCase().includes('range')) {
     try {
-      // Handle both Date objects and date strings
-      const expectedDate = expected instanceof Date 
-        ? expected.toISOString().split('T')[0]
-        : new Date(expected).toISOString().split('T')[0];
-      const actualDate = actual instanceof Date
-        ? actual.toISOString().split('T')[0]
-        : new Date(actual).toISOString().split('T')[0];
+      // Extract just the date portion (YYYY-MM-DD) from both values
+      const expectedDate = extractDatePortion(expected);
+      const actualDate = extractDatePortion(actual);
+      
+      if (expectedDate === null || actualDate === null) {
+        return false;
+      }
+      
       return expectedDate === actualDate;
     } catch {
       // If date parsing fails, do string comparison

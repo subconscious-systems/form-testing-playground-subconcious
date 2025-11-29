@@ -66,6 +66,7 @@ const MultipageFormPage = () => {
       groundTruth={configForm.groundTruth}
       layout={configForm.layout || 'single-column'}
       websiteContext={configForm.websiteContext}
+      formDefinition={configForm}
     />
   );
 

@@ -88,7 +88,7 @@ FORM_PAGE_SCHEMA = {
         },
         "inputToLLM": {
             "type": "string",
-            "description": "Detailed instructions for an LLM to fill out this form. Include all field values in a natural language format."
+            "description": "Detailed instructions for an LLM to fill out this form, written in FIRST PERSON mode. Describe all field values as if the person filling the form is speaking about themselves (e.g., 'My name is John Smith, my email is john@example.com, my address is 123 Main St...'). Do NOT use second person."
         },
         "pages": {
             "type": "array",
@@ -224,7 +224,7 @@ FEW_SHOT_EXAMPLES = [
         "title": "Employee Onboarding Form",
         "description": "New employee registration and information collection",
         "type": "single-page",
-        "inputToLLM": "You are a new employee filling out an onboarding form. Your name is John Smith, email is john.smith@company.com, phone is 5551234567, employee ID is EMP001, department is Engineering, start date is 2024-09-01, you agree to company policies, and your emergency contact is Jane Smith with phone 5559876543.",
+        "inputToLLM": "I am a new employee filling out an onboarding form. My name is John Smith, my email is john.smith@company.com, my phone number is 5551234567, my employee ID is EMP001, my department is Engineering, my start date is 2024-09-01, I agree to company policies, and my emergency contact is Jane Smith with phone number 5559876543.",
         "groundTruth": {
             "fullName": "John Smith",
             "email": "john.smith@company.com",
@@ -258,7 +258,7 @@ FEW_SHOT_EXAMPLES = [
         "title": "Conference Registration",
         "description": "Multi-page conference registration with personal info, session selection, and payment",
         "type": "multipage",
-        "inputToLLM": "You are registering for a tech conference. Page 1: Name is Sarah Johnson, email is sarah.j@email.com, phone is 5559876543, company is TechCorp. Page 2: You want to attend sessions on 'Machine Learning' and 'Cloud Computing', you have dietary restrictions (Vegetarian), and you need accommodation. Page 3: You will pay $450.00, card number is 4532015112830366, expiration is 12/25, CVV is 123, and you agree to terms.",
+        "inputToLLM": "I am registering for a tech conference. Page 1: My name is Sarah Johnson, my email is sarah.j@email.com, my phone number is 5559876543, and my company is TechCorp. Page 2: I want to attend sessions on 'Machine Learning' and 'Cloud Computing', I have dietary restrictions (Vegetarian), and I need accommodation. Page 3: I will pay $450.00, my card number is 4532015112830366, expiration is 12/25, CVV is 123, and I agree to terms.",
         "groundTruth": {
             "fullName": "Sarah Johnson",
             "email": "sarah.j@email.com",
@@ -366,6 +366,7 @@ CRITICAL DATE RULES:
 Important rules:
 - Use realistic field combinations (e.g., don't mix unrelated fields)
 - Ensure groundTruth matches the inputToLLM description exactly
+- CRITICAL: The inputToLLM field MUST be written in FIRST PERSON mode. Write it as if the person filling the form is describing their own information. Use phrases like "My name is...", "My address is...", "I work at...", "My phone number is...", etc. Do NOT use second person ("Your name is...", "You should enter..."). The inputToLLM should read as if the person is speaking about themselves.
 - For date fields, use 'allowed: "before"' for dates in the past (like DOB) and 'allowed: "after"' for future dates
 - For multipage forms, distribute fields logically across pages
 - Include validation-appropriate fields (phone, email, URL, etc.)
@@ -398,7 +399,7 @@ Requirements:
 - Include 5-12 fields per page
 - Mix different field types appropriately
 - IMPORTANT: Set "required": true for essential fields and "required": false for optional fields. This is critical for form validation.
-- In inputToLLM, describe ALL field values that will appear in groundTruth, including dates relative to today ({current_date_str})
+- CRITICAL: In inputToLLM, write in FIRST PERSON mode. Describe all field values as if the person filling the form is speaking about themselves. Use "My name is...", "My email is...", "I live at...", "My phone number is...", etc. Do NOT use second person ("Your name is...", "You should enter..."). The inputToLLM should read naturally as someone describing their own information, including dates relative to today ({current_date_str})
 - In groundTruth, include an entry for EVERY field ID from all pages
 - Ensure groundTruth values exactly match what you described in inputToLLM
 - DATE REQUIREMENTS FOR groundTruth:

@@ -8,7 +8,7 @@ import { WebsiteContext } from "@/types/form-config";
 export const WebsiteStyleLayout = ({ fields, renderField, websiteContext }: LayoutProps) => {
   // Use provided context or fallbacks
   const context: WebsiteContext = websiteContext || {
-    companyName: "Form Playground",
+    companyName: "Subconcious Form Playground",
     themeColor: "#2563EB", // Blue-600
     navigationItems: [
       { label: "Home", href: "#", active: true },

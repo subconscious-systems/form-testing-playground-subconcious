@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+.env.local
 venv/
+DATABASE_SETUP.md

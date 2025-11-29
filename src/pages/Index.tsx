@@ -45,11 +45,11 @@ const Index = () => {
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'single-page':
-        return 'bg-success/10 text-success border-success/20';
+        return 'bg-gray-50 text-gray-700 border-gray-200';
       case 'multipage':
-        return 'bg-primary/10 text-primary border-primary/20';
+        return 'bg-gray-50 text-gray-700 border-gray-200';
       default:
-        return 'bg-muted text-muted-foreground';
+        return 'bg-gray-50 text-gray-600 border-gray-200';
     }
   };
 
@@ -66,11 +66,11 @@ const Index = () => {
 
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+    <div className="min-h-screen bg-white">
+      <header className="border-b border-gray-200 bg-white backdrop-blur-sm sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Form Playground</h1>
-          <p className="text-muted-foreground text-lg">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Subconcious Form Playground</h1>
+          <p className="text-gray-600 text-lg">
             Testing environment for AI form-filling systems
           </p>
         </div>
@@ -82,15 +82,15 @@ const Index = () => {
             {/* Stats and Filter */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-wrap gap-4">
-            <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+            <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
               <Zap className="w-3 h-3 mr-1" />
                   Single Page ({allForms.filter(f => f.type === 'single-page').length})
             </Badge>
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+            <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
               <Layers className="w-3 h-3 mr-1" />
                   Multipage ({allForms.filter(f => f.type === 'multipage').length})
                 </Badge>
-                <Badge variant="outline" className="bg-muted text-muted-foreground">
+                <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
                   Total ({allForms.length})
             </Badge>
               </div>
@@ -124,13 +124,13 @@ const Index = () => {
         ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {forms.map((form) => (
-            <Card key={form.id} className="hover:shadow-lg transition-all duration-200 border-border/50">
+            <Card key={form.id} className="hover:shadow-lg transition-all duration-200 border-gray-200 bg-white">
               <CardHeader>
                 <div className="flex items-start justify-between mb-2">
-                  <CardTitle className="text-xl">{form.title}</CardTitle>
+                  <CardTitle className="text-xl text-gray-900">{form.title}</CardTitle>
                   {getTypeIcon(form.type)}
                 </div>
-                <CardDescription className="text-base">{form.description}</CardDescription>
+                <CardDescription className="text-base text-gray-600">{form.description}</CardDescription>
               </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap items-center gap-2">
@@ -138,12 +138,12 @@ const Index = () => {
                       {form.type}
                     </Badge>
                     {form.pages.length > 1 && (
-                      <Badge variant="outline" className="bg-muted text-muted-foreground">
+                      <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
                         {form.pages.length} pages
                       </Badge>
                     )}
                     {form.layout && (
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
                         {form.layout.replace('-', ' ')}
                       </Badge>
                     )}
@@ -158,7 +158,7 @@ const Index = () => {
                     }
                     className="w-full"
                   >
-                    <Button className="w-full" variant="default">
+                    <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white" variant="default">
                       Fill Form
                     </Button>
                   </Link>

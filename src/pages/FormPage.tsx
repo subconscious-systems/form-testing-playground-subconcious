@@ -64,6 +64,7 @@ const FormPage = () => {
       groundTruth={form.groundTruth}
       layout={form.layout || 'single-column'}
       websiteContext={form.websiteContext}
+      formDefinition={form}
     />
   );
 };

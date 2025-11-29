@@ -7,6 +7,7 @@ import { FormProvider } from "@/contexts/FormContext";
 import Index from "./pages/Index";
 import FormPage from "./pages/FormPage";
 import MultipageFormPage from "./pages/MultipageFormPage";
+import FormCompletePage from "./pages/FormCompletePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/:formId/complete" element={<FormCompletePage />} />
             <Route path="/:formId/page/:page" element={<MultipageFormPage />} />
             <Route path="/:formId" element={<FormPage />} />
             <Route path="*" element={<NotFound />} />

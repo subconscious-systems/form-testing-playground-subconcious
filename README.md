@@ -34,11 +34,25 @@ cd form-playground-subconcious
 # Step 3: Install dependencies
 npm install
 
-# Step 4: Start the development server
+# Step 4: Set up environment variables
+# Create a .env file in the root directory with:
+# DATABASE_URL=your_neon_postgresql_connection_string
+# VITE_OPENAI_API_KEY=your_openai_api_key
+
+# Step 5: Start the development servers
+# Option 1: Run both frontend and API server together
+npm run dev:all
+
+# Option 2: Run them separately (in different terminals)
+# Terminal 1: Frontend (Vite)
 npm run dev
+
+# Terminal 2: API Server (Express)
+npm run dev:api
 ```
 
 The application will be available at `http://localhost:8080`
+The API server will run on `http://localhost:3001`
 
 ## Project Structure
 
