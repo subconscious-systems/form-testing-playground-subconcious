@@ -29,6 +29,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Check if DATABASE_URL is set before attempting connection
+    if (!process.env.DATABASE_URL) {
+      return res.status(500).json({
+        error: 'Database configuration error',
+        message: 'DATABASE_URL environment variable is not set. Please configure it in your Vercel project settings.'
+      });
+    }
+
     const dbPool = getPool();
 
     const {
@@ -47,7 +55,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Validate required fields
     if (!form_id || !field_eval || fixed_field_score === undefined || dynamic_field_score === undefined || overall_accuracy === undefined) {
       return res.status(400).json({ 
-        error: 'form_id, field_eval, fixed_field_score, dynamic_field_score, and overall_accuracy are required' 
+        error: 'Missing required fields',
+        message: 'form_id, field_eval, fixed_field_score, dynamic_field_score, and overall_accuracy are required' 
       });
     }
 
@@ -88,9 +97,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   } catch (error) {
     console.error('Database error:', error);
+    
+    // Provide more helpful error messages
+    let errorMessage = 'Unknown error';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      // Check for common database connection errors
+      if (error.message.includes('DATABASE_URL') || error.message.includes('connection')) {
+        errorMessage = 'Database connection failed. Please verify DATABASE_URL is set correctly in Vercel environment variables.';
+      }
+    }
+    
     return res.status(500).json({
       error: 'Failed to save evaluation',
-      message: error instanceof Error ? error.message : 'Unknown error'
+      message: errorMessage
     });
   }
 }

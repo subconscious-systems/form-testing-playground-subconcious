@@ -27,3 +27,4 @@ dist-ssr
 .env.local
 venv/
 DATABASE_SETUP.md
+DEPLOYMENT_SETUP.md 
