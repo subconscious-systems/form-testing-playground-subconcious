@@ -127,7 +127,10 @@ const Index = () => {
             <Card key={form.id} className="hover:shadow-lg transition-all duration-200 border-gray-200 bg-white">
               <CardHeader>
                 <div className="flex items-start justify-between mb-2">
-                  <CardTitle className="text-xl text-gray-900">{form.title}</CardTitle>
+                  <div className="flex-1">
+                    <CardTitle className="text-xl text-gray-900">{form.title}</CardTitle>
+                    <p className="text-xs text-gray-400 mt-1 font-mono">ID: {form.id}</p>
+                  </div>
                   {getTypeIcon(form.type)}
                 </div>
                 <CardDescription className="text-base text-gray-600">{form.description}</CardDescription>
