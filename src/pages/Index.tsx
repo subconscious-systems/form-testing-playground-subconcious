@@ -22,20 +22,37 @@ const Index = () => {
     localStorage.setItem('form-playground-filter-preference', filterType);
   }, [filterType]);
 
-  // Load forms on mount
+  // Load forms on mount and when window gains focus (to pick up new forms)
   useEffect(() => {
-    const loadForms = async () => {
+    const loadForms = async (forceReload: boolean = false) => {
       setLoading(true);
       try {
-        const forms = await getAllFormsAsync();
+        // Import here to avoid circular dependency
+        const { getAllFormsAsync, clearFormConfigCache } = await import('@/utils/form-config-loader');
+        if (forceReload) {
+          clearFormConfigCache();
+        }
+        const forms = await getAllFormsAsync(forceReload);
         setAllForms(forms);
       } catch (error) {
+        console.error('Error loading forms:', error);
         setAllForms([]);
       } finally {
         setLoading(false);
       }
     };
+    
     loadForms();
+    
+    // Reload forms when window gains focus (user might have generated new forms)
+    const handleFocus = () => {
+      loadForms(true);
+    };
+    window.addEventListener('focus', handleFocus);
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
   }, []);
 
   const forms = filterType === "all" 
@@ -89,7 +106,7 @@ const Index = () => {
             <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
               <Layers className="w-3 h-3 mr-1" />
                   Multipage ({allForms.filter(f => f.type === 'multipage').length})
-                </Badge>
+            </Badge>
                 <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
                   Total ({allForms.length})
             </Badge>
@@ -135,7 +152,7 @@ const Index = () => {
                 </div>
                 <CardDescription className="text-base text-gray-600">{form.description}</CardDescription>
               </CardHeader>
-                <CardContent>
+              <CardContent>
                   <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="outline" className={getTypeColor(form.type)}>
                       {form.type}
@@ -143,30 +160,30 @@ const Index = () => {
                     {form.pages.length > 1 && (
                       <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
                         {form.pages.length} pages
-                      </Badge>
+                  </Badge>
                     )}
                     {form.layout && (
                       <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
                         {form.layout.replace('-', ' ')}
-                      </Badge>
-                    )}
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Link
-                    to={
+                    </Badge>
+                  )}
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Link
+                  to={
                       form.type === 'multipage'
-                        ? `/${form.id}/page/1`
-                        : `/${form.id}`
-                    }
-                    className="w-full"
-                  >
+                      ? `/${form.id}/page/1`
+                      : `/${form.id}`
+                  }
+                  className="w-full"
+                >
                     <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white" variant="default">
-                      Fill Form
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
+                    Fill Form
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
           ))}
         </div>
         )}

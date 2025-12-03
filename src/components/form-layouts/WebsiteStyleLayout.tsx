@@ -77,15 +77,12 @@ export const WebsiteStyleLayout = ({ fields, renderField, websiteContext }: Layo
           <div className="flex items-center justify-between h-16">
             {/* Logo Section */}
             <div className="flex items-center gap-3 cursor-pointer">
-              {context.logoUrl && context.logoUrl.length > 3 ? (
-                <img src={context.logoUrl} alt="Logo" className="h-8 w-auto" />
-              ) : (
-                <div className="w-10 h-10 theme-bg rounded-lg flex items-center justify-center shadow-md">
-                  <span className="text-white font-bold text-lg">
-                    {context.logoUrl || context.companyName.charAt(0)}
-                  </span>
-                </div>
-              )}
+              {/* Always show dummy logo placeholder */}
+              <div className="w-10 h-10 theme-bg rounded-lg flex items-center justify-center shadow-md">
+                <span className="text-white font-bold text-lg">
+                  {context.companyName.charAt(0).toUpperCase()}
+                </span>
+              </div>
               <span className="text-xl font-bold text-gray-900 tracking-tight">{context.companyName}</span>
             </div>
 
@@ -242,7 +239,7 @@ export const WebsiteStyleLayout = ({ fields, renderField, websiteContext }: Layo
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 theme-bg rounded flex items-center justify-center">
                   <span className="text-white font-bold text-sm">
-                    {context.logoUrl || context.companyName.charAt(0)}
+                    {context.companyName.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <span className="text-lg font-bold">{context.companyName}</span>

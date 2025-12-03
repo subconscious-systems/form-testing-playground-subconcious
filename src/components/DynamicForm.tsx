@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { FormField, FormPage } from "@/types/form-config";
 import { useFormState } from "@/hooks/useFormState";
 import { compareWithGroundTruth, ComparisonResult } from "@/utils/form-comparison";
-import { evaluateTextFieldWithLLM } from "@/utils/llm-evaluator";
 import { FormDefinition } from "@/types/form-config";
 import { saveEvaluationToDatabase } from "@/utils/api";
 import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
@@ -18,7 +17,6 @@ import {
   PhoneField,
   EmailField,
   UrlField,
-  FileField,
   CheckboxField,
   SwitchField,
   SelectField,
@@ -30,7 +28,6 @@ import {
   DateRangeField,
   NumberField,
   SliderField,
-  ColorField,
   CurrencyField,
   StarRatingField,
   AddressField,
@@ -66,8 +63,6 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
   const [openSelects, setOpenSelects] = useState<Record<string, boolean>>({});
   const [searchQueries, setSearchQueries] = useState<Record<string, string>>({});
   const [comparisonResult, setComparisonResult] = useState<ComparisonResult | null>(null);
-  const [isEvaluating, setIsEvaluating] = useState<boolean>(false);
-  const [evaluationProgress, setEvaluationProgress] = useState<{ current: number; total: number; fieldName?: string } | null>(null);
   const navigate = useNavigate();
 
   // Load existing data for this page on mount
@@ -168,72 +163,11 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
 
       // Compare with ground truth if available
       if (groundTruth && formDefinition) {
-        // Identify dynamic fields (text, textarea, address)
-        const dynamicFields: Array<{ fieldId: string; expected: string; actual: string; fieldLabel?: string }> = [];
-        
-        formDefinition.pages.forEach(page => {
-          page.fields.forEach(field => {
-            if ((field.type === 'text' || field.type === 'textarea' || field.type === 'address') && 
-                groundTruth[field.id] && allFormData[field.id]) {
-              dynamicFields.push({
-                fieldId: field.id,
-                expected: String(groundTruth[field.id]),
-                actual: String(allFormData[field.id]),
-                fieldLabel: field.label
-              });
-            }
-          });
-        });
-
-        // Perform LLM evaluation for dynamic fields one by one
-        let llmEvaluations: Record<string, { score: number; feedback: string }> = {};
-        if (dynamicFields.length > 0) {
-          // Show loading screen
-          setIsEvaluating(true);
-          setEvaluationProgress({ current: 0, total: dynamicFields.length });
-          
-          try {
-            // Evaluate fields one by one with progress indication
-            for (let i = 0; i < dynamicFields.length; i++) {
-              const field = dynamicFields[i];
-              setEvaluationProgress({ 
-                current: i + 1, 
-                total: dynamicFields.length, 
-                fieldName: field.fieldLabel || field.fieldId 
-              });
-              
-              try {
-                const result = await evaluateTextFieldWithLLM(
-                  field.expected,
-                  field.actual,
-                  field.fieldLabel
-                );
-                llmEvaluations[field.fieldId] = {
-                  score: result.score,
-                  feedback: result.feedback
-                };
-              } catch (error) {
-                // If individual field evaluation fails, mark it as 0 score
-                llmEvaluations[field.fieldId] = {
-                  score: 0,
-                  feedback: `Evaluation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-                };
-              }
-            }
-          } catch (error) {
-            setIsEvaluating(false);
-            setEvaluationProgress(null);
-            toast.error("Error during AI evaluation. Please try again.");
-            throw error;
-          }
-        }
-
-        // Perform comparison with LLM evaluations
+        // Perform comparison with binary scoring
         const comparison = await compareWithGroundTruth(
           allFormData,
           groundTruth,
-          formDefinition,
-          llmEvaluations
+          formDefinition
         );
 
         // Store comparison result in sessionStorage for the complete page
@@ -251,20 +185,17 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
             expected: any;
             submitted: any;
             score: number;
-            dynamic: boolean;
+            required: boolean;
             inputType: string;
-            feedback?: string;
           }> = {};
 
           Object.entries(comparison.fieldResults).forEach(([fieldId, result]) => {
-            const isDynamic = comparison.dynamicFields.includes(fieldId);
             fieldEval[fieldId] = {
               expected: result.expected,
               submitted: result.actual,
-              score: result.score ?? (isDynamic ? (result.llmScore ?? 0) : (result.match ? 1.0 : 0.0)),
-              dynamic: isDynamic,
-              inputType: result.fieldType || 'text',
-              ...(isDynamic && result.llmFeedback && { feedback: result.llmFeedback })
+              score: result.score ?? 0.0,
+              required: result.required ?? false,
+              inputType: result.fieldType || 'text'
             };
           });
 
@@ -276,8 +207,6 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
             layout: formDefinition.layout || 'single-column',
             inputToLLM: formDefinition.inputToLLM,
             field_eval: fieldEval,
-            fixed_field_score: comparison.fixedFieldScore,
-            dynamic_field_score: comparison.dynamicFieldScore,
             overall_accuracy: comparison.accuracy
           });
         } catch (error) {
@@ -286,12 +215,8 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         }
 
         // Clear form data and navigate to complete page
-        // Keep loading screen visible - don't set isEvaluating to false
-        // The component will unmount on navigation, so state cleanup isn't needed
         submitForm();
         navigate(`/${formId}/complete`);
-        // Note: isEvaluating stays true until component unmounts
-        // This prevents the form from flashing before navigation completes
       } else {
         // If no ground truth, clear and navigate home
         submitForm();
@@ -351,8 +276,6 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         return <EmailField {...commonProps} value={value || ""} />;
       case "url":
         return <UrlField {...commonProps} value={value || ""} />;
-      case "file":
-        return <FileField {...commonProps} value={value || null} />;
       case "checkbox":
         return <CheckboxField {...commonProps} value={value === true} />;
       case "switch":
@@ -391,8 +314,6 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         return <NumberField {...commonProps} value={value || ""} />;
       case "slider":
         return <SliderField {...commonProps} value={value || field.defaultValue || field.min || 0} />;
-      case "color":
-        return <ColorField {...commonProps} value={value || "#000000"} />;
       case "currency":
         return <CurrencyField {...commonProps} value={value || ""} />;
       case "star-rating":
@@ -417,46 +338,6 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         return <TextField {...commonProps} value={value || ""} />;
     }
   };
-
-  // Show loading screen during evaluation
-  if (isEvaluating) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardContent className="pt-6">
-            <div className="flex flex-col items-center justify-center space-y-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-              <div className="text-center space-y-2">
-                <h3 className="text-lg font-semibold">Evaluating Form Submission</h3>
-                <p className="text-sm text-muted-foreground">
-                  {evaluationProgress ? (
-                    <>
-                      Evaluating field {evaluationProgress.current} of {evaluationProgress.total}
-                      {evaluationProgress.fieldName && (
-                        <span className="block mt-1 font-medium">{evaluationProgress.fieldName}</span>
-                      )}
-                    </>
-                  ) : (
-                    "Processing with AI..."
-                  )}
-                </p>
-                <div className="w-full bg-muted rounded-full h-2 mt-4">
-                  <div 
-                    className="bg-primary h-2 rounded-full transition-all duration-300"
-                    style={{ 
-                      width: evaluationProgress 
-                        ? `${(evaluationProgress.current / evaluationProgress.total) * 100}%` 
-                        : '0%' 
-                    }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background p-4">

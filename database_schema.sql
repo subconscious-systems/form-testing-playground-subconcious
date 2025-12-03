@@ -10,8 +10,6 @@ CREATE TABLE form_evaluations (
   layout VARCHAR(50),
   input_to_llm TEXT,
   field_eval JSONB NOT NULL,
-  fixed_field_score DECIMAL(5, 2),
-  dynamic_field_score DECIMAL(5, 2),
   overall_accuracy DECIMAL(5, 2),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -26,16 +24,22 @@ CREATE INDEX idx_overall_accuracy ON form_evaluations(overall_accuracy);
 --     "expected": "user@example.com",
 --     "submitted": "user@example.com",
 --     "score": 1.0,
---     "dynamic": false,
+--     "required": true,
 --     "inputType": "email"
 --   },
 --   "fullName": {
 --     "expected": "John Doe",
 --     "submitted": "John D.",
---     "score": 0.85,
---     "dynamic": true,
---     "inputType": "text",
---     "feedback": "Close match with minor abbreviation"
+--     "score": 0.0,
+--     "required": true,
+--     "inputType": "text"
+--   },
+--   "notes": {
+--     "expected": null,
+--     "submitted": "Some notes",
+--     "score": 1.0,
+--     "required": false,
+--     "inputType": "textarea"
 --   }
 -- }
 

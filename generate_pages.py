@@ -4,7 +4,8 @@ import random
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from openai import OpenAI
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional, Literal, Union
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 # Load environment variables from .env file
 load_dotenv()
@@ -59,163 +60,254 @@ INDUSTRIES = [
     "Wholesale seller post form"
 ]
 
-# JSON Schema for form page generation
-FORM_PAGE_SCHEMA = {
-    "type": "object",
-    "additionalProperties": False,
-    "properties": {
-        "id": {
-            "type": "string",
-            "description": "Unique identifier for the form (e.g., '29', '30') - just the number as a string"
-        },
-        "title": {
-            "type": "string",
-            "description": "Descriptive title for the form"
-        },
-        "description": {
-            "type": "string",
-            "description": "Brief description of what the form is for"
-        },
-        "type": {
-            "type": "string",
-            "enum": ["single-page", "multipage"],
-            "description": "Whether this is a single-page or multipage form"
-        },
-        "layout": {
-            "type": "string",
-            "enum": ["single-column", "two-column", "split-screen", "wizard-style", "website-style"],
-            "description": "Layout style for the form: 'single-column' (vertical stack), 'two-column' (grid), 'split-screen' (two columns with sidebar), 'wizard-style' (sectioned with dividers), 'website-style' (professional website layout with header, navigation, and side-by-side content)"
-        },
-        "inputToLLM": {
-            "type": "string",
-            "description": "Detailed instructions for an LLM to fill out this form, written in FIRST PERSON mode. Describe all field values as if the person filling the form is speaking about themselves (e.g., 'My name is John Smith, my email is john@example.com, my address is 123 Main St...'). Do NOT use second person."
-        },
-        "pages": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "additionalProperties": False,
-                "properties": {
-                    "pageNumber": {"type": "integer"},
-                    "fields": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "additionalProperties": False,
-                            "properties": {
-                                "id": {"type": "string"},
-                                "type": {
-                                    "type": "string",
-                                    "enum": [
-                                        "text", "textarea", "phone", "email", "url", "file",
+# Pydantic Models for form page generation
+
+# Field type enum
+FieldType = Literal[
+    "text", "textarea", "phone", "email", "url",
                                         "checkbox", "switch", "select", "radio", "multiselect",
                                         "searchable-multiselect", "date", "time", "date-range",
-                                        "number", "slider", "color", "currency", "star-rating",
+    "number", "slider", "currency", "star-rating",
                                         "address", "country", "state", "zip", "credit-card",
                                         "expiration-date", "cvv", "reactive-chunks"
                                     ]
-                                },
-                                "label": {"type": "string"},
-                                "required": {"type": "boolean"},
-                                "placeholder": {"type": ["string", "null"]},
-                                "options": {"type": ["array", "null"], "items": {"type": "string"}},
-                                "min": {"type": ["number", "null"]},
-                                "max": {"type": ["number", "null"]},
-                                "step": {"type": ["number", "null"]},
-                                "defaultValue": {"type": ["number", "string", "null"]},
-                                "currency": {"type": ["string", "null"]},
-                                "maxStars": {"type": ["integer", "null"]},
-                                "maxLength": {"type": ["integer", "null"]},
-                                "accept": {"type": ["string", "null"]},
-                                "allowed": {"type": ["string", "null"]},
-                                "chunkFields": {
-                                    "type": ["array", "null"],
-                                    "items": {
-                                        "type": "object",
-                                        "additionalProperties": False
-                                    }
-                                }
-                            },
-                            "required": ["id", "type", "label", "required", "placeholder", "options", "min", "max", "step", "defaultValue", "currency", "maxStars", "maxLength", "accept", "allowed", "chunkFields"]
-                        }
-                    }
-                },
-                "required": ["pageNumber", "fields"]
-            }
-        },
-        "websiteContext": {
-            "type": "object",
-            "additionalProperties": False,
-            "description": "Context for website-style layout. REQUIRED if layout is 'website-style'.",
-            "properties": {
-                "companyName": {"type": "string"},
-                "logoUrl": {"type": "string", "description": "Optional URL or just use initials"},
-                "themeColor": {"type": "string", "description": "Hex code, e.g., #2563EB"},
-                "navigationItems": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "label": {"type": "string"},
-                            "href": {"type": "string"},
-                            "active": {"type": "boolean"}
-                        },
-                        "required": ["label", "href"]
-                    }
-                },
-                "heroTitle": {"type": "string"},
-                "heroSubtitle": {"type": "string"},
-                "sidebarContent": {
-                    "type": "object",
-                    "properties": {
-                        "title": {"type": "string"},
-                        "content": {"type": "string"},
-                        "links": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "label": {"type": "string"},
-                                    "href": {"type": "string"}
-                                },
-                                "required": ["label", "href"]
-                            }
-                        }
-                    },
-                    "required": ["title", "content"]
-                },
-                "footerLinks": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "title": {"type": "string"},
-                            "links": {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "properties": {
-                                        "label": {"type": "string"},
-                                        "href": {"type": "string"}
-                                    },
-                                    "required": ["label", "href"]
-                                }
-                            }
-                        },
-                        "required": ["title", "links"]
-                    }
-                }
-            },
-            "required": ["companyName", "themeColor", "navigationItems", "heroTitle", "heroSubtitle", "footerLinks"]
-        },
-        "groundTruth": {
-            "type": "object",
-            "additionalProperties": True,
-            "description": "Expected values for all fields. This MUST be generated LAST after all pages and fields are defined. For each field ID in the form, provide the expected value. Format: dates as 'YYYY-MM-DD' strings, arrays for multi-selects, booleans for checkboxes/switches, numbers as strings or numbers, date-ranges as objects with 'from' and 'to' ISO date strings."
-        }
-    },
-    "required": ["id", "title", "description", "type", "inputToLLM", "pages", "groundTruth", "layout"]
-}
+
+FormType = Literal["single-page", "multipage"]
+LayoutType = Literal["single-column", "two-column", "split-screen", "wizard-style", "website-style"]
+
+# Valid country and state lists (must match UI components)
+VALID_COUNTRIES_LIST = [
+    "United States", "Canada", "United Kingdom", "Australia", "Germany", "France", 
+    "Japan", "China", "India", "Brazil", "Mexico", "Spain", "Italy", "South Korea", 
+    "Netherlands", "Sweden"
+]
+
+VALID_STATES_LIST = [
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
+    "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas",
+    "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+    "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York",
+    "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
+    "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+    "Wisconsin", "Wyoming"
+]
+
+VALID_ADDRESSES_LIST = [
+    "123 Main Street, New York, NY 10001",
+    "123 Main St, Boston, MA 02101",
+    "1234 Main Street, Los Angeles, CA 90001",
+    "1234 Main St, Chicago, IL 60601",
+    "12 Main Avenue, New York, NY 10002",
+    "12 Main Ave, San Francisco, CA 94102",
+    "123 Oak Street, Seattle, WA 98101",
+    "123 Oak St, Portland, OR 97201",
+    "1234 Oak Street, Denver, CO 80201",
+    "1234 Oak Ave, Phoenix, AZ 85001",
+    "456 Park Avenue, New York, NY 10022",
+    "456 Park Ave, Miami, FL 33101",
+    "4567 Park Avenue, Houston, TX 77001",
+    "4567 Park St, Atlanta, GA 30301",
+    "789 Elm Street, Philadelphia, PA 19101",
+    "789 Elm St, Washington, DC 20001",
+    "7890 Elm Street, Dallas, TX 75201",
+    "7890 Elm Ave, San Diego, CA 92101",
+    "321 Pine Street, Austin, TX 78701",
+    "321 Pine St, Nashville, TN 37201",
+    "3210 Pine Avenue, Las Vegas, NV 89101",
+    "3210 Pine St, Minneapolis, MN 55401",
+    "555 Broadway, New York, NY 10012",
+    "555 Broadway St, San Antonio, TX 78201",
+    "5555 Broadway Avenue, Columbus, OH 43201"
+]
+
+
+class ChunkField(BaseModel):
+    """Represents a field within a reactive-chunks field."""
+    # For OpenAI structured output, we need to define specific fields
+    # If chunk fields need to be flexible, we'll handle that in validation
+    model_config = {"extra": "forbid"}
+
+
+class FormField(BaseModel):
+    """Represents a single form field."""
+    id: str = Field(..., description="Unique identifier for the field")
+    type: FieldType = Field(..., description="Type of the form field")
+    label: str = Field(..., description="Label text for the field")
+    required: bool = Field(..., description="Whether the field is required")
+    placeholder: Optional[str] = Field(None, description="Placeholder text")
+    options: Optional[List[str]] = Field(
+        None, 
+        description="Options for select/multiselect/radio/address fields. If type is 'country', options must be from: " + ", ".join(VALID_COUNTRIES_LIST) + ". If type is 'state', options must be from the 50 US states list. If type is 'address', options must be from the valid addresses list. Schema validation will enforce this."
+    )
+    min: Optional[float] = Field(None, description="Minimum value for number/slider fields")
+    max: Optional[float] = Field(None, description="Maximum value for number/slider fields")
+    step: Optional[float] = Field(None, description="Step value for number/slider fields")
+    defaultValue: Optional[Union[float, str]] = Field(
+        None, 
+        description="Default value for the field. If type is 'country', must be from: " + ", ".join(VALID_COUNTRIES_LIST) + ". If type is 'state', must be from the 50 US states list. If type is 'address', must be from the valid addresses list. Schema validation will enforce this."
+    )
+    currency: Optional[str] = Field(None, description="Currency code for currency fields")
+    maxStars: Optional[int] = Field(None, description="Maximum stars for star-rating fields")
+    maxLength: Optional[int] = Field(None, description="Maximum length for text fields")
+    allowed: Optional[str] = Field(None, description="Date restriction: 'before' or 'after'")
+    # dateStyle and rangeStyle are NOT generated by LLM - they are assigned automatically in round-robin fashion
+    dateStyle: Optional[str] = Field(None, description="DO NOT GENERATE THIS FIELD. It will be automatically assigned.")
+    rangeStyle: Optional[str] = Field(None, description="DO NOT GENERATE THIS FIELD. It will be automatically assigned.")
+    chunkFields: Optional[List[ChunkField]] = Field(None, description="Fields for reactive-chunks type")
+    
+    @model_validator(mode='after')
+    def validate_country_state_fields(self):
+        """Validate that country and state fields only use valid values."""
+        if self.type == "country":
+            # Validate options
+            if self.options:
+                invalid = [opt for opt in self.options if opt not in VALID_COUNTRIES_LIST]
+                if invalid:
+                    raise ValueError(f"Invalid countries in options: {invalid}. Must be one of: {VALID_COUNTRIES_LIST}")
+            # Validate defaultValue
+            if self.defaultValue and isinstance(self.defaultValue, str):
+                if self.defaultValue not in VALID_COUNTRIES_LIST:
+                    raise ValueError(f"Invalid country default value: {self.defaultValue}. Must be one of: {VALID_COUNTRIES_LIST}")
+        
+        elif self.type == "state":
+            # Validate options
+            if self.options:
+                invalid = [opt for opt in self.options if opt not in VALID_STATES_LIST]
+                if invalid:
+                    raise ValueError(f"Invalid states in options: {invalid}. Must be one of: {VALID_STATES_LIST}")
+            # Validate defaultValue
+            if self.defaultValue and isinstance(self.defaultValue, str):
+                if self.defaultValue not in VALID_STATES_LIST:
+                    raise ValueError(f"Invalid state default value: {self.defaultValue}. Must be one of: {VALID_STATES_LIST}")
+        
+        elif self.type == "address":
+            # Validate options
+            if self.options:
+                invalid = [opt for opt in self.options if opt not in VALID_ADDRESSES_LIST]
+                if invalid:
+                    raise ValueError(f"Invalid addresses in options: {invalid}. Must be one of: {VALID_ADDRESSES_LIST}")
+            # Validate defaultValue
+            if self.defaultValue and isinstance(self.defaultValue, str):
+                if self.defaultValue not in VALID_ADDRESSES_LIST:
+                    raise ValueError(f"Invalid address default value: {self.defaultValue}. Must be one of: {VALID_ADDRESSES_LIST}")
+        
+        return self
+
+
+class Page(BaseModel):
+    """Represents a single page in a form."""
+    pageNumber: int = Field(..., description="Page number (1-indexed)")
+    fields: List[FormField] = Field(..., description="List of fields on this page")
+
+
+class NavigationItem(BaseModel):
+    """Represents a navigation item in website-style layout."""
+    label: str = Field(..., description="Navigation label")
+    href: str = Field(..., description="Navigation link URL")
+    active: Optional[bool] = Field(None, description="Whether this item is currently active")
+
+
+class SidebarLink(BaseModel):
+    """Represents a link in the sidebar content."""
+    label: str = Field(..., description="Link label")
+    href: str = Field(..., description="Link URL")
+
+
+class SidebarContent(BaseModel):
+    """Represents sidebar content in website-style layout."""
+    title: str = Field(..., description="Sidebar title")
+    content: str = Field(..., description="Sidebar content text")
+    links: Optional[List[SidebarLink]] = Field(None, description="Optional links in sidebar")
+
+
+class FooterLink(BaseModel):
+    """Represents a single link in footer link groups."""
+    label: str = Field(..., description="Link label")
+    href: str = Field(..., description="Link URL")
+
+
+class FooterLinkGroup(BaseModel):
+    """Represents a group of footer links."""
+    title: str = Field(..., description="Group title")
+    links: List[FooterLink] = Field(..., description="List of links in this group")
+
+
+class WebsiteContext(BaseModel):
+    """Context for website-style layout. REQUIRED if layout is 'website-style'."""
+    companyName: str = Field(..., description="Company name")
+    logoUrl: Optional[str] = Field(None, description="DO NOT generate this field. Leave it null/undefined. The UI will automatically show a placeholder logo based on the company name initial.")
+    themeColor: str = Field(..., description="Hex code, e.g., #2563EB")
+    navigationItems: List[NavigationItem] = Field(..., description="Navigation menu items")
+    heroTitle: str = Field(..., description="Hero section title")
+    heroSubtitle: str = Field(..., description="Hero section subtitle")
+    sidebarContent: Optional[SidebarContent] = Field(None, description="Sidebar content")
+    footerLinks: List[FooterLinkGroup] = Field(..., description="Footer link groups")
+
+
+class FormDefinition(BaseModel):
+    """Complete form definition with all pages and metadata."""
+    id: str = Field(..., description="Unique identifier for the form (e.g., '29', '30') - just the number as a string")
+    title: str = Field(..., description="Descriptive title for the form")
+    description: str = Field(..., description="Brief description of what the form is for")
+    type: FormType = Field(..., description="Whether this is a single-page or multipage form")
+    layout: LayoutType = Field(
+        ...,
+        description="Layout style for the form: 'single-column' (vertical stack), 'two-column' (grid), 'split-screen' (two columns with sidebar), 'wizard-style' (sectioned with dividers), 'website-style' (professional website layout with header, navigation, and side-by-side content)"
+    )
+    inputToLLM: str = Field(
+        ...,
+        description="Detailed instructions for an LLM to fill out this form, written in FIRST PERSON mode. Describe all field values as if the person filling the form is speaking about themselves (e.g., 'My name is John Smith, my email is john@example.com, my address is 123 Main St...'). Do NOT use second person."
+    )
+    pages: List[Page] = Field(..., description="List of pages in the form")
+    websiteContext: Optional[WebsiteContext] = Field(
+        None,
+        description="Context for website-style layout. REQUIRED if layout is 'website-style'."
+    )
+    groundTruth: Dict[str, Any] = Field(
+        ...,
+        description="Expected values for all fields. This MUST be generated LAST after all pages and fields are defined. For each field ID in the form, provide the expected value. Format: dates as 'YYYY-MM-DD' strings, arrays for multi-selects, booleans for checkboxes/switches, numbers as strings or numbers, date-ranges as objects with 'from' and 'to' ISO date strings."
+    )
+    
+    model_config = {"extra": "forbid"}
+    
+    @model_validator(mode='after')
+    def validate_ground_truth_country_state(self):
+        """Validate that groundTruth values for country and state fields are valid."""
+        # Build a map of field IDs to their types
+        field_types = {}
+        for page in self.pages:
+            for field in page.fields:
+                field_types[field.id] = field.type
+        
+        # Validate groundTruth values
+        for field_id, value in self.groundTruth.items():
+            field_type = field_types.get(field_id)
+            
+            if field_type == "country":
+                if isinstance(value, str) and value not in VALID_COUNTRIES_LIST:
+                    raise ValueError(f"Invalid country value in groundTruth for field '{field_id}': {value}. Must be one of: {VALID_COUNTRIES_LIST}")
+                elif isinstance(value, list):
+                    invalid = [v for v in value if v not in VALID_COUNTRIES_LIST]
+                    if invalid:
+                        raise ValueError(f"Invalid country values in groundTruth for field '{field_id}': {invalid}. Must be from: {VALID_COUNTRIES_LIST}")
+            
+            elif field_type == "state":
+                if isinstance(value, str) and value not in VALID_STATES_LIST:
+                    raise ValueError(f"Invalid state value in groundTruth for field '{field_id}': {value}. Must be one of: {VALID_STATES_LIST}")
+                elif isinstance(value, list):
+                    invalid = [v for v in value if v not in VALID_STATES_LIST]
+                    if invalid:
+                        raise ValueError(f"Invalid state values in groundTruth for field '{field_id}': {invalid}. Must be from: {VALID_STATES_LIST}")
+            
+            elif field_type == "address":
+                if isinstance(value, str) and value not in VALID_ADDRESSES_LIST:
+                    raise ValueError(f"Invalid address value in groundTruth for field '{field_id}': {value}. Must be one of: {VALID_ADDRESSES_LIST}")
+                elif isinstance(value, list):
+                    invalid = [v for v in value if v not in VALID_ADDRESSES_LIST]
+                    if invalid:
+                        raise ValueError(f"Invalid address values in groundTruth for field '{field_id}': {invalid}. Must be from: {VALID_ADDRESSES_LIST}")
+        
+        return self
 
 # Few-shot examples
 FEW_SHOT_EXAMPLES = [
@@ -305,6 +397,40 @@ FEW_SHOT_EXAMPLES = [
     }
 ]
 
+def assign_date_styles_random(form_dict: Dict[str, Any], form_id: str) -> Dict[str, Any]:
+    """
+    Assign dateStyle and rangeStyle to date and date-range fields randomly.
+    This ensures random distribution of all date picker types across all forms.
+    """
+    # Date picker styles (3 types)
+    date_styles = ["default", "ios-scroll", "text-input"]
+    # Date range picker styles (2 types)
+    range_styles = ["single-calendar", "dual-calendar"]
+    
+    # Use form_id as seed for reproducibility (same form always gets same styles)
+    random.seed(hash(form_id) if not form_id.isdigit() else int(form_id))
+    
+    # Process all pages
+    if "pages" in form_dict:
+        for page in form_dict["pages"]:
+            if "fields" in page:
+                for field in page["fields"]:
+                    if field.get("type") == "date":
+                        # Remove any existing dateStyle (from LLM if it generated one)
+                        if "dateStyle" in field:
+                            del field["dateStyle"]
+                        # Assign randomly
+                        field["dateStyle"] = random.choice(date_styles)
+                    elif field.get("type") == "date-range":
+                        # Remove any existing rangeStyle (from LLM if it generated one)
+                        if "rangeStyle" in field:
+                            del field["rangeStyle"]
+                        # Assign randomly
+                        field["rangeStyle"] = random.choice(range_styles)
+    
+    return form_dict
+
+
 def generate_form_page(page_number: int, industry: str, form_id: str, layout: str) -> Dict[str, Any]:
     """
     Generate a single form page using OpenAI GPT-4o.
@@ -375,6 +501,10 @@ Important rules:
 - IMPORTANT: Set the "required" field appropriately for each field. Fields that are essential for the form purpose should be required=true, while optional fields should be required=false. This affects form validation.
 - If layout is 'website-style', you MUST generate a rich 'websiteContext' object with realistic branding, navigation, and footer links appropriate for the industry.
 - For 'website-style', make the heroTitle and heroSubtitle very engaging and professional.
+- CRITICAL: DO NOT generate logoUrl in websiteContext. Always set logoUrl to null or omit it entirely. The UI automatically displays a placeholder logo based on the company name initial.
+- CRITICAL: DO NOT use "file" or "color" field types. These are not supported in the UI.
+- CRITICAL: For "country" field type, you MUST only use values from the allowed countries list (enforced by schema validation). The schema will reject invalid country names.
+- CRITICAL: For "state" field type, you MUST only use values from the 50 US states list (enforced by schema validation). The schema will reject invalid state names or abbreviations.
 
 Generate diverse forms - vary industries, complexity, and field types."""
 
@@ -409,12 +539,85 @@ Requirements:
   * NEVER use dates outside this 4-year range (2 years before to 2 years after today)
   * Format all dates as 'YYYY-MM-DD' strings
 - Use proper date formats and restrictions
+- CRITICAL: DO NOT generate 'dateStyle' or 'rangeStyle' fields - these are automatically assigned in round-robin fashion after generation
 - Make it realistic and useful for testing AI form-filling
 - The form should be specific to the {industry} industry/use case
+- CRITICAL: DO NOT use "file" or "color" field types. These are not supported in the UI.
+- CRITICAL: For "country" field type, only use values from the allowed countries list. The schema validation will enforce this - invalid countries will be rejected.
+- CRITICAL: For "state" field type, only use values from the 50 US states list. The schema validation will enforce this - invalid states will be rejected.
+- CRITICAL: For "address" field type, you MUST include the 'options' field with all valid addresses from the allowed addresses list. The address field acts as a searchable dropdown. Only use values from the allowed addresses list in both options and groundTruth. The schema validation will enforce this - invalid addresses will be rejected.
+- CRITICAL: For "address" field type, you MUST include the 'options' field with all valid addresses from the allowed addresses list. The LLM will see these options in the schema. Only use values from the allowed addresses list. The schema validation will enforce this - invalid addresses will be rejected.
 
-Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), use the exact layout "{layout}", set "required" appropriately for each field, and ensure ALL dates in groundTruth are within the allowed range ({min_date_str} to {max_date_str}). If layout is 'website-style', include detailed websiteContext."""
+Generate a unique, realistic form for {industry}. Remember: groundTruth must be the LAST property in the JSON, use the exact ID "{form_id}" (as a string), use the exact layout "{layout}", set "required" appropriately for each field, and ensure ALL dates in groundTruth are within the allowed range ({min_date_str} to {max_date_str}). If layout is 'website-style', include detailed websiteContext but DO NOT generate logoUrl - always set it to null or omit it. DO NOT use file or color field types."""
 
     try:
+        # Generate JSON schema from Pydantic model and customize for OpenAI
+        json_schema = FormDefinition.model_json_schema()
+        
+        # OpenAI requires additionalProperties: false at the top level
+        json_schema["additionalProperties"] = False
+        
+        # But we need additionalProperties: true for groundTruth to allow arbitrary field IDs
+        if "properties" in json_schema and "groundTruth" in json_schema["properties"]:
+            # Ensure groundTruth allows additional properties (arbitrary field IDs)
+            ground_truth_schema = json_schema["properties"]["groundTruth"]
+            if "type" in ground_truth_schema:
+                # If it's already an object type, add additionalProperties
+                ground_truth_schema["additionalProperties"] = True
+            elif "anyOf" in ground_truth_schema:
+                # Handle anyOf case
+                for schema_option in ground_truth_schema["anyOf"]:
+                    if schema_option.get("type") == "object":
+                        schema_option["additionalProperties"] = True
+            
+            # Add explicit country/state/address lists to groundTruth description
+            current_desc = ground_truth_schema.get("description", "")
+            ground_truth_schema["description"] = (
+                current_desc + 
+                " CRITICAL: For country field values, MUST use only: " + ", ".join(VALID_COUNTRIES_LIST) + 
+                ". For state field values, MUST use only these 50 US states: " + ", ".join(VALID_STATES_LIST) + 
+                ". For address field values, MUST use only: " + ", ".join(VALID_ADDRESSES_LIST) + 
+                ". Schema validation will reject invalid values."
+            )
+        
+        # Enhance schema with explicit country/state lists for LLM guidance
+        # The LLM reads the schema, so we add the lists directly in descriptions
+        if "properties" in json_schema and "pages" in json_schema["properties"]:
+            pages_schema = json_schema["properties"]["pages"]
+            if "items" in pages_schema and "properties" in pages_schema["items"]:
+                fields_schema = pages_schema["items"]["properties"].get("fields", {})
+                if "items" in fields_schema and "properties" in fields_schema["items"]:
+                    field_props = fields_schema["items"]["properties"]
+                    
+                    # Enhance options field description with explicit lists
+                    if "options" in field_props:
+                        current_desc = field_props.get("description", "")
+                        # Add explicit lists to description so LLM sees them in schema
+                        field_props["description"] = (
+                            current_desc + 
+                            " CRITICAL: If field type is 'country', options MUST be from this exact list: " + 
+                            ", ".join(VALID_COUNTRIES_LIST) + 
+                            ". If field type is 'state', options MUST be from these 50 US states: " + 
+                            ", ".join(VALID_STATES_LIST) + 
+                            ". If field type is 'address', options MUST be from: " + 
+                            ", ".join(VALID_ADDRESSES_LIST) + 
+                            ". Schema validation will reject invalid values."
+                        )
+                    
+                    # Enhance defaultValue field description
+                    if "defaultValue" in field_props:
+                        current_desc = field_props.get("description", "")
+                        field_props["description"] = (
+                            current_desc + 
+                            " CRITICAL: If field type is 'country', value MUST be from: " + 
+                            ", ".join(VALID_COUNTRIES_LIST) + 
+                            ". If field type is 'state', value MUST be from: " + 
+                            ", ".join(VALID_STATES_LIST) + 
+                            ". If field type is 'address', value MUST be from: " + 
+                            ", ".join(VALID_ADDRESSES_LIST) + 
+                            ". Schema validation will reject invalid values."
+                        )
+        
         response = client.beta.chat.completions.parse(
             model="gpt-4o",
             messages=[
@@ -427,17 +630,33 @@ Generate a unique, realistic form for {industry}. Remember: groundTruth must be 
                 "json_schema": {
                     "name": "form_definition",
                     "strict": False,
-                    "schema": FORM_PAGE_SCHEMA
+                    "schema": json_schema
                 }
             },
             temperature=0.8
         )
         
-        generated_form = json.loads(response.choices[0].message.content)
+        # Parse the response - OpenAI returns JSON string when using json_schema mode
+        response_content = response.choices[0].message.content
+        if isinstance(response_content, str):
+            parsed_data = json.loads(response_content)
+        else:
+            parsed_data = response_content
+        
+        # Validate and parse with Pydantic
+        generated_form_model = FormDefinition(**parsed_data)
+        
         # Ensure the ID and layout match what we requested
-        generated_form["id"] = form_id
-        generated_form["layout"] = layout
-        print(f"✓ Generated form #{page_number} ({industry}, {layout}): {generated_form.get('title', 'Unknown')}")
+        generated_form_model.id = form_id
+        generated_form_model.layout = layout
+        
+        # Convert to dict for return (maintains backward compatibility)
+        generated_form = generated_form_model.model_dump(exclude_none=False)
+        
+        # Assign dateStyle and rangeStyle randomly (post-processing)
+        generated_form = assign_date_styles_random(generated_form, form_id)
+        
+        print(f"✓ Generated form #{page_number} ({industry}, {layout}): {generated_form_model.title}")
         return generated_form
         
     except Exception as e:
@@ -449,9 +668,9 @@ def main():
     print("Starting form generation with OpenAI GPT-4o...")
     print("=" * 60)
     
-    # Load manual config to count existing forms
+    # Load manual config to count existing forms (from public folder)
     manual_config = {}
-    manual_config_file = "manual_config.json"
+    manual_config_file = "public/manual_config.json"
     if os.path.exists(manual_config_file):
         try:
             with open(manual_config_file, 'r', encoding='utf-8') as f:
@@ -461,8 +680,8 @@ def main():
             print(f"Warning: Could not load manual config: {e}")
             manual_config = {}
     
-    # Load existing LLM config if it exists
-    output_file = "llm_generated_config.json"
+    # Load existing LLM config if it exists (from public folder)
+    output_file = "public/llm_generated_config.json"
     existing_config = {}
     
     if os.path.exists(output_file):
@@ -479,10 +698,10 @@ def main():
     existing_llm_count = len(existing_config)
     start_id = manual_form_count + existing_llm_count + 1
     
-    # Generate 10 new forms
+    # Generate 20 new forms
     generated_forms = {}
     
-    for i in range(1, 11):
+    for i in range(1, 21):
         form_number = start_id + i - 1
         form_id = str(form_number)  # Use just the number as string
         
@@ -491,12 +710,15 @@ def main():
             print(f"⚠ Form {form_id} already exists, skipping...")
             continue
         
-        # Randomly select an industry
-        industry = random.choice(INDUSTRIES)
+        # Round-robin selection based on form number to ensure even distribution
+        # even across multiple runs of the script
+        industry_index = (form_number - 1) % len(INDUSTRIES)
+        industry = INDUSTRIES[industry_index]
         
-        # Randomly select a layout
+        # Round-robin selection for layout
         layouts = ["single-column", "two-column", "split-screen", "wizard-style", "website-style"]
-        selected_layout = random.choice(layouts)
+        layout_index = (form_number - 1) % len(layouts)
+        selected_layout = layouts[layout_index]
         
         try:
             form = generate_form_page(i, industry, form_id, selected_layout)
@@ -517,13 +739,58 @@ def main():
     # Merge with existing config
     all_forms = {**existing_config, **generated_forms}
     
-    # Save to file
+    # Calculate field distribution statistics
+    field_type_counts: Dict[str, int] = {}
+    date_style_counts: Dict[str, int] = {}
+    range_style_counts: Dict[str, int] = {}
+    
+    for form_id, form_data in all_forms.items():
+        if "pages" in form_data:
+            for page in form_data["pages"]:
+                if "fields" in page:
+                    for field in page["fields"]:
+                        field_type = field.get("type", "unknown")
+                        field_type_counts[field_type] = field_type_counts.get(field_type, 0) + 1
+                        
+                        # Count date styles
+                        if field_type == "date":
+                            date_style = field.get("dateStyle", "default")
+                            date_style_counts[date_style] = date_style_counts.get(date_style, 0) + 1
+                        
+                        # Count range styles
+                        if field_type == "date-range":
+                            range_style = field.get("rangeStyle", "single-calendar")
+                            range_style_counts[range_style] = range_style_counts.get(range_style, 0) + 1
+    
+    # Save to file (directly to public folder)
+    output_file = "public/llm_generated_config.json"
     try:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(all_forms, f, indent=2, ensure_ascii=False)
+        
         print("=" * 60)
         print(f"✓ Successfully saved {len(generated_forms)} new forms to {output_file}")
         print(f"  Total forms in file: {len(all_forms)}")
+        
+        # Print field distribution statistics
+        print("=" * 60)
+        print("FIELD DISTRIBUTION STATISTICS")
+        print("=" * 60)
+        print("\nField Type Distribution:")
+        for field_type, count in sorted(field_type_counts.items(), key=lambda x: x[1], reverse=True):
+            print(f"  {field_type:30s}: {count:4d}")
+        
+        if date_style_counts:
+            print("\nDate Picker Style Distribution:")
+            for style, count in sorted(date_style_counts.items(), key=lambda x: x[1], reverse=True):
+                print(f"  {style:30s}: {count:4d}")
+        
+        if range_style_counts:
+            print("\nDate Range Picker Style Distribution:")
+            for style, count in sorted(range_style_counts.items(), key=lambda x: x[1], reverse=True):
+                print(f"  {style:30s}: {count:4d}")
+        
+        print("=" * 60)
     except Exception as e:
         print(f"✗ Error saving to file: {str(e)}")
         raise

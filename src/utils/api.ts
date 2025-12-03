@@ -5,10 +5,9 @@
 interface FieldEval {
   expected: any;
   submitted: any;
-  score: number; // 0-1 for both fixed and dynamic fields
-  dynamic: boolean;
+  score: number; // 0-1 binary score
+  required: boolean; // Whether field is required
   inputType: string; // Field input type (text, email, date, etc.)
-  feedback?: string; // Only for dynamic fields
 }
 
 interface SaveEvaluationPayload {
@@ -19,8 +18,6 @@ interface SaveEvaluationPayload {
   layout?: string;
   inputToLLM?: string;
   field_eval: Record<string, FieldEval>;
-  fixed_field_score: number;
-  dynamic_field_score: number;
   overall_accuracy: number;
 }
 

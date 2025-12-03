@@ -47,16 +47,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       layout,
       inputToLLM,
       field_eval,
-      fixed_field_score,
-      dynamic_field_score,
       overall_accuracy
     } = req.body;
 
     // Validate required fields
-    if (!form_id || !field_eval || fixed_field_score === undefined || dynamic_field_score === undefined || overall_accuracy === undefined) {
+    if (!form_id || !field_eval || overall_accuracy === undefined) {
       return res.status(400).json({ 
         error: 'Missing required fields',
-        message: 'form_id, field_eval, fixed_field_score, dynamic_field_score, and overall_accuracy are required' 
+        message: 'form_id, field_eval, and overall_accuracy are required' 
       });
     }
 
@@ -70,10 +68,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         layout,
         input_to_llm,
         field_eval,
-        fixed_field_score,
-        dynamic_field_score,
         overall_accuracy
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING eval_id, created_at
     `;
 
@@ -85,8 +81,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       layout || null,
       inputToLLM || null,
       JSON.stringify(field_eval),
-      fixed_field_score,
-      dynamic_field_score,
       overall_accuracy
     ]);
 

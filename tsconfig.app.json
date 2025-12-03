@@ -27,5 +27,5 @@
     },
     "resolveJsonModule": true
   },
-  "include": ["src", "manual_config.json", "llm_generated_config.json"]
+  "include": ["src"]
 }

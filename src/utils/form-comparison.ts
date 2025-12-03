@@ -8,44 +8,37 @@ export interface ComparisonResult {
     expected: any;
     actual: any;
     match: boolean;
-    score?: number; // 0-1 for both fixed and dynamic fields
-    llmScore?: number; // 0-1 for dynamic fields evaluated by LLM (deprecated, use score)
-    llmFeedback?: string; // One-line feedback from LLM
+    score: number; // 0-1 binary score
     fieldType?: string; // Field type for categorization
+    required?: boolean; // Whether field is required
   }>;
   accuracy: number; // 0-100
-  fixedFieldScore: number; // Average accuracy of fixed/deterministic fields (0-100)
-  dynamicFieldScore: number; // Average LLM score of dynamic fields (0-100)
-  fixedFields: string[]; // Field IDs that are fixed/deterministic
-  dynamicFields: string[]; // Field IDs that are dynamic/non-deterministic
+  requiredFieldScore: number; // Average accuracy of required fields (0-100)
+  optionalFieldScore: number; // Average accuracy of optional fields (0-100)
+  requiredFields: string[]; // Field IDs that are required
+  optionalFields: string[]; // Field IDs that are optional
 }
 
 /**
- * Check if a field type is dynamic (requires LLM evaluation)
- */
-const isDynamicField = (fieldType: string): boolean => {
-  return fieldType === 'text' || fieldType === 'textarea' || fieldType === 'address';
-};
-
-/**
  * Compare form submission data against ground truth
+ * Uses binary scoring: required fields (1 if match, 0 if not), optional fields (1 if not null, 0 if null)
  * @param submittedData - The submitted form data
  * @param groundTruth - The expected ground truth values
- * @param formDefinition - Optional form definition to determine field types
- * @param llmEvaluations - Optional pre-computed LLM evaluations for dynamic fields
+ * @param formDefinition - Optional form definition to determine field types and required status
  */
 export const compareWithGroundTruth = async (
   submittedData: Record<string, any>,
   groundTruth: Record<string, any>,
-  formDefinition?: { pages: Array<{ fields: Array<{ id: string; type: string; label?: string }> }> },
-  llmEvaluations?: Record<string, { score: number; feedback?: string }>
+  formDefinition?: { pages: Array<{ fields: Array<{ id: string; type: string; label?: string; required?: boolean }> }> }
 ): Promise<ComparisonResult> => {
-  // Build field type map from form definition
+  // Build field type and required status maps from form definition
   const fieldTypeMap: Record<string, string> = {};
+  const fieldRequiredMap: Record<string, boolean> = {};
   if (formDefinition) {
     formDefinition.pages.forEach(page => {
       page.fields.forEach(field => {
         fieldTypeMap[field.id] = field.type;
+        fieldRequiredMap[field.id] = field.required ?? false;
       });
     });
   }
@@ -55,83 +48,71 @@ export const compareWithGroundTruth = async (
   let totalFields = 0;
   const missingFields: string[] = [];
   const extraFields: string[] = [];
-  const fixedFields: string[] = [];
-  const dynamicFields: string[] = [];
-  let fixedFieldCorrect = 0;
-  let fixedFieldTotal = 0;
-  let dynamicFieldScoreSum = 0;
-  let dynamicFieldTotal = 0;
+  const requiredFields: string[] = [];
+  const optionalFields: string[] = [];
+  let requiredFieldScoreSum = 0;
+  let requiredFieldTotal = 0;
+  let optionalFieldScoreSum = 0;
+  let optionalFieldTotal = 0;
 
   // Check all ground truth fields
   for (const fieldId of Object.keys(groundTruth)) {
     totalFields++;
     const expected = groundTruth[fieldId];
     const actual = submittedData[fieldId];
-    const fieldType = fieldTypeMap[fieldId] || 'text'; // Default to text if unknown
-    const isDynamic = isDynamicField(fieldType);
+    const fieldType = fieldTypeMap[fieldId] || 'text';
+    const isRequired = fieldRequiredMap[fieldId] ?? false;
     
-    if (isDynamic) {
-      dynamicFields.push(fieldId);
-      dynamicFieldTotal++;
+    if (isRequired) {
+      requiredFields.push(fieldId);
+      requiredFieldTotal++;
       
-      // MUST use LLM evaluation for dynamic fields - no fallback
-      if (llmEvaluations && llmEvaluations[fieldId]) {
-        const llmScore = llmEvaluations[fieldId].score;
-        const llmFeedback = llmEvaluations[fieldId].feedback || '';
-        const match = llmScore >= 0.8; // Threshold for "correct" (80% similarity)
-        
-        fieldResults[fieldId] = {
-          expected,
-          actual: actual ?? null,
-          match,
-          score: llmScore, // Use score instead of llmScore
-          llmScore, // Keep for backward compatibility
-          llmFeedback,
-          fieldType
-        };
-        
-        if (match) {
-          correctFields++;
-        }
-        dynamicFieldScoreSum += llmScore;
-      } else {
-        // If no LLM evaluation, mark as incorrect (should not happen)
-        fieldResults[fieldId] = {
-          expected,
-          actual: actual ?? null,
-          match: false,
-          score: 0.0,
-          llmScore: 0,
-          llmFeedback: 'LLM evaluation not available',
-          fieldType
-        };
-        dynamicFieldScoreSum += 0.0;
-      }
-    } else {
-      // Fixed/deterministic field
-      fixedFields.push(fieldId);
-      fixedFieldTotal++;
+      // For required fields: 1 if matches ground truth, 0 if not
       const match = compareValues(expected, actual, fieldId);
-      // For fixed fields, score is 1.0 if match, 0.0 if not
       const score = match ? 1.0 : 0.0;
       
       fieldResults[fieldId] = {
         expected,
         actual: actual ?? null,
         match,
-        score, // Add score for fixed fields (0.0 or 1.0)
-        fieldType
+        score,
+        fieldType,
+        required: true
       };
-
+      
       if (match) {
         correctFields++;
-        fixedFieldCorrect++;
       } else {
         if (actual === undefined || actual === null || actual === '' || 
             (Array.isArray(actual) && actual.length === 0)) {
           missingFields.push(fieldId);
         }
       }
+      
+      requiredFieldScoreSum += score;
+    } else {
+      optionalFields.push(fieldId);
+      optionalFieldTotal++;
+      
+      // For optional fields: 1 if not null, 0 if null
+      const isNotNull = actual !== undefined && actual !== null && actual !== '' && 
+                       !(Array.isArray(actual) && actual.length === 0);
+      const score = isNotNull ? 1.0 : 0.0;
+      
+      fieldResults[fieldId] = {
+        expected,
+        actual: actual ?? null,
+        match: isNotNull, // Match means "has value" for optional fields
+        score,
+        fieldType,
+        required: false
+      };
+      
+      if (isNotNull) {
+        correctFields++;
+      }
+      
+      optionalFieldScoreSum += score;
     }
   }
 
@@ -145,7 +126,7 @@ export const compareWithGroundTruth = async (
   // Calculate scores: sum all field scores (0-1) and divide by total
   let totalScoreSum = 0;
   
-  // Add all field scores (both fixed and dynamic use the score field)
+  // Add all field scores
   Object.keys(fieldResults).forEach(fieldId => {
     const score = fieldResults[fieldId].score ?? 0.0;
     totalScoreSum += score;
@@ -153,8 +134,8 @@ export const compareWithGroundTruth = async (
 
   // Overall accuracy: average of all field scores (0-1) converted to percentage
   const accuracy = totalFields > 0 ? (totalScoreSum / totalFields) * 100 : 0;
-  const fixedFieldScore = fixedFieldTotal > 0 ? (fixedFieldCorrect / fixedFieldTotal) * 100 : 100;
-  const dynamicFieldScore = dynamicFieldTotal > 0 ? (dynamicFieldScoreSum / dynamicFieldTotal) * 100 : 100;
+  const requiredFieldScore = requiredFieldTotal > 0 ? (requiredFieldScoreSum / requiredFieldTotal) * 100 : 100;
+  const optionalFieldScore = optionalFieldTotal > 0 ? (optionalFieldScoreSum / optionalFieldTotal) * 100 : 100;
 
   return {
     totalFields,
@@ -164,10 +145,10 @@ export const compareWithGroundTruth = async (
     extraFields,
     fieldResults,
     accuracy: Math.round(accuracy * 100) / 100,
-    fixedFieldScore: Math.round(fixedFieldScore * 100) / 100,
-    dynamicFieldScore: Math.round(dynamicFieldScore * 100) / 100,
-    fixedFields,
-    dynamicFields
+    requiredFieldScore: Math.round(requiredFieldScore * 100) / 100,
+    optionalFieldScore: Math.round(optionalFieldScore * 100) / 100,
+    requiredFields,
+    optionalFields
   };
 };
 

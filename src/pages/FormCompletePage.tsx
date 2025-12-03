@@ -164,42 +164,22 @@ const FormCompletePage = () => {
           </Button>
         </div>
 
-        {/* Score Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Fixed Field Score */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Fixed Fields Score
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold text-blue-600">
-                {comparison.fixedFieldScore.toFixed(1)}%
-              </div>
-              <div className="text-sm text-muted-foreground mt-2">
-                {comparison.fixedFields.length} deterministic fields
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Dynamic Field Score */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Dynamic Fields Score
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-4xl font-bold text-orange-600">
-                {comparison.dynamicFieldScore.toFixed(1)}%
-              </div>
-              <div className="text-sm text-muted-foreground mt-2">
-                {comparison.dynamicFields.length} text fields (AI-evaluated)
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Overall Accuracy Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Overall Accuracy
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-4xl font-bold text-blue-600">
+              {comparison.accuracy.toFixed(1)}%
+            </div>
+            <div className="text-sm text-muted-foreground mt-2">
+              {comparison.totalFields} total fields
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Detailed Results */}
         <Card>
@@ -215,8 +195,8 @@ const FormCompletePage = () => {
                 const field = formDefinition?.pages
                   .flatMap(p => p.fields)
                   .find(f => f.id === fieldId);
-                const isDynamic = comparison.dynamicFields.includes(fieldId);
-                const isFixed = comparison.fixedFields.includes(fieldId);
+                const isRequired = comparison.requiredFields.includes(fieldId);
+                const isOptional = comparison.optionalFields.includes(fieldId);
                 
                 return (
                   <div
@@ -228,14 +208,14 @@ const FormCompletePage = () => {
                         <h3 className="font-semibold">
                           {field?.label || fieldId}
                         </h3>
-                        {isDynamic && (
-                          <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
-                            Dynamic
+                        {isRequired && (
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                            Required
                           </Badge>
                         )}
-                        {isFixed && (
-                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                            Fixed
+                        {isOptional && (
+                          <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                            Optional
                           </Badge>
                         )}
                         {result.match ? (
@@ -249,12 +229,10 @@ const FormCompletePage = () => {
                             Incorrect
                           </Badge>
                         )}
-                        {isDynamic && result.llmScore !== undefined && (
-                          <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
-                            <TrendingUp className="w-3 h-3 mr-1" />
-                            {(result.llmScore * 100).toFixed(0)}%
-                          </Badge>
-                        )}
+                        <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                          <TrendingUp className="w-3 h-3 mr-1" />
+                          {(result.score * 100).toFixed(0)}%
+                        </Badge>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-sm">
@@ -271,21 +249,14 @@ const FormCompletePage = () => {
                         </div>
                       </div>
                     </div>
-                    {isDynamic && result.llmScore !== undefined && (
-                      <div className="mt-2 pt-2 border-t">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-medium text-muted-foreground">AI Score:</span>
-                          <span className="text-sm font-bold text-purple-700">
-                            {(result.llmScore * 100).toFixed(1)}%
-                          </span>
-                        </div>
-                        {result.llmFeedback && (
-                          <div className="text-xs text-muted-foreground italic">
-                            "{result.llmFeedback}"
-                          </div>
-                        )}
+                    <div className="mt-2 pt-2 border-t">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-muted-foreground">Score:</span>
+                        <span className="text-sm font-bold text-purple-700">
+                          {(result.score * 100).toFixed(0)}%
+                        </span>
                       </div>
-                    )}
+                    </div>
                   </div>
                 );
               })}
@@ -293,93 +264,13 @@ const FormCompletePage = () => {
           </CardContent>
         </Card>
 
-        {/* Fixed Fields Average Score */}
-        {comparison.fixedFields.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Fixed Fields Average Score</CardTitle>
-              <CardDescription>
-                Average score across all {comparison.fixedFields.length} fixed field(s)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center">
-                <div className="text-5xl font-bold text-blue-600 mb-2">
-                  {comparison.fixedFieldScore.toFixed(1)}%
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  Based on exact match evaluation of deterministic fields
-                </div>
-                <div className="mt-4 space-y-1">
-                  {comparison.fixedFields.map(fieldId => {
-                    const result = comparison.fieldResults[fieldId];
-                    if (!result) return null;
-                    const score = result.match ? 100 : 0;
-                    return (
-                      <div key={fieldId} className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">
-                          {formDefinition?.pages
-                            .flatMap(p => p.fields)
-                            .find(f => f.id === fieldId)?.label || fieldId}
-                        </span>
-                        <span className="font-medium">
-                          {score.toFixed(0)}%
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Dynamic Fields Average Score */}
-        {comparison.dynamicFields.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Dynamic Fields Average Score</CardTitle>
-              <CardDescription>
-                Average AI-evaluated score across all {comparison.dynamicFields.length} dynamic field(s)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center">
-                <div className="text-5xl font-bold text-orange-600 mb-2">
-                  {comparison.dynamicFieldScore.toFixed(1)}%
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  Based on LLM evaluation of text/textarea/address fields
-                </div>
-                <div className="mt-4 space-y-1">
-                  {comparison.dynamicFields.map(fieldId => {
-                    const result = comparison.fieldResults[fieldId];
-                    if (!result || result.llmScore === undefined) return null;
-                    return (
-                      <div key={fieldId} className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">
-                          {formDefinition?.pages
-                            .flatMap(p => p.fields)
-                            .find(f => f.id === fieldId)?.label || fieldId}
-                        </span>
-                        <span className="font-medium">
-                          {(result.llmScore * 100).toFixed(1)}%
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Overall Accuracy */}
         <Card>
           <CardHeader>
             <CardTitle>Overall Accuracy</CardTitle>
             <CardDescription>
-              Average of all field scores (fixed and dynamic) across {comparison.totalFields} total field(s)
+              Average of all field scores across {comparison.totalFields} total field(s)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -388,7 +279,7 @@ const FormCompletePage = () => {
                 {comparison.accuracy.toFixed(1)}%
               </div>
               <div className="text-sm text-muted-foreground">
-                Calculated by summing all field scores (0-1) and dividing by total number of fields
+                Calculated by summing all field scores (0-1 binary) and dividing by total number of fields
               </div>
             </div>
           </CardContent>
