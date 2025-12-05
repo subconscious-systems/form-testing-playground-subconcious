@@ -16,7 +16,7 @@ MANUAL_CONFIG_PATH = PUBLIC_DIR / "manual_config.json"
 LLM_CONFIG_PATH = PUBLIC_DIR / "llm_generated_config.json"
 
 # Valid date styles and range styles
-DATE_STYLES = ["default", "ios-scroll", "text-input"]
+DATE_STYLES = ["default", "text-input", "dropdown"]
 RANGE_STYLES = ["single-calendar", "dual-calendar"]
 
 # Valid layouts
@@ -159,21 +159,23 @@ def print_statistics(stats: Dict[str, Any], source_name: str):
         percentage = (count / stats['total_fields'] * 100) if stats['total_fields'] > 0 else 0
         print(f"   {field_type:25s}: {count:3d} ({percentage:5.1f}%)")
     
-    print(f"\n📅 Date Picker Styles Distribution:")
     total_date_fields = sum(stats['date_styles'].values())
-    for style in DATE_STYLES + ['not-set']:
-        count = stats['date_styles'].get(style, 0)
-        if total_date_fields > 0:
-            percentage = (count / total_date_fields * 100)
-            print(f"   {style:20s}: {count:3d} ({percentage:5.1f}%)")
+    if total_date_fields > 0:
+        print(f"\n📅 Date Picker Styles Distribution:")
+        for style in DATE_STYLES + ['not-set']:
+            count = stats['date_styles'].get(style, 0)
+            if count > 0:  # Only show styles that are actually used
+                percentage = (count / total_date_fields * 100)
+                print(f"   {style:20s}: {count:3d} ({percentage:5.1f}%)")
     
-    print(f"\n📆 Date Range Picker Styles Distribution:")
     total_range_fields = sum(stats['range_styles'].values())
-    for style in RANGE_STYLES + ['not-set']:
-        count = stats['range_styles'].get(style, 0)
-        if total_range_fields > 0:
-            percentage = (count / total_range_fields * 100)
-            print(f"   {style:20s}: {count:3d} ({percentage:5.1f}%)")
+    if total_range_fields > 0:
+        print(f"\n📆 Date Range Picker Styles Distribution:")
+        for style in RANGE_STYLES + ['not-set']:
+            count = stats['range_styles'].get(style, 0)
+            if count > 0:  # Only show styles that are actually used
+                percentage = (count / total_range_fields * 100)
+                print(f"   {style:20s}: {count:3d} ({percentage:5.1f}%)")
     
     if stats['date_fields_with_restrictions']:
         print(f"\n🔒 Date Field Restrictions:")

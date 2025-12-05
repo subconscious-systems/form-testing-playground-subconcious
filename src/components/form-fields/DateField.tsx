@@ -1,13 +1,8 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BaseField } from "./BaseField";
 import { FormField } from "@/types/form-config";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 
 interface DateFieldProps {
   field: FormField;
@@ -17,7 +12,27 @@ interface DateFieldProps {
 
 export const DateField = ({ field, value, onChange }: DateFieldProps) => {
   const dateStyle = field.dateStyle || "default";
-  const [isOpen, setIsOpen] = useState(false);
+  
+  // States for dropdown picker (must be at top level due to React Hooks rules)
+  const [dropdownMonth, setDropdownMonth] = useState<string>(
+    value ? String(value.getMonth() + 1) : ""
+  );
+  const [dropdownDay, setDropdownDay] = useState<string>(
+    value ? String(value.getDate()) : ""
+  );
+  const [dropdownYear, setDropdownYear] = useState<string>(
+    value ? String(value.getFullYear()) : ""
+  );
+  
+  // State for text-input (must be at top level)
+  const formatDateForInput = (date: Date | undefined): string => {
+    if (!date) return '';
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  };
+  const [inputValue, setInputValue] = useState(formatDateForInput(value));
 
   // Determine min/max based on "allowed" parameter
   const today = new Date();
@@ -74,139 +89,126 @@ export const DateField = ({ field, value, onChange }: DateFieldProps) => {
     );
   }
 
-  // iOS-style scrollable picker
-  if (dateStyle === "ios-scroll") {
-    const currentDate = value || new Date();
-    const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
-    const [selectedDay, setSelectedDay] = useState(currentDate.getDate());
-    const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  // Update dropdown state when value changes
+  useEffect(() => {
+    if (value && dateStyle === "dropdown") {
+      setDropdownMonth(String(value.getMonth() + 1));
+      setDropdownDay(String(value.getDate()));
+      setDropdownYear(String(value.getFullYear()));
+    }
+  }, [value, dateStyle]);
 
-    const months = Array.from({ length: 12 }, (_, i) => i);
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 100 }, (_, i) => currentYear - 50 + i);
-    
-    const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  // Update text-input state when value changes
+  useEffect(() => {
+    if (dateStyle === "text-input") {
+      setInputValue(formatDateForInput(value));
+    }
+  }, [value, dateStyle]);
 
-    const handleDateChange = (month: number, day: number, year: number) => {
-      const validDay = Math.min(day, new Date(year, month + 1, 0).getDate());
-      setSelectedMonth(month);
-      setSelectedDay(validDay);
-      setSelectedYear(year);
-      const newDate = new Date(year, month, validDay);
-      if (newDate >= minDate && newDate <= maxDate) {
-        onChange(newDate);
-      }
+  // Dropdown style (separate dropdowns for month, day, year)
+  if (dateStyle === "dropdown") {
+    // Generate year options (±50 years from 2025)
+    const years = Array.from({ length: 101 }, (_, i) => 2025 - 50 + i);
+    const months = [
+      { value: "1", label: "January" },
+      { value: "2", label: "February" },
+      { value: "3", label: "March" },
+      { value: "4", label: "April" },
+      { value: "5", label: "May" },
+      { value: "6", label: "June" },
+      { value: "7", label: "July" },
+      { value: "8", label: "August" },
+      { value: "9", label: "September" },
+      { value: "10", label: "October" },
+      { value: "11", label: "November" },
+      { value: "12", label: "December" },
+    ];
+
+    // Calculate days based on selected month and year
+    const getDaysInMonth = (month: number, year: number) => {
+      return new Date(year, month, 0).getDate();
     };
 
-    // Update selected values when value prop changes
+    const monthNum = dropdownMonth ? parseInt(dropdownMonth, 10) : 1;
+    const yearNum = dropdownYear ? parseInt(dropdownYear, 10) : 2025;
+    const daysInMonth = getDaysInMonth(monthNum, yearNum);
+    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+    // Update date when all three fields are selected
     useEffect(() => {
-      if (value) {
-        const valueMonth = value.getMonth();
-        const valueDay = value.getDate();
-        const valueYear = value.getFullYear();
-        setSelectedMonth(valueMonth);
-        setSelectedDay(valueDay);
-        setSelectedYear(valueYear);
+      if (dropdownMonth && dropdownDay && dropdownYear) {
+        const month = parseInt(dropdownMonth, 10);
+        const day = parseInt(dropdownDay, 10);
+        const year = parseInt(dropdownYear, 10);
+        
+        // Validate day exists in selected month/year
+        const maxDays = getDaysInMonth(month, year);
+        const validDay = Math.min(day, maxDays);
+        
+        const newDate = new Date(year, month - 1, validDay);
+        if (newDate >= minDate && newDate <= maxDate) {
+          onChange(newDate);
+        }
+      } else {
+        onChange(undefined);
       }
-    }, [value]);
+    }, [dropdownMonth, dropdownDay, dropdownYear]);
 
     return (
       <BaseField field={field} value={value} onChange={onChange}>
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className={cn("w-full justify-start text-left font-normal", !value && "text-muted-foreground")}
-              type="button"
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {value ? format(value, "PPP") : "Pick a date"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <div className="flex gap-3 p-4 bg-background border-b">
-              {/* Month Scroll */}
-              <div className="flex flex-col items-center min-w-[80px]">
-                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Month</div>
-                <div className="h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 snap-y snap-mandatory">
-                  {months.map((month) => {
-                    const monthName = new Date(2000, month, 1).toLocaleString('default', { month: 'short' });
-                    return (
-                      <div
-                        key={month}
-                        onClick={() => handleDateChange(month, Math.min(selectedDay, new Date(selectedYear, month + 1, 0).getDate()), selectedYear)}
-                        className={cn(
-                          "px-4 py-2 cursor-pointer text-sm rounded hover:bg-accent snap-center",
-                          selectedMonth === month && "bg-primary text-primary-foreground font-semibold"
-                        )}
-                      >
-                        {monthName}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+        <div className="grid grid-cols-3 gap-2">
+          {/* Month Dropdown */}
+          <Select value={dropdownMonth} onValueChange={setDropdownMonth}>
+            <SelectTrigger>
+              <SelectValue placeholder="Month" />
+            </SelectTrigger>
+            <SelectContent>
+              {months.map((month) => (
+                <SelectItem key={month.value} value={month.value}>
+                  {month.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-              {/* Day Scroll */}
-              <div className="flex flex-col items-center min-w-[60px]">
-                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Day</div>
-                <div className="h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 snap-y snap-mandatory">
-                  {days.map((day) => (
-                    <div
-                      key={day}
-                      onClick={() => handleDateChange(selectedMonth, day, selectedYear)}
-                      className={cn(
-                        "px-3 py-2 cursor-pointer text-sm rounded hover:bg-accent text-center snap-center",
-                        selectedDay === day && "bg-primary text-primary-foreground font-semibold"
-                      )}
-                    >
-                      {day}
-                    </div>
-                  ))}
-                </div>
-              </div>
+          {/* Day Dropdown */}
+          <Select 
+            value={dropdownDay} 
+            onValueChange={setDropdownDay}
+            disabled={!dropdownMonth}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Day" />
+            </SelectTrigger>
+            <SelectContent>
+              {days.map((day) => (
+                <SelectItem key={day} value={String(day)}>
+                  {day}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-              {/* Year Scroll */}
-              <div className="flex flex-col items-center min-w-[80px]">
-                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Year</div>
-                <div className="h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 snap-y snap-mandatory">
-                  {years.map((year) => (
-                    <div
-                      key={year}
-                      onClick={() => handleDateChange(selectedMonth, Math.min(selectedDay, new Date(year, selectedMonth + 1, 0).getDate()), year)}
-                      className={cn(
-                        "px-4 py-2 cursor-pointer text-sm rounded hover:bg-accent text-center snap-center",
-                        selectedYear === year && "bg-primary text-primary-foreground font-semibold"
-                      )}
-                    >
-                      {year}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="p-3 border-t flex justify-end">
-              <Button variant="default" size="sm" onClick={() => setIsOpen(false)}>
-                Done
-              </Button>
-            </div>
-          </PopoverContent>
-        </Popover>
+          {/* Year Dropdown */}
+          <Select value={dropdownYear} onValueChange={setDropdownYear}>
+            <SelectTrigger>
+              <SelectValue placeholder="Year" />
+            </SelectTrigger>
+            <SelectContent>
+              {years.map((year) => (
+                <SelectItem key={year} value={String(year)}>
+                  {year}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </BaseField>
     );
   }
 
   // Text input style (MM/DD/YYYY)
   if (dateStyle === "text-input") {
-    const formatDateForInput = (date: Date | undefined): string => {
-      if (!date) return '';
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const year = date.getFullYear();
-      return `${month}/${day}/${year}`;
-    };
-
     const parseDateFromInput = (input: string): Date | undefined => {
       // Must match exactly MM/DD/YYYY format with 4-digit year
       const match = input.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
@@ -238,13 +240,6 @@ export const DateField = ({ field, value, onChange }: DateFieldProps) => {
       }
       return undefined;
     };
-
-    const [inputValue, setInputValue] = useState(formatDateForInput(value));
-
-    // Sync input value when value prop changes
-    useEffect(() => {
-      setInputValue(formatDateForInput(value));
-    }, [value]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       let value = e.target.value;

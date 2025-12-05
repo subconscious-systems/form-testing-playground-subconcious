@@ -18,7 +18,7 @@ export { NumberField } from "./NumberField";
 export { SliderField } from "./SliderField";
 export { CurrencyField } from "./CurrencyField";
 export { StarRatingField } from "./StarRatingField";
-export { AddressField } from "./AddressField";
+export { HomeAddressField } from "./HomeAddressField";
 export { CountryField } from "./CountryField";
 export { StateField } from "./StateField";
 export { ZipField } from "./ZipField";
