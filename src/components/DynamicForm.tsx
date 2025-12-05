@@ -30,7 +30,7 @@ import {
   SliderField,
   CurrencyField,
   StarRatingField,
-  AddressField,
+  HomeAddressField,
   CountryField,
   StateField,
   ZipField,
@@ -318,8 +318,8 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
         return <CurrencyField {...commonProps} value={value || ""} />;
       case "star-rating":
         return <StarRatingField {...commonProps} value={value || 0} />;
-      case "address":
-        return <AddressField {...commonProps} value={value || ""} />;
+      case "home-address":
+        return <HomeAddressField {...commonProps} value={value || ""} />;
       case "country":
         return <CountryField {...commonProps} value={value || ""} />;
       case "state":
