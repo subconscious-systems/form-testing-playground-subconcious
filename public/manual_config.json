@@ -25,31 +25,33 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "Please enter the full name as Robert Martinez. Make sure to spell it exactly as provided: Robert Martinez.",
+        "instruction": "Please enter my full name, which is Robert Martinez, into the form.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "The full name to be entered is Robert Martinez. Ensure that the spelling is correct: Robert Martinez.",
+        "instruction": "The full name to be entered in the form is Robert Martinez.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "You need to input the full name, which is Robert Martinez. Verify that it is spelled as Robert Martinez.",
+        "instruction": "Make sure to fill in the full name field with Robert Martinez.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "Enter the full name in the field: Robert Martinez. Double-check for any spelling errors: Robert Martinez.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "",
+        "masked": true,
+        "maskedFields": [
+          "fullName"
+        ]
       },
       {
         "id": "task_5",
-        "instruction": "Fill in the full name as Robert Martinez. Confirm that it matches the provided spelling: Robert Martinez.",
+        "instruction": "For this task, you need to input the full name Robert Martinez in the designated field.",
         "masked": false,
         "maskedFields": []
       }
@@ -81,37 +83,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I recently used the service and I must say, the service was excellent and exceeded my expectations. I would definitely recommend it to others.",
+        "instruction": "I recently used a service and I must say that the service was excellent and exceeded my expectations. I would definitely recommend it to others.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "I recently used the service and I must say, it was a great experience.",
-        "masked": true,
-        "maskedFields": [
-          "feedback"
-        ]
+        "instruction": "The service I experienced was truly outstanding and surpassed what I had anticipated. I am more than happy to recommend it to others.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "I had a wonderful experience using the service recently.",
-        "masked": true,
-        "maskedFields": [
-          "feedback"
-        ]
+        "instruction": "I had an excellent experience with the service, which went beyond my expectations. I would certainly suggest it to others.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "I tried the service and was very pleased with the outcome.",
-        "masked": true,
-        "maskedFields": [
-          "feedback"
-        ]
+        "instruction": "My feedback on the service is that it was excellent and exceeded my expectations. I would wholeheartedly recommend it to others.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "I had the opportunity to use the service recently, and I can confidently say that the service was excellent and exceeded my expectations. I would definitely recommend it to others.",
+        "instruction": "The service provided was excellent and went beyond my expectations. I would definitely recommend it to others.",
         "masked": false,
         "maskedFields": []
       }
@@ -143,7 +139,7 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "Please enter my phone number as 5551234567.",
+        "instruction": "Please enter my phone number, which is 5551234567.",
         "masked": false,
         "maskedFields": []
       },
@@ -155,19 +151,23 @@
       },
       {
         "id": "task_3",
-        "instruction": "Kindly fill in the phone number field with 5551234567.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "[No instruction available for this task.]",
+        "masked": true,
+        "maskedFields": [
+          "phone"
+        ]
       },
       {
         "id": "task_4",
-        "instruction": "Make sure to enter the phone number as 5551234567.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "[No instruction available for this task.]",
+        "masked": true,
+        "maskedFields": [
+          "phone"
+        ]
       },
       {
         "id": "task_5",
-        "instruction": "For the phone number, please use 5551234567.",
+        "instruction": "My contact number is 5551234567.",
         "masked": false,
         "maskedFields": []
       }
@@ -199,31 +199,35 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "Please enter the email address exactly as follows: jennifer.white@email.com. Ensure there are no typos or additional spaces.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "",
+        "masked": true,
+        "maskedFields": [
+          "email"
+        ]
       },
       {
         "id": "task_2",
-        "instruction": "The email address you need to input is jennifer.white@email.com. Double-check for accuracy before submission.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "",
+        "masked": true,
+        "maskedFields": [
+          "email"
+        ]
       },
       {
         "id": "task_3",
-        "instruction": "Make sure to fill in the email field with the following: jennifer.white@email.com. Verify that it matches exactly.",
+        "instruction": "My email address is jennifer.white@email.com.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "For the email address, type in jennifer.white@email.com. Confirm that it's entered correctly without any mistakes.",
+        "instruction": "You can reach me at my email, which is jennifer.white@email.com.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "Input the email address as jennifer.white@email.com. Be precise and ensure it is exactly as stated.",
+        "instruction": "Please note my email address: jennifer.white@email.com.",
         "masked": false,
         "maskedFields": []
       }
@@ -255,35 +259,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "Please enter the website URL as follows: https://www.example-portfolio.com. Make sure to input it exactly as given.",
+        "instruction": "Please enter the website URL as https://www.example-portfolio.com.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "The website URL you need to enter is https://www.example-portfolio.com. Please ensure it is typed correctly.",
+        "instruction": "The website URL you need to input is https://www.example-portfolio.com.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "",
-        "masked": true,
-        "maskedFields": [
-          "website"
-        ]
+        "instruction": "Input the website URL: https://www.example-portfolio.com.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "Please ensure all required fields are completed accurately.",
-        "masked": true,
-        "maskedFields": [
-          "website"
-        ]
+        "instruction": "Kindly fill in the website URL field with https://www.example-portfolio.com.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "The URL to be entered is https://www.example-portfolio.com. Please verify the accuracy before submission.",
+        "instruction": "Ensure the website URL is entered as https://www.example-portfolio.com.",
         "masked": false,
         "maskedFields": []
       }
@@ -314,35 +314,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I confirm that I agree to the terms and conditions as outlined in the form. My agreement is indicated by checking the box.",
+        "instruction": "I acknowledge that I have read and agree to the terms and conditions as indicated by checking the box.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "[No instruction available due to masked fields.]",
-        "masked": true,
-        "maskedFields": [
-          "agreeToTerms"
-        ]
+        "instruction": "By selecting the checkbox, I confirm my agreement to the terms and conditions provided.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "I acknowledge that I have read and agree to the terms and conditions by selecting the checkbox provided.",
+        "instruction": "I have reviewed the terms and conditions and express my agreement by marking the checkbox.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "[No instruction available due to masked fields.]",
-        "masked": true,
-        "maskedFields": [
-          "agreeToTerms"
-        ]
+        "instruction": "I hereby agree to the terms and conditions, as evidenced by my selection of the checkbox.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "I have reviewed and agreed to the terms and conditions by marking the checkbox accordingly.",
+        "instruction": "I affirm my agreement to the terms and conditions by ticking the checkbox.",
         "masked": false,
         "maskedFields": []
       }
@@ -373,31 +369,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "To ensure you receive all important updates, please enable email notifications by setting the switch to enabled.",
+        "instruction": "To ensure you receive all the latest updates, make sure to enable email notifications by setting the switch to 'enabled'.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "Make sure to toggle the switch to enable email notifications so you don't miss any crucial information.",
+        "instruction": "Please enable email notifications by setting the switch to 'enabled' so you can stay informed with the latest news and updates.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "Activate email notifications by switching the toggle to the enabled position to stay informed.",
+        "instruction": "Make sure to set the switch to 'enabled' to activate email notifications and keep up with important information.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "For continuous updates, set the email notifications switch to enabled.",
+        "instruction": "Enable your email notifications by switching the toggle to 'enabled' to stay updated with all necessary communications.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "Ensure the email notifications are turned on by enabling the switch for uninterrupted updates.",
+        "instruction": "Set the switch to 'enabled' to turn on email notifications and ensure you don't miss out on any important updates.",
         "masked": false,
         "maskedFields": []
       }
@@ -437,33 +433,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I need to fill out the form but I can't provide the country information for this task.",
-        "masked": true,
-        "maskedFields": [
-          "country"
-        ]
+        "instruction": "Please select your country from the list provided. The correct selection for my country is Canada.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "For this form, I will select my country as Canada.",
+        "instruction": "When choosing a country from the dropdown menu, ensure that you select Canada as that is my country.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "In this form, I am required to select my country, and I choose Canada.",
+        "instruction": "For the country selection field, please choose Canada, as it is the correct option for my location.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "I need to complete the form by selecting my country, which is Canada.",
+        "instruction": "Make sure to select Canada from the country list, as it accurately represents my country of residence.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "The form requires me to specify my country, and I will select Canada.",
+        "instruction": "In the dropdown menu for country selection, please choose Canada, as that is my designated country.",
         "masked": false,
         "maskedFields": []
       }
@@ -500,33 +494,35 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "For this form, I need to select my preferred payment method. I choose to pay by Credit Card.",
+        "instruction": "I would like to select a payment method for my transaction. My preferred option is to use a Credit Card.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "In filling out this form, I will select my payment method. My preference is to use a Credit Card.",
+        "instruction": "For the payment method, I choose to pay by Credit Card, as it is the most convenient option for me.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "As I complete this form, I will indicate my payment method. I prefer to pay using a Credit Card.",
+        "instruction": "Please note that I have selected Credit Card as my payment method for this transaction.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "When selecting a payment method on this form, I choose to use a Credit Card.",
+        "instruction": "I am opting to pay by Credit Card, which is my preferred payment method.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "To complete this form, I will specify my payment method, which is a Credit Card.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "",
+        "masked": true,
+        "maskedFields": [
+          "paymentMethod"
+        ]
       }
     ]
   },
@@ -568,31 +564,33 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I have a keen interest in Technology, Sports, and Music, and I would like to select these as my interests.",
+        "instruction": "I am interested in Technology, Sports, and Music. These are the areas that captivate my attention the most.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "Please note that my interests include Technology, Sports, and Music, which I would like to select.",
+        "instruction": "My interests include Technology, Sports, and Music. I find these topics to be the most engaging and enjoyable.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "I am interested in Technology, Sports, and Music, and I would like to choose these options.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "[No information about interests is provided in this task.]",
+        "masked": true,
+        "maskedFields": [
+          "interests"
+        ]
       },
       {
         "id": "task_4",
-        "instruction": "My interests lie in Technology, Sports, and Music, and I want to select these as my preferred interests.",
+        "instruction": "Technology, Sports, and Music are the fields that I am passionate about. These interests define my hobbies and activities.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "I would like to indicate that my interests are in Technology, Sports, and Music, and I wish to select these options.",
+        "instruction": "The areas that I am interested in are Technology, Sports, and Music. These are the subjects I focus on the most.",
         "masked": false,
         "maskedFields": []
       }
@@ -638,31 +636,33 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I have expertise in several programming languages and frameworks. Specifically, I am skilled in Python, JavaScript, and React, which I use frequently in my projects.",
+        "instruction": "I have expertise in a variety of programming languages and frameworks. Specifically, I am skilled in Python, JavaScript, and React. These are the primary technologies I use in my projects.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "My programming skills include Python, JavaScript, and React. These are the languages and frameworks I am most comfortable with and have extensive experience using.",
+        "instruction": "When it comes to programming, my skill set includes Python, JavaScript, and React. These are the languages and frameworks I am most proficient in and utilize regularly.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "When it comes to programming, I am proficient in Python, JavaScript, and React. These skills are integral to my work, and I apply them regularly in various projects.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "As a programmer, I have developed skills in several key areas, but I won't be specifying them at this moment.",
+        "masked": true,
+        "maskedFields": [
+          "skills"
+        ]
       },
       {
         "id": "task_4",
-        "instruction": "I am well-versed in programming languages and frameworks such as Python, JavaScript, and React. These are the primary tools I utilize in my software development tasks.",
+        "instruction": "My programming skills encompass a range of languages and frameworks. I am particularly proficient in Python, JavaScript, and React, which I use extensively in my work.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "My technical skills encompass Python, JavaScript, and React. I rely on these programming languages and frameworks to execute my development projects effectively.",
+        "instruction": "In terms of programming, I have honed my skills in Python, JavaScript, and React. These are the main technologies I work with and have a strong command over.",
         "masked": false,
         "maskedFields": []
       }
@@ -694,21 +694,19 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I am unable to provide my date of birth at this time.",
-        "masked": true,
-        "maskedFields": [
-          "dateOfBirth"
-        ]
+        "instruction": "Please enter your date of birth as 08-15-1992.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "Please enter my date of birth as 08-15-1992.",
+        "instruction": "Your birth date should be entered as 08-15-1992.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "I'm not disclosing my date of birth right now.",
+        "instruction": "[No instruction available due to masked fields.]",
         "masked": true,
         "maskedFields": [
           "dateOfBirth"
@@ -716,17 +714,15 @@
       },
       {
         "id": "task_4",
-        "instruction": "My date of birth is 08-15-1992, please make sure it is entered correctly.",
+        "instruction": "Kindly fill in your date of birth: 08-15-1992.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "I prefer not to share my date of birth in this instance.",
-        "masked": true,
-        "maskedFields": [
-          "dateOfBirth"
-        ]
+        "instruction": "Make sure to enter your date of birth as 08-15-1992.",
+        "masked": false,
+        "maskedFields": []
       }
     ]
   },
@@ -755,33 +751,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "Please ensure that the meeting is scheduled for the preferred time of 14:30.",
+        "instruction": "I need to schedule a meeting and my preferred meeting time is 14:30.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "The meeting should be set for the preferred time, which is 14:30.",
+        "instruction": "Please set the meeting time to my preferred time, which is 14:30.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "Please select the meeting time as per your preference.",
-        "masked": true,
-        "maskedFields": [
-          "meetingTime"
-        ]
+        "instruction": "For the meeting, I would like to choose 14:30 as the preferred time.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "Make sure to choose 14:30 as the preferred time for the meeting.",
+        "instruction": "The time I prefer for the meeting is 14:30, please select this time.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "The preferred meeting time is 14:30, so please set it accordingly.",
+        "instruction": "Kindly select 14:30 as the preferred meeting time for the schedule.",
         "masked": false,
         "maskedFields": []
       }
@@ -815,31 +809,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I am planning my vacation and have decided on the dates. My vacation will start on July 1, 2024, and end on July 15, 2024. Please ensure these dates are correctly noted for my vacation period.",
+        "instruction": "For my upcoming vacation, I have planned a date range starting from July 1, 2024, and ending on July 15, 2024. This period has been selected to ensure a relaxing break.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "For my upcoming vacation, I have selected the date range from July 1, 2024, to July 15, 2024. Kindly make sure these dates are accurately recorded.",
+        "instruction": "I have chosen my vacation period to begin on the 1st of July, 2024, and conclude on the 15th of July, 2024. These dates will allow me to have a well-deserved rest.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "I have chosen my vacation period, which will begin on July 1, 2024, and conclude on July 15, 2024. Please confirm that these dates are set for my vacation.",
+        "instruction": "My vacation is scheduled to start on July 1, 2024, and will end on July 15, 2024. This timeframe provides a perfect opportunity for a getaway.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "The dates for my vacation have been set. I will be on vacation from July 1, 2024, through July 15, 2024. Please ensure these dates are entered correctly.",
+        "instruction": "I will be on vacation from July 1, 2024, until July 15, 2024. This two-week period is ideal for my travel plans.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "I have finalized my vacation schedule. My vacation will take place from July 1, 2024, to July 15, 2024. Please verify that these dates are correctly documented.",
+        "instruction": "The dates I have selected for my vacation are from July 1, 2024, to July 15, 2024. This duration is intended to give me ample time to unwind.",
         "masked": false,
         "maskedFields": []
       }
@@ -872,33 +866,33 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I am filling out a form but cannot disclose my age at this time.",
+        "instruction": "I am 28 years old. Please enter this information accurately as my age is 28.",
+        "masked": false,
+        "maskedFields": []
+      },
+      {
+        "id": "task_2",
+        "instruction": "Please proceed without entering my age.",
         "masked": true,
         "maskedFields": [
           "age"
         ]
       },
       {
-        "id": "task_2",
-        "instruction": "I am completing this form and need to specify that I am 28 years old.",
-        "masked": false,
-        "maskedFields": []
-      },
-      {
         "id": "task_3",
-        "instruction": "For this form, I am required to enter my age, which is 28.",
+        "instruction": "I am 28 years old. Kindly record this accurately as my age is 28.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "In this form, I need to indicate that my age is 28.",
+        "instruction": "My age is 28 years. Please ensure this is entered correctly as I am 28.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "As I fill out this form, I should mention that I am 28 years old.",
+        "instruction": "I am 28 years old. Please make sure to input this correctly as my age is 28.",
         "masked": false,
         "maskedFields": []
       }
@@ -933,33 +927,35 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I am asked to rate my satisfaction level, and I would rate it as an 8 on a scale from 1 to 10.",
+        "instruction": "For my satisfaction level, I rate it as an 8 on the scale of 1 to 10.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "For my satisfaction level, I would give it an 8 out of 10.",
+        "instruction": "I would like to express that my satisfaction level is an 8 out of 10.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "On a scale of 1 to 10, my satisfaction level is 8.",
+        "instruction": "On the satisfaction scale from 1 to 10, I would rate my level as 8.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "I would rate my satisfaction at an 8 on a scale of 1 to 10.",
+        "instruction": "My satisfaction level is an 8 when rated on a scale from 1 to 10.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "My satisfaction level is 8 when rated on a scale of 1 to 10.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "",
+        "masked": true,
+        "maskedFields": [
+          "satisfaction"
+        ]
       }
     ]
   },
@@ -990,31 +986,33 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "For this task, please enter my expected salary, which is $95000.",
+        "instruction": "For this task, I need to provide my expected salary, which is $95000.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "My expected salary is $95000, and I need to ensure this is accurately recorded.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "I am unable to provide the expected salary information for this task.",
+        "masked": true,
+        "maskedFields": [
+          "salary"
+        ]
       },
       {
         "id": "task_3",
-        "instruction": "Ensure to input my expected salary as $95000 for this task.",
+        "instruction": "In this task, I am required to fill in my expected salary, which is $95000.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "I would like to confirm that my expected salary is $95000.",
+        "instruction": "The expected salary I need to enter for this task is $95000.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "Please record my expected salary as $95000 in the form.",
+        "instruction": "For this task, my expected salary is $95000.",
         "masked": false,
         "maskedFields": []
       }
@@ -1046,31 +1044,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I recently reviewed a product and decided to give it a perfect score. I rated it 5 stars out of 5, reflecting my complete satisfaction with its quality and performance.",
+        "instruction": "I recently had the opportunity to review a product and I was thoroughly impressed with its quality and performance. I decided to give it a full 5-star rating out of 5, reflecting my satisfaction and the product's excellence.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "In my latest product review, I awarded the item the highest possible rating. I gave it 5 stars out of 5, as it met all my expectations and left me thoroughly impressed.",
+        "instruction": "After using the product extensively, I found it to meet all my expectations and more. Consequently, I rated it with 5 stars out of 5, which accurately represents my level of satisfaction with the product.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "After using the product, I felt it deserved the best rating possible. I rated it 5 stars out of 5, indicating my full approval and appreciation of its features.",
+        "instruction": "The product I evaluated exceeded my expectations in every aspect, leading me to award it a perfect score of 5 stars out of 5. This rating reflects my complete satisfaction with the product's performance and quality.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "For my most recent product evaluation, I chose to give it a top rating. I rated the product 5 stars out of 5, which signifies my utmost satisfaction with its overall performance.",
+        "instruction": "I assessed the product based on its features and performance, and I was very pleased with what it offered. As a result, I rated it 5 stars out of 5, indicating my high level of approval and satisfaction.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "In my assessment of the product, I found it to be outstanding and gave it a perfect rating. I rated it 5 stars out of 5, as it surpassed my expectations in every way.",
+        "instruction": "Upon reviewing the product, I found it to be exceptional in all regards. Therefore, I rated it 5 stars out of 5, which captures my appreciation for its outstanding quality and functionality.",
         "masked": false,
         "maskedFields": []
       }
@@ -1102,31 +1100,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "Please enter your home address as 456 Park Avenue, New York, NY 10022.",
+        "instruction": "Please enter my home address as 456 Park Avenue, New York, NY 10022.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "For the home address field, input 456 Park Avenue, New York, NY 10022.",
+        "instruction": "My home address is 456 Park Avenue, New York, NY 10022. Please enter it as such.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "Your home address should be filled out as 456 Park Avenue, New York, NY 10022.",
+        "instruction": "For my home address, please input 456 Park Avenue, New York, NY 10022.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "Ensure you write your home address as 456 Park Avenue, New York, NY 10022.",
+        "instruction": "Enter my home address exactly as 456 Park Avenue, New York, NY 10022.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "The home address you need to provide is 456 Park Avenue, New York, NY 10022.",
+        "instruction": "The address to be entered is 456 Park Avenue, New York, NY 10022.",
         "masked": false,
         "maskedFields": []
       }
@@ -1157,31 +1155,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I am filling out the form and my country of residence is the United Kingdom.",
+        "instruction": "Please select your country of residence. I am currently residing in the United Kingdom.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "For this form, I need to specify my country of residence, which is the United Kingdom.",
+        "instruction": "For the purpose of this form, please indicate your country of residence. I live in the United Kingdom.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "I reside in the United Kingdom, and I am selecting this as my country of residence on the form.",
+        "instruction": "When filling out the form, please ensure that you select the correct country of residence. My residence is in the United Kingdom.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "My country of residence is the United Kingdom, and I am indicating this on the form.",
+        "instruction": "As you complete this form, please choose your country of residence accurately. I reside in the United Kingdom.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "On this form, I am selecting the United Kingdom as my country of residence.",
+        "instruction": "To proceed with the form, please confirm your country of residence. I am a resident of the United Kingdom.",
         "masked": false,
         "maskedFields": []
       }
@@ -1212,31 +1210,33 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I currently reside in the state of Texas. Please ensure that my state of residence is correctly recorded as Texas.",
+        "instruction": "I reside in the state of Texas, so please select Texas as my state of residence.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "For my location details, I need to specify that I live in Texas. Kindly select Texas as my state of residence.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "Please proceed without mentioning my state of residence.",
+        "masked": true,
+        "maskedFields": [
+          "state"
+        ]
       },
       {
         "id": "task_3",
-        "instruction": "When filling out the form, please note that my state is Texas. Ensure that Texas is selected as my current state.",
+        "instruction": "For my location, please select Texas as the state where I live.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "I am located in the state of Texas. Please make sure to indicate Texas as my state in the form.",
+        "instruction": "I am currently living in Texas, so make sure to choose Texas as my state.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "My state of residence is Texas. Please confirm that Texas is selected as my state on the form.",
+        "instruction": "My place of residence is Texas, therefore, select Texas as the state.",
         "masked": false,
         "maskedFields": []
       }
@@ -1268,33 +1268,31 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "Please enter my ZIP code, which is 90210, into the form.",
+        "instruction": "Please enter your ZIP code in the form. My ZIP code is 90210, so I will fill that in the ZIP/Postal Code field.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "The ZIP code you need to fill in is 90210. Please make sure to enter it correctly.",
+        "instruction": "For this form, I need to provide my ZIP code. The ZIP/Postal Code I will enter is 90210.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "Kindly input the ZIP/Postal Code as 90210 in the form provided.",
+        "instruction": "I am required to fill out my ZIP code on this form. The correct ZIP/Postal Code for me is 90210.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "",
-        "masked": true,
-        "maskedFields": [
-          "zipCode"
-        ]
+        "instruction": "To complete this form, I will input my ZIP code. My ZIP/Postal Code is 90210.",
+        "masked": false,
+        "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "For the form, my ZIP code is 90210. Please ensure it is entered accurately.",
+        "instruction": "On this form, I need to enter my ZIP code. The ZIP/Postal Code that applies to me is 90210.",
         "masked": false,
         "maskedFields": []
       }
@@ -1326,33 +1324,41 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "To complete the form, please enter your credit card number, which is 4532015112830366.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "I need to fill out my credit card information, but I can't mention the exact card number here.",
+        "masked": true,
+        "maskedFields": [
+          "cardNumber"
+        ]
       },
       {
         "id": "task_2",
-        "instruction": "Ensure you fill in your credit card number accurately; the number is 4532015112830366.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "I'm preparing to enter my credit card details, but I'm not able to specify the card number in this context.",
+        "masked": true,
+        "maskedFields": [
+          "cardNumber"
+        ]
       },
       {
         "id": "task_3",
-        "instruction": "For this form, you need to provide your credit card number: 4532015112830366.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "I'm about to input my credit card information, though I cannot disclose the card number right now.",
+        "masked": true,
+        "maskedFields": [
+          "cardNumber"
+        ]
       },
       {
         "id": "task_4",
-        "instruction": "Please input your credit card number as 4532015112830366 in the form.",
+        "instruction": "For my credit card application, I need to provide my card number, which is 4532015112830366.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "The required credit card number for this form is 4532015112830366; please enter it correctly.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "I'm in the process of entering my credit card details, however, I'm unable to mention the card number at this time.",
+        "masked": true,
+        "maskedFields": [
+          "cardNumber"
+        ]
       }
     ]
   },
@@ -1382,33 +1388,35 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "Please ensure to enter the card expiration date as 12/25. This is crucial for processing your transaction smoothly.",
+        "instruction": "Please make sure to enter the card expiration date as 12/25.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_2",
-        "instruction": "For the card expiration, kindly input the date 12/25. This will ensure that your card details are up to date and valid.",
+        "instruction": "The expiration date for the card is 12/25, please enter it accordingly.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "Make sure to provide the expiration date of your card, which is 12/25, to avoid any issues with processing.",
+        "instruction": "Ensure that the card's expiration date is correctly entered as 12/25.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "The card's expiration date you need to enter is 12/25. This information is necessary for completing your transaction.",
+        "instruction": "Remember to input the expiration date, which is 12/25, for the card.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "Remember to fill in the card expiration date as 12/25. This is important for maintaining the validity of your card.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "",
+        "masked": true,
+        "maskedFields": [
+          "expirationDate"
+        ]
       }
     ]
   },
@@ -1445,25 +1453,25 @@
       },
       {
         "id": "task_2",
-        "instruction": "To complete the payment, you need to input the CVV, which is 456.",
+        "instruction": "To ensure the security of your transaction, kindly input the CVV code, which is 456.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "Ensure the security of your transaction by entering the CVV: 456.",
+        "instruction": "For verification purposes, please enter the CVV code, which is 456.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "For verification purposes, please provide the CVV code, which is 456.",
+        "instruction": "To complete your purchase, please provide the CVV code, which is 456.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "Kindly enter the CVV code, 456, to confirm your transaction.",
+        "instruction": "Enter the CVV code, which is 456, to finalize your payment.",
         "masked": false,
         "maskedFields": []
       }
@@ -1536,31 +1544,33 @@
     "trainingTasks": [
       {
         "id": "task_1",
-        "instruction": "I worked as a Software Engineer at Tech Corp from January 15, 2020, to June 30, 2023. During this time, I developed web applications using React and Node.js.",
-        "masked": false,
-        "maskedFields": []
+        "instruction": "I am unable to provide any details about my work experience for this task.",
+        "masked": true,
+        "maskedFields": [
+          "workExperience"
+        ]
       },
       {
         "id": "task_2",
-        "instruction": "My role as a Software Engineer at Tech Corp spanned from 01-15-2020 to 06-30-2023, where I was responsible for developing web applications with React and Node.js.",
+        "instruction": "I have worked as a Software Engineer at Tech Corp from January 15, 2020, to June 30, 2023. During this time, I developed web applications using React and Node.js.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_3",
-        "instruction": "At Tech Corp, I held the position of Software Engineer from January 15, 2020, until June 30, 2023, focusing on developing web applications utilizing React and Node.js.",
+        "instruction": "My job title was Software Engineer at Tech Corp, where I was employed from January 15, 2020, to June 30, 2023. My role involved developing web applications utilizing React and Node.js.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_4",
-        "instruction": "From January 15, 2020, to June 30, 2023, I served as a Software Engineer at Tech Corp, where I developed web applications using React and Node.js.",
+        "instruction": "At Tech Corp, I held the position of Software Engineer from January 15, 2020, until June 30, 2023. My responsibilities included developing web applications with React and Node.js.",
         "masked": false,
         "maskedFields": []
       },
       {
         "id": "task_5",
-        "instruction": "I was employed as a Software Engineer at Tech Corp from 01-15-2020 to 06-30-2023, during which I developed web applications using React and Node.js.",
+        "instruction": "Working as a Software Engineer at Tech Corp from January 15, 2020, to June 30, 2023, I was responsible for developing web applications using React and Node.js.",
         "masked": false,
         "maskedFields": []
       }
