@@ -63,6 +63,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
   const [openSelects, setOpenSelects] = useState<Record<string, boolean>>({});
   const [searchQueries, setSearchQueries] = useState<Record<string, string>>({});
   const [comparisonResult, setComparisonResult] = useState<ComparisonResult | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   // Load existing data for this page on mount
@@ -157,6 +158,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
 
     // If this is the last page, submit the entire form
     if (pageNumber === totalPages) {
+      setIsSubmitting(true);
       const allFormData = getAllData(); // Get data without clearing (we'll clear after navigation)
 
       toast.success("Form submitted successfully!");
@@ -170,15 +172,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
           formDefinition
         );
 
-        // Store comparison result in sessionStorage for the complete page
-        // Data will be cleared when navigating away from complete page
-        sessionStorage.setItem(`form-evaluation-${formId}`, JSON.stringify({
-          comparison,
-          submittedData: allFormData,
-          formDefinition
-        }));
-
-        // Save evaluation to database
+        let evalId: number | undefined;
         try {
           // Transform fieldResults into field_eval format
           const fieldEval: Record<string, {
@@ -199,7 +193,7 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
             };
           });
 
-          await saveEvaluationToDatabase({
+          const result = await saveEvaluationToDatabase({
             form_id: formId,
             title: formDefinition.title,
             description: formDefinition.description,
@@ -209,14 +203,32 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
             field_eval: fieldEval,
             overall_accuracy: comparison.accuracy
           });
+
+          if (result.success) {
+            evalId = result.eval_id;
+          }
         } catch (error) {
           // Log error but don't block navigation
           console.error('Failed to save evaluation to database:', error);
         }
 
+        // Store comparison result in sessionStorage for the complete page
+        // Data will be cleared when navigating away from complete page
+        sessionStorage.setItem(`form-evaluation-${formId}`, JSON.stringify({
+          comparison,
+          submittedData: allFormData,
+          formDefinition,
+          evalId
+        }));
+
         // Clear form data and navigate to complete page
         submitForm();
-        navigate(`/${formId}/complete`);
+
+        // Small delay to ensure user sees the loading state if everything was too fast
+        setTimeout(() => {
+          setIsSubmitting(false);
+          navigate(`/${formId}/complete`);
+        }, 1000);
       } else {
         // If no ground truth, clear and navigate home
         submitForm();
@@ -590,6 +602,18 @@ const DynamicForm = ({ formId, title, description, page, pageNumber = 1, totalPa
           </div>
         )}
       </div>
+
+      {/* Loading Overlay */}
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <Card className="w-full max-w-md mx-4">
+            <CardContent className="flex flex-col items-center justify-center py-10 space-y-4">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <p className="text-lg font-medium text-center">The eval is being prepared</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
