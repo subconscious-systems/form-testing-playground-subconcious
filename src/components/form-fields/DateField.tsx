@@ -146,9 +146,9 @@ export const DateField = ({ field, value, onChange }: DateFieldProps) => {
         const validDay = Math.min(day, maxDays);
         
         const newDate = new Date(year, month - 1, validDay);
-        if (newDate >= minDate && newDate <= maxDate) {
-          onChange(newDate);
-        }
+      if (newDate >= minDate && newDate <= maxDate) {
+        onChange(newDate);
+      }
       } else {
         onChange(undefined);
       }
@@ -181,11 +181,11 @@ export const DateField = ({ field, value, onChange }: DateFieldProps) => {
               <SelectValue placeholder="Day" />
             </SelectTrigger>
             <SelectContent>
-              {days.map((day) => (
+                  {days.map((day) => (
                 <SelectItem key={day} value={String(day)}>
-                  {day}
+                      {day}
                 </SelectItem>
-              ))}
+                  ))}
             </SelectContent>
           </Select>
 
@@ -195,14 +195,14 @@ export const DateField = ({ field, value, onChange }: DateFieldProps) => {
               <SelectValue placeholder="Year" />
             </SelectTrigger>
             <SelectContent>
-              {years.map((year) => (
+                  {years.map((year) => (
                 <SelectItem key={year} value={String(year)}>
-                  {year}
+                      {year}
                 </SelectItem>
-              ))}
+                  ))}
             </SelectContent>
           </Select>
-        </div>
+            </div>
       </BaseField>
     );
   }
